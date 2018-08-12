@@ -1,0 +1,10 @@
+#msoffice-ext-frame {
+    position: absolute;
+    z-index: 1000000;
+    display: none;
+    border: none;
+}
+
+#msoffice-ext-frame.visible {
+    display: block;
+}
