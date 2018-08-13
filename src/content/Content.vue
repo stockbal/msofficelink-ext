@@ -22,26 +22,21 @@
 </template>
 
 <script>
-import {
-  TIMER_DURATION,
-  popoverFrame,
-  runsSharepoint,
-  sendUpdateTabRequest,
-  getProtocol
-} from '../util';
+import { TIMER_DURATION, popoverFrame, sendUpdateTabRequest, getProtocol } from '../util';
 
 import { bus } from './bus';
 
 export default {
   data: () => ({
     visible: true,
-    isSharepoint: runsSharepoint(),
+    // isSharepoint: false,
     timer: null,
     linkType: '',
     linkText: '',
     linkURL: ''
   }),
   created() {
+    // this.isSharepoint = this.$parent.isSharepoint;
     bus.$on('show', link => {
       this.resetTimer();
       this.$data.linkType = getProtocol(link.href);
@@ -53,6 +48,11 @@ export default {
       this.startHideTimer();
     });
   },
+  computed: {
+    isSharepoint() {
+      return this.$parent.isSharepoint;
+    }
+  },
   methods: {
     onMouseEnter(evt) {
       this.resetTimer();
@@ -62,6 +62,9 @@ export default {
       this.resetTimer();
       this.hide();
       popoverFrame.hide();
+    },
+    setSharepoint(isSharepoint) {
+      this.isSharepoint = isSharepoint;
     },
     viewLocally() {
       sendUpdateTabRequest(this.linkType + ':ofv|u|' + this.linkURL);

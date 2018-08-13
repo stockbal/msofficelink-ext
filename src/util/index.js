@@ -1,8 +1,8 @@
 export const TIMER_DURATION = 200;
 
-export const runsSharepoint = () => {
+const runsSharepoint = () => {
   for (const script of document.querySelectorAll('script')) {
-    if (/_layouts\/15\/sp\.js/.test(script.src)) {
+    if (/_layouts\/15\/sp\.init\.js/.test(script.src)) {
       return true;
     }
   }
@@ -38,6 +38,10 @@ class Frame {
     this._frame = document.createElement('iframe');
     this._frame.id = 'msoffice-ext-frame';
     this._popoverEl = document.createElement('div');
+    this._isSharePointSite = runsSharepoint();
+  }
+  get isSharePointSite() {
+    return this._isSharePointSite;
   }
   get frame() {
     return this._frame;
@@ -67,10 +71,6 @@ class Frame {
     this._frame.contentDocument.head.appendChild(FAScript);
     this._frame.contentDocument.head.appendChild(createCSSEl('css/content.css'));
     this._frame.contentDocument.body.appendChild(this._popoverEl);
-
-    if (runsSharepoint()) {
-      this._frame.contentDocument.body.classList.add('sharepoint-site');
-    }
   }
 }
 

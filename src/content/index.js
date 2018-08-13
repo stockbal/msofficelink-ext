@@ -8,6 +8,9 @@ popoverFrame.hide();
 
 /* eslint-disable no-new */
 new Vue({
+  data: {
+    isSharepoint: popoverFrame.isSharePointSite
+  },
   el: popoverFrame.popoverEl,
   render: h => h(Content)
 });
