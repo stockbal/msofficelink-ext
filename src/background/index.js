@@ -10,28 +10,28 @@ const getProtocol = link => {
   }
 };
 
-// const patterns = ['docx', 'doc', 'docm', 'xls', 'xlsx', 'csv', 'xlsm', 'pptx', 'ppt', 'pptm'].map(
-//   el => `*://*/*.${el}`
-// );
+const patterns = ['docx', 'doc', 'docm', 'xls', 'xlsx', 'csv', 'xlsm', 'pptx', 'ppt', 'pptm'].map(
+  el => `*://*/*.${el}`
+);
 
 // install the context menus to open links in ms office applications
 chrome.contextMenus.create({
   title: 'Open in read only mode',
   id: 'MenuOpenRead',
-  contexts: ['link']
-  // targetUrlPatterns: patterns
+  contexts: ['link'],
+  targetUrlPatterns: patterns
 });
 chrome.contextMenus.create({
   title: 'Open in edit mode',
   id: 'MenuOpenEdit',
-  contexts: ['link']
-  // targetUrlPatterns: patterns
+  contexts: ['link'],
+  targetUrlPatterns: patterns
 });
 chrome.contextMenus.create({
   title: 'Open in online mode',
   id: 'MenuOpenOnline',
-  contexts: ['link']
-  // targetUrlPatterns: patterns
+  contexts: ['link'],
+  targetUrlPatterns: patterns
 });
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {

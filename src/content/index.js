@@ -1,13 +1,12 @@
 import { popoverFrame } from '../util';
 import Content from './Content.vue';
-import { bus } from './bus';
 import Vue from 'vue';
 
 popoverFrame.fillContent();
 popoverFrame.hide();
 
 /* eslint-disable no-new */
-new Vue({
+const popover = new Vue({
   data: {
     isSharepoint: popoverFrame.isSharePointSite
   },
@@ -22,9 +21,9 @@ for (const link of links) {
     continue;
   }
   link.addEventListener('mouseenter', evt => {
-    bus.$emit('show', link);
+    popover.$emit('show', link, evt);
   });
   link.addEventListener('mouseleave', evt => {
-    bus.$emit('hide');
+    popover.$emit('hide');
   });
 }

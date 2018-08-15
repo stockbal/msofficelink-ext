@@ -2,7 +2,7 @@
  * @see {@link https://developer.chrome.com/extensions/manifest}
  */
 module.exports = {
-  name: 'msofficelink-new',
+  name: 'MS Office Link',
   description: 'A Chrome extension project with Vue.js',
   author: 'Ludwig Stockbauer-Muhr <ludwig.stockbauer-muhr@msg.group>',
   version: '1.0.0',
@@ -27,7 +27,7 @@ module.exports = {
     'storage'
   ],
   browser_action: {
-    default_title: 'title',
+    // default_title: 'title',
     default_popup: 'pages/popup.html'
   },
   background: {
