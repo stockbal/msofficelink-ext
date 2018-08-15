@@ -46,7 +46,7 @@ module.exports = {
         options: {
           extractCSS: true,
           loaders: {
-            ...cssLoaders(),
+            ...cssLoaders({ extract: true }),
             js: { loader: 'babel-loader' }
           },
           transformToRequire: {
