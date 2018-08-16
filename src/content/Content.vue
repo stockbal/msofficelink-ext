@@ -85,7 +85,6 @@ export default {
     },
     startShowTimer(link = null, evt) {
       this.$data.timer = setTimeout(() => {
-        console.log(evt.movementY);
         if (link) {
           const { y, height } = link.getBoundingClientRect();
           popoverFrame.setTop(y + height + scrollY);

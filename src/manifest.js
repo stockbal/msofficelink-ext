@@ -38,7 +38,7 @@ module.exports = {
   content_scripts: [
     {
       js: ['js/manifest.js', 'js/vendor.js', 'js/content.js'],
-      css: ['css/content-frame.css'],
+      css: ['css/content-frame.css', 'css/content.css'],
       run_at: 'document_end',
       matches: ['<all_urls>'],
       all_frames: true

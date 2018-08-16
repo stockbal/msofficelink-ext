@@ -68,6 +68,7 @@ class Frame {
     const FAScript = document.createElement('script');
     FAScript.type = 'text/javascript';
     FAScript.src = 'https://use.fontawesome.com/releases/v5.1.0/js/all.js';
+    this._frame.contentDocument.documentElement.classList.add('msoffice-ext-content');
     this._frame.contentDocument.head.appendChild(FAScript);
     this._frame.contentDocument.head.appendChild(createCSSEl('css/content.css'));
     this._frame.contentDocument.body.appendChild(this._popoverEl);

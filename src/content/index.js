@@ -20,10 +20,40 @@ for (const link of links) {
   if (!/.(doc|docx|docm|xls|xlsx|xlsm|csv|ppt|pptx|pptm)$/.test(link.href)) {
     continue;
   }
-  link.addEventListener('mouseenter', evt => {
-    popover.$emit('show', link, evt);
+
+  const newLink = document.createElement('a');
+  newLink.href = link.href;
+  newLink.innerHTML = link.innerHTML;
+
+  link.classList.forEach(clsname => {
+    newLink.classList.add(clsname);
   });
-  link.addEventListener('mouseleave', evt => {
+
+  newLink.onmousedown = evt => {
+    // TODO: do custom link handling here
+    evt.preventDefault();
+    evt.stopPropagation();
+    return true;
+  };
+
+  newLink.onmouseup = evt => {
+    evt.preventDefault();
+    evt.stopPropagation();
+    return true;
+  };
+
+  newLink.onclick = evt => {
+    evt.preventDefault();
+    evt.stopPropagation();
+    return true;
+  };
+
+  link.parentNode.replaceChild(newLink, link);
+
+  newLink.addEventListener('mouseenter', evt => {
+    popover.$emit('show', newLink, evt);
+  });
+  newLink.addEventListener('mouseleave', evt => {
     popover.$emit('hide');
   });
 }
