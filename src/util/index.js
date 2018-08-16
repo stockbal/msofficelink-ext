@@ -1,20 +1,12 @@
 export const TIMER_DURATION = 200;
 
-const runsSharepoint = () => {
+export const runsSharepoint = () => {
   for (const script of document.querySelectorAll('script')) {
     if (/_layouts\/15\/sp\.init\.js/.test(script.src)) {
       return true;
     }
   }
   return false;
-};
-
-const createCSSEl = url => {
-  const el = document.createElement('link');
-  el.href = chrome.runtime.getURL(url);
-  el.rel = 'stylesheet';
-  el.type = 'text/css';
-  return el;
 };
 
 export const sendUpdateTabRequest = url => {
@@ -32,47 +24,3 @@ export const getProtocol = link => {
     return '';
   }
 };
-
-class Frame {
-  constructor() {
-    this._frame = document.createElement('iframe');
-    this._frame.id = 'msoffice-ext-frame';
-    this._popoverEl = document.createElement('div');
-    this._isSharePointSite = runsSharepoint();
-  }
-  get isSharePointSite() {
-    return this._isSharePointSite;
-  }
-  get frame() {
-    return this._frame;
-  }
-  get popoverEl() {
-    return this._popoverEl;
-  }
-  setTop(top) {
-    this._frame.style.top = top + 'px';
-  }
-  setLeft(left) {
-    this._frame.style.left = left + 'px';
-  }
-  hide() {
-    this._frame.classList.remove('visible');
-  }
-  show() {
-    this._frame.classList.add('visible');
-  }
-  fillContent() {
-    document.body.appendChild(this._frame);
-
-    // inject font awesome script for icons
-    const FAScript = document.createElement('script');
-    FAScript.type = 'text/javascript';
-    FAScript.src = 'https://use.fontawesome.com/releases/v5.1.0/js/all.js';
-    this._frame.contentDocument.documentElement.classList.add('msoffice-ext-content');
-    this._frame.contentDocument.head.appendChild(FAScript);
-    this._frame.contentDocument.head.appendChild(createCSSEl('css/content.css'));
-    this._frame.contentDocument.body.appendChild(this._popoverEl);
-  }
-}
-
-export const popoverFrame = new Frame();

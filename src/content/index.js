@@ -1,17 +1,18 @@
-import { popoverFrame } from '../util';
-import Content from './Content.vue';
+import '../assets/css/element-ui.scss';
+import LinkOptions from './LinkOptions';
+import ElementUI from 'element-ui';
 import Vue from 'vue';
+import locale from 'element-ui/lib/locale/lang/en';
 
-popoverFrame.fillContent();
-popoverFrame.hide();
+Vue.use(ElementUI, { locale });
+
+const popoverEl = document.createElement('div');
+document.body.appendChild(popoverEl);
 
 /* eslint-disable no-new */
 const popover = new Vue({
-  data: {
-    isSharepoint: popoverFrame.isSharePointSite
-  },
-  el: popoverFrame.popoverEl,
-  render: h => h(Content)
+  el: popoverEl,
+  render: h => h(LinkOptions)
 });
 
 const links = document.querySelectorAll('a[href]');
@@ -30,30 +31,13 @@ for (const link of links) {
   });
 
   newLink.onmousedown = evt => {
-    // TODO: do custom link handling here
-    evt.preventDefault();
-    evt.stopPropagation();
-    return true;
-  };
-
-  newLink.onmouseup = evt => {
-    evt.preventDefault();
-    evt.stopPropagation();
-    return true;
-  };
-
-  newLink.onclick = evt => {
-    evt.preventDefault();
-    evt.stopPropagation();
-    return true;
+    if (!evt.button) {
+      popover.$emit('openDialog', newLink, evt);
+      evt.preventDefault();
+      evt.stopPropagation();
+      return true;
+    }
   };
 
   link.parentNode.replaceChild(newLink, link);
-
-  newLink.addEventListener('mouseenter', evt => {
-    popover.$emit('show', newLink, evt);
-  });
-  newLink.addEventListener('mouseleave', evt => {
-    popover.$emit('hide');
-  });
 }
