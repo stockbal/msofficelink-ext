@@ -2,11 +2,12 @@
     <el-dialog title="Open Microsoft Office Document" class="msoffice-link-dialog"
                :visible.sync="dialogVisible"
                width="30%">
-        <div class="notification-text">You are about to open the file '{{file}}'</div>
+        <div class="notification-text">You are about to open the file <em><u>{{file}}</u></em></div>
+        <div class="notification-text">Choose the file operation</div>
         <el-radio-group class="file-option-radio" v-model="fileOpenOption">
-            <el-radio :label="'read'">Open in Read Only mode</el-radio>
-            <el-radio :label="'edit'">Open in Edit mode</el-radio>
-            <el-radio :label="'online'">Open in {{type}} online</el-radio>
+            <el-radio :label="'read'">Open in protected mode</el-radio>
+            <el-radio :label="'edit'">Open in edit mode</el-radio>
+            <el-radio :label="'online'">Open online</el-radio>
             <el-radio :label="'download'">Download file</el-radio>
         </el-radio-group>
         <span slot="footer" class="dialog-footer">
@@ -31,7 +32,11 @@ export default {
     this.$parent.$on('openDialog', (link, evt) => {
       this.type = getProtocol(link.href);
       this.linkUrl = link.href;
-      this.file = link.innerText;
+      const files = link.href.match(/\/(?:.(?!\/))+$/gi);
+      this.file = files.length > 0 ? files[0] : link.innerText;
+      if (this.file.startsWith('/')) {
+        this.file = decodeURI(this.file.substring(1, this.file.length));
+      }
       this.dialogVisible = true;
     });
   },
@@ -77,6 +82,7 @@ export default {
   display: block;
   padding: 5px;
 }
+
 .el-radio {
   display: block;
   padding: 5px;
@@ -97,6 +103,6 @@ export default {
 
 .notification-text {
   padding: 0 0 20px 0;
-  font-size: 1.2vh;
+  font-size: 15px;
 }
 </style>
