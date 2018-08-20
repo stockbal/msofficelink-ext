@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const ChromeReloadPlugin = require('wcer');
+const GenerateJSON = require('generate-json-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { cssLoaders, htmlPage } = require('./tools');
 
@@ -102,11 +102,6 @@ module.exports = {
     htmlPage('background', 'background', ['manifest', 'vendor', 'background']),
     // End customize
     new CopyWebpackPlugin([{ from: path.join(rootDir, 'static') }]),
-    // new CopyWebpackPlugin([{ from: path.join(rootDir, 'src', 'assets') }]),
-    new ChromeReloadPlugin({
-      port: 9090,
-      manifest: path.join(rootDir, 'src', 'manifest.js')
-    }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       minChunks: function(module) {
@@ -120,7 +115,8 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'manifest',
       chunks: ['vendor']
-    })
+    }),
+    new GenerateJSON('manifest.json', require('../src/manifest'))
   ],
   performance: { hints: false }
 };
