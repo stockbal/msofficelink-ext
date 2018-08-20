@@ -10,7 +10,7 @@ export const runsSharepoint = () => {
 };
 
 export const sendUpdateTabRequest = url => {
-  chrome.runtime.sendMessage({ url });
+  chrome.runtime.sendMessage({ action: 'handleLink', url });
 };
 
 export const getProtocol = link => {

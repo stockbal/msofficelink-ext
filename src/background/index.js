@@ -58,8 +58,22 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 
 // open
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.url) {
-    chrome.tabs.update({ url: request.url });
+  switch (request.action) {
+    case 'handleLink':
+      if (request.url) {
+        chrome.tabs.update({ url: request.url });
+      }
+      sendResponse({ success: true });
+      break;
+    case 'updateBadge':
+      chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+        console.log(request);
+        chrome.browserAction.setBadgeText({
+          text: request.officeLinkCount ? `${request.officeLinkCount}` : '',
+          tabId: tabs[0].id
+        });
+        sendResponse({ success: true, tabId: tabs[0].id });
+      });
+      break;
   }
-  sendResponse({ success: true });
 });

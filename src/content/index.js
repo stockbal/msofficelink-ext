@@ -17,10 +17,14 @@ const popover = new Vue({
 
 const links = document.querySelectorAll('a[href]');
 
+let officeLinkCount = 0;
+
 for (const link of links) {
   if (!/.(doc|docx|docm|xls|xlsx|xlsm|csv|ppt|pptx|pptm)$/.test(link.href)) {
     continue;
   }
+
+  officeLinkCount++;
 
   const newLink = document.createElement('a');
   newLink.href = link.href;
@@ -41,3 +45,6 @@ for (const link of links) {
 
   link.parentNode.replaceChild(newLink, link);
 }
+
+// retrieve current tab id from background script
+chrome.runtime.sendMessage({ action: 'updateBadge', officeLinkCount }, tabId => {});

@@ -1,11 +1,12 @@
 import Vue from 'vue';
 import root from './root.vue';
 import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
+import '../assets/css/element-ui.scss';
+import locale from 'element-ui/lib/locale/lang/en';
 
 Vue.config.productionTip = false;
 
-Vue.use(ElementUI);
+Vue.use(ElementUI, { locale });
 
 /* eslint-disable no-new */
 new Vue({
