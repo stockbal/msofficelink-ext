@@ -2,9 +2,13 @@ import Vue from 'vue';
 import root from './root.vue';
 import ElementUI from 'element-ui';
 import '../assets/css/element-ui.scss';
-import locale from 'element-ui/lib/locale/lang/en';
+import localeEN from 'element-ui/lib/locale/lang/en';
+import localeDE from 'element-ui/lib/locale/lang/de';
 
 Vue.config.productionTip = false;
+
+const currentLocale = chrome.i18n.getUILanguage();
+const locale = currentLocale === 'de' ? localeDE : localeEN;
 
 Vue.use(ElementUI, { locale });
 
