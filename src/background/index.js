@@ -1,14 +1,4 @@
-const getProtocol = link => {
-  if (/\.(docx|doc|docm)$/.test(link)) {
-    return 'ms-word';
-  } else if (/\.(xlsx|xls|xlsm|csv)$/.test(link)) {
-    return 'ms-excel';
-  } else if (/\.(pptx|ppt|pptm)$/.test(link)) {
-    return 'ms-powerpoint';
-  } else {
-    return null;
-  }
-};
+import { buildLinkActionUrl } from '../util';
 
 const patterns = ['docx', 'doc', 'docm', 'xls', 'xlsx', 'csv', 'xlsm', 'pptx', 'ppt', 'pptm'].map(
   el => `*://*/*.${el}`
@@ -17,47 +7,39 @@ const patterns = ['docx', 'doc', 'docm', 'xls', 'xlsx', 'csv', 'xlsm', 'pptx', '
 // install the context menus to open links in ms office applications
 chrome.contextMenus.create({
   title: 'Open in read only mode',
-  id: 'MenuOpenRead',
+  id: 'read',
   contexts: ['link'],
   targetUrlPatterns: patterns
 });
 chrome.contextMenus.create({
   title: 'Open in edit mode',
-  id: 'MenuOpenEdit',
+  id: 'edit',
   contexts: ['link'],
   targetUrlPatterns: patterns
 });
 chrome.contextMenus.create({
   title: 'Open in online mode',
-  id: 'MenuOpenOnline',
+  id: 'online',
+  contexts: ['link'],
+  targetUrlPatterns: patterns
+});
+chrome.contextMenus.create({
+  title: 'Download file',
+  id: 'download',
   contexts: ['link'],
   targetUrlPatterns: patterns
 });
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
-  const protocol = getProtocol(info.linkUrl);
-  if (protocol) {
-    chrome.tabs.update({ url: `${info.linkUrl}?web=1` });
-  } else {
-    alert('File extension is not yet supported');
-    return;
-  }
-
-  switch (info.menuItemId) {
-    case 'MenuOpenRead':
-      chrome.tabs.update({ url: `${protocol}:ofv|u|${info.linkUrl}` });
-      break;
-    case 'MenuOpenEdit':
-      chrome.tabs.update({ url: `${protocol}:ofe|u|${info.linkUrl}` });
-      break;
-    case 'MenuOpenOnline':
-      chrome.tabs.update({ url: `${info.linkUrl}?web=1` });
-      break;
-  }
+  try {
+    const url = buildLinkActionUrl(info.linkUrl);
+    chrome.tabs.update({ url });
+  } catch (e) {}
 });
 
 // open
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log(request);
   switch (request.action) {
     case 'handleLink':
       if (request.url) {
@@ -67,7 +49,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       break;
     case 'updateBadge':
       chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-        console.log(request);
         chrome.browserAction.setBadgeText({
           text: request.officeLinkCount ? `${request.officeLinkCount}` : '',
           tabId: tabs[0].id

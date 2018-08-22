@@ -9,6 +9,32 @@ export const runsSharepoint = () => {
   return false;
 };
 
+/**
+ * Builds the url for the tab update
+ * @param action
+ * @param url
+ * @returns {*}
+ */
+export const buildLinkActionUrl = (action, url) => {
+  const protocol = getProtocol(url);
+  if (!protocol) {
+    throw new Error('unrecognized protocol');
+  }
+
+  switch (action) {
+    case 'read':
+      return `${protocol}:ofv|u|${url}`;
+    case 'edit':
+      return `${protocol}:ofe|u|${url}`;
+    case 'online':
+      return `${url}?web=1`;
+    case 'download':
+      return url;
+    default:
+      throw new Error('unrecognized link action');
+  }
+};
+
 export const sendUpdateTabRequest = url => {
   chrome.runtime.sendMessage({ action: 'handleLink', url });
 };

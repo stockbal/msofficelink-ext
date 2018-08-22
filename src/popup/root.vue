@@ -4,8 +4,8 @@
             <img class="popup-icon" src="../../static/icons/Icon128.png" alt="image">
             <h2>MS Office Link</h2>
         </div>
-        <el-tabs class="popup-tabs">
-            <el-tab-pane label="Link History" class="popup-tabs__history flex flex--column">
+        <el-tabs class="popup-tabs" :value="currentTab">
+            <el-tab-pane v-if="form.linkHistoryActive" label="Link History" name="history" class="popup-tabs__history flex flex--column">
                 <el-table :data="tableData"
                           border
                           height="350"
@@ -32,16 +32,25 @@
                 </el-table>
                 <el-button class="show-history-btn">Show full history</el-button>
             </el-tab-pane>
-            <el-tab-pane label="Options">
-                <form-entry class="flex flex--row flex--align-center" label="Activate Options">
-                    <el-switch v-model="form.delivery"></el-switch>
-                </form-entry>
-                <form-entry class="flex flex--row flex--align-center" label="Default Action">
-                    <el-select v-model="form.region" placeholder="please select your zone">
-                        <el-option label="Zone one" value="shanghai"></el-option>
-                        <el-option label="Zone two" value="beijing"></el-option>
-                    </el-select>
-                </form-entry>
+            <el-tab-pane label="Options" name="options">
+                <el-form ref="form" :model="form" label-width="170px">
+                    <el-form-item label="Activate Link History">
+                        <el-switch v-model="form.linkHistoryActive" @change="onSubmit"></el-switch>
+                    </el-form-item>
+                    <el-form-item label="Maximum Link History">
+                        <el-input-number v-model="form.maxLinkHistory" @change="onSubmit" :disabled="!form.linkHistoryActive" controls-position="right"></el-input-number>
+                    </el-form-item>
+                    <el-form-item label="Default Link Action">
+                        <el-select v-model="form.linkDefaultAction" placeholder="please select your zone" @change="onSubmit">
+                            <el-option label="Original" value="original"></el-option>
+                            <el-option label="Show option dialog" value="dialog"></el-option>
+                            <el-option label="Open in edit mode" value="edit"></el-option>
+                            <el-option label="Open in protected mode" value="read"></el-option>
+                            <el-option label="Open online" value="online"></el-option>
+                            <el-option label="Download file" value="download"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form>
             </el-tab-pane>
         </el-tabs>
     </div>
@@ -55,21 +64,34 @@ export default {
     FormEntry
   },
   data: () => ({
+    currentTab: 'options',
     form: {
-      name: '',
-      region: '',
-      date1: '',
-      date2: '',
-      delivery: false,
-      type: [],
-      resource: '',
-      desc: ''
+      linkHistoryActive: false,
+      linkDefaultAction: 'original',
+      maxLinkHistory: 10
     },
     tableData: []
   }),
+  created() {
+    chrome.storage.sync.get('settings', value => {
+      Object.assign(this.form, value.settings);
+      if (this.form.linkHistoryActive) {
+        this.currentTab = 'history';
+      }
+    });
+  },
   methods: {
-    onSubmit() {
-      console.log('submit!');
+    onDefaultActionChange() {
+      this.onSubmit(() => {
+        chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+          chrome.tabs.sendMessage(tabs[0].id, { action: 'updateLinks' });
+        });
+      });
+    },
+    onSubmit(afterSetFunction = () => {}) {
+      chrome.storage.sync.set({ settings: this.form }, () => {
+        // afterSetFunction();
+      });
     }
   }
 };
