@@ -29,8 +29,18 @@ chrome.contextMenus.create({
   contexts: ['link'],
   targetUrlPatterns: patterns
 });
+chrome.contextMenus.create({
+  title: 'Document History',
+  id: 'advoptions',
+  contexts: ['browser_action']
+});
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
+  if (info.menuItemId === 'advoptions') {
+    chrome.tabs.create({ url: 'pages/history.html' });
+    return;
+  }
+
   try {
     chrome.tabs.update({ url: buildLinkActionUrl(info.menuItemId, info.linkUrl) });
   } catch (e) {

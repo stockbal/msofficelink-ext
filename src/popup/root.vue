@@ -1,11 +1,11 @@
 <template>
     <div class="popup">
         <div class="popup-title flex flex--row flex--align-center">
-            <img class="popup-icon" src="../../static/icons/Icon128.png" alt="image">
-            <h2>MS Office Link</h2>
+            <img class="popup-icon" src="../../static/icons/icon.svg" alt="image">
+            <h2>MS Doc Link</h2>
         </div>
         <el-tabs class="popup-tabs" :value="currentTab">
-            <el-tab-pane v-if="form.linkHistoryActive" label="Link History" name="history" class="popup-tabs__history flex flex--column">
+            <el-tab-pane v-if="settings.linkHistoryActive" label="Link History" name="history" class="popup-tabs__history flex flex--column">
                 <el-table :data="tableData"
                           border
                           height="350"
@@ -30,18 +30,18 @@
                         </template>
                     </el-table-column>
                 </el-table>
-                <el-button class="show-history-btn">Show full history</el-button>
+                <el-button class="show-history-btn" @click="openHistory">Show full history</el-button>
             </el-tab-pane>
             <el-tab-pane label="Options" name="options">
-                <el-form ref="form" :model="form" label-width="170px">
+                <el-form ref="settings" :model="settings" label-width="170px">
                     <el-form-item label="Activate Link History">
-                        <el-switch v-model="form.linkHistoryActive" @change="onSubmit"></el-switch>
+                        <el-switch v-model="settings.linkHistoryActive" @change="onSubmit"></el-switch>
                     </el-form-item>
                     <el-form-item label="Maximum Link History">
-                        <el-input-number v-model="form.maxLinkHistory" @change="onSubmit" :disabled="!form.linkHistoryActive" controls-position="right"></el-input-number>
+                        <el-input-number v-model="settings.maxLinkHistory" @change="onSubmit" :disabled="!settings.linkHistoryActive" controls-position="right"></el-input-number>
                     </el-form-item>
                     <el-form-item label="Default Link Action">
-                        <el-select v-model="form.linkDefaultAction" placeholder="please select your zone" @change="onDefaultActionChange">
+                        <el-select v-model="settings.linkDefaultAction" placeholder="please select your zone" @change="onDefaultActionChange">
                             <el-option label="Original" value="original"></el-option>
                             <el-option label="Show option dialog" value="dialog"></el-option>
                             <el-option label="Open in edit mode" value="edit"></el-option>
@@ -49,6 +49,9 @@
                             <el-option label="Open online" value="online"></el-option>
                             <el-option label="Download file" value="download"></el-option>
                         </el-select>
+                    </el-form-item>
+                    <el-form-item label="Open in new Tab" v-show="showInNewTabEnabled">
+                        <el-switch v-model="settings.openInNewTab" @change="onSubmit"></el-switch>
                     </el-form-item>
                 </el-form>
             </el-tab-pane>
@@ -65,22 +68,32 @@ export default {
   },
   data: () => ({
     currentTab: 'options',
-    form: {
+    settings: {
       linkHistoryActive: false,
       linkDefaultAction: 'original',
+      openInNewTab: false,
       maxLinkHistory: 10
     },
     tableData: []
   }),
   created() {
-    chrome.storage.sync.get('settings', value => {
-      Object.assign(this.form, value.settings);
-      if (this.form.linkHistoryActive) {
+    chrome.storage.sync.get('settings', ({ settings }) => {
+      Object.assign(this.settings, settings);
+      if (this.settings.linkHistoryActive) {
         this.currentTab = 'history';
       }
     });
   },
+  computed: {
+    showInNewTabEnabled() {
+      const { linkDefaultAction } = this.settings;
+      return linkDefaultAction === 'online' || linkDefaultAction === 'dialog';
+    }
+  },
   methods: {
+    openHistory() {
+      chrome.tabs.create({ url: 'pages/history.html' });
+    },
     onDefaultActionChange(newValue) {
       if (newValue === 'original') {
         // page refresh may be needed
@@ -96,7 +109,7 @@ export default {
       });
     },
     onSubmit(afterSetFunction = () => {}) {
-      chrome.storage.sync.set({ settings: this.form }, () => {
+      chrome.storage.sync.set({ settings: this.settings }, () => {
         afterSetFunction();
       });
     }
@@ -104,6 +117,7 @@ export default {
 };
 </script>
 <style lang="scss">
+@import '../assets/css/element-ui.scss';
 body {
   font-family: Google Sans, Roboto, sans-serif;
 }
@@ -133,16 +147,15 @@ hr {
 
 .popup-icon {
   width: 50px;
-
-  margin-right: 15px;
+  margin: 0 15px 0 -8px;
 }
 
 .popup-title {
   border-radius: 28px 0 0 28px;
   border: 1px solid #e5d8d9;
   padding: 3px 14px;
-  background: #0195f9;
-  box-shadow: 1px 1px 10px inset #0064a7;
+  background: $--color-primary;
+  box-shadow: 1px 1px 10px inset darken($--color-primary, 20%);
   color: white;
   margin: 0 -15px 0 0;
 }
