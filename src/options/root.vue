@@ -5,9 +5,7 @@
 export default {
   data: () => ({}),
   computed: {},
-  created() {
-    console.log('options');
-  },
+  created() {},
   mounted() {},
   methods: {}
 };

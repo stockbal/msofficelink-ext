@@ -10,6 +10,25 @@ export const runsSharepoint = () => {
 };
 
 /**
+ * Returns the extension settings (if configured)
+ * @return {Promise<any>}
+ */
+export const getExtSettings = () =>
+  new Promise((resolve, reject) => {
+    // read current extension settings
+    chrome.storage.sync.get('settings', ({ settings }) => {
+      if (!settings) {
+        settings = {
+          linkHistoryActive: false,
+          linkDefaultAction: 'original',
+          maxLinkHistory: 10
+        };
+      }
+
+      resolve(settings);
+    });
+  });
+/**
  * Builds the url for the tab update
  * @param action
  * @param url
@@ -23,9 +42,9 @@ export const buildLinkActionUrl = (action, url) => {
 
   switch (action) {
     case 'read':
-      return `${protocol}:ofv|u|${url}`;
+      return `${protocol}:ofv|u|${decodeURI(url)}`;
     case 'edit':
-      return `${protocol}:ofe|u|${url}`;
+      return `${protocol}:ofe|u|${decodeURI(url)}`;
     case 'online':
       return `${url}?web=1`;
     case 'download':

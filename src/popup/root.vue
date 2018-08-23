@@ -41,7 +41,7 @@
                         <el-input-number v-model="form.maxLinkHistory" @change="onSubmit" :disabled="!form.linkHistoryActive" controls-position="right"></el-input-number>
                     </el-form-item>
                     <el-form-item label="Default Link Action">
-                        <el-select v-model="form.linkDefaultAction" placeholder="please select your zone" @change="onSubmit">
+                        <el-select v-model="form.linkDefaultAction" placeholder="please select your zone" @change="onDefaultActionChange">
                             <el-option label="Original" value="original"></el-option>
                             <el-option label="Show option dialog" value="dialog"></el-option>
                             <el-option label="Open in edit mode" value="edit"></el-option>
@@ -81,7 +81,14 @@ export default {
     });
   },
   methods: {
-    onDefaultActionChange() {
+    onDefaultActionChange(newValue) {
+      if (newValue === 'original') {
+        // page refresh may be needed
+        this.$message({
+          message: 'To get the original link action back a page refresh may be needed',
+          type: 'warning'
+        });
+      }
       this.onSubmit(() => {
         chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
           chrome.tabs.sendMessage(tabs[0].id, { action: 'updateLinks' });
@@ -90,7 +97,7 @@ export default {
     },
     onSubmit(afterSetFunction = () => {}) {
       chrome.storage.sync.set({ settings: this.form }, () => {
-        // afterSetFunction();
+        afterSetFunction();
       });
     }
   }

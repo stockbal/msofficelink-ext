@@ -32,14 +32,14 @@ chrome.contextMenus.create({
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   try {
-    const url = buildLinkActionUrl(info.linkUrl);
-    chrome.tabs.update({ url });
-  } catch (e) {}
+    chrome.tabs.update({ url: buildLinkActionUrl(info.menuItemId, info.linkUrl) });
+  } catch (e) {
+    console.log(e);
+  }
 });
 
-// open
+// handle messages from content scripts or popup pages
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log(request);
   switch (request.action) {
     case 'handleLink':
       if (request.url) {

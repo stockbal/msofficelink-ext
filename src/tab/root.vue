@@ -5,9 +5,7 @@
 export default {
   data: () => ({}),
   computed: {},
-  created() {
-    console.log('tab');
-  },
+  created() {},
   mounted() {},
   methods: {}
 };

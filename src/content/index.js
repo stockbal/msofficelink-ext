@@ -4,7 +4,7 @@ import ElementUI from 'element-ui';
 import Vue from 'vue';
 import localeEN from 'element-ui/lib/locale/lang/en';
 import localeDE from 'element-ui/lib/locale/lang/de';
-import { buildLinkActionUrl, sendUpdateTabRequest } from '../util';
+import { buildLinkActionUrl, getExtSettings, sendUpdateTabRequest } from '../util';
 
 Vue.config.productionTip = false;
 
@@ -22,19 +22,11 @@ const popover = new Vue({
   render: h => h(LinkOptions)
 });
 
-const getLinkDefaultAction = () =>
-  new Promise((resolve, reject) => {
-    // read current extension settings
-    chrome.storage.sync.get('settings', ({ settings }) => {
-      resolve(settings.linkDefaultAction || 'original');
-    });
-  });
-
 const updateOfficeLinks = async () => {
   const links = document.querySelectorAll('a[href]');
 
   let officeLinkCount = 0;
-  const defaultAction = await getLinkDefaultAction();
+  const settings = await getExtSettings();
 
   for (const link of links) {
     if (!/.(doc|docx|docm|xls|xlsx|xlsm|csv|ppt|pptx|pptm)$/.test(link.href)) {
@@ -43,7 +35,7 @@ const updateOfficeLinks = async () => {
 
     officeLinkCount++;
 
-    if (defaultAction !== 'original') {
+    if (settings.linkDefaultAction !== 'original') {
       const newLink = document.createElement('a');
       newLink.href = link.href;
       newLink.innerHTML = link.innerHTML;
@@ -56,22 +48,41 @@ const updateOfficeLinks = async () => {
       newLink.addEventListener('mousedown', async evt => {
         if (!evt.button) {
           // check the required option
-          const defaultAction = await getLinkDefaultAction();
+          const settings = await getExtSettings();
+          const defaultAction = settings.linkDefaultAction;
           if (defaultAction === 'original') {
           } else {
+            evt.preventDefault();
+            evt.stopPropagation();
+
             if (defaultAction === 'dialog') {
               popover.$emit('openDialog', newLink, evt);
             } else {
               sendUpdateTabRequest(buildLinkActionUrl(defaultAction, newLink.href));
             }
-            evt.preventDefault();
-            evt.stopPropagation();
+
             return true;
           }
         }
       });
 
+      newLink.addEventListener('click', evt => {
+        evt.preventDefault();
+        evt.stopPropagation();
+        return true;
+      });
+
+      newLink.addEventListener('mouseup', evt => {
+        evt.preventDefault();
+        evt.stopPropagation();
+        return true;
+      });
+
       link.parentNode.replaceChild(newLink, link);
+    } else if (settings.linkHistoryActive) {
+      link.addEventListener('mousedown', evt => {
+        // TODO: store link in history
+      });
     }
   }
 
@@ -81,9 +92,8 @@ const updateOfficeLinks = async () => {
 
 updateOfficeLinks();
 
-// chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-//   console.log('update links');
-//   if (request.action && request.action === 'updateLinks') {
-//     updateOfficeLinks();
-//   }
-// });
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action && request.action === 'updateLinks') {
+    updateOfficeLinks();
+  }
+});
