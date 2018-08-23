@@ -2,8 +2,8 @@
  * @see {@link https://developer.chrome.com/extensions/manifest}
  */
 module.exports = {
-  name: 'MS Office Link',
-  description: 'A Chrome extension project with Vue.js',
+  name: 'MS Doc Link',
+  description: 'Handle MS Office Document links in a better way',
   author: 'Ludwig Stockbauer-Muhr <ludwig.stockbauer-muhr@msg.group>',
   version: '1.0.0',
   icons: {
