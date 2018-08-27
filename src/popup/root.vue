@@ -5,12 +5,13 @@
             <h2>MS Doc Link</h2>
         </div>
         <el-tabs class="popup-tabs" :value="currentTab">
-            <el-tab-pane v-if="settings.linkHistoryActive" label="Link History" name="history" class="popup-tabs__history flex flex--column">
+            <el-tab-pane v-if="settings.linkHistoryActive" label="Link History" name="history"
+                         class="popup-tabs__history flex flex--column">
                 <el-table :data="tableData"
                           border
                           height="350"
                           style="width: 100%">
-                    <el-table-column label="Type"
+                    <el-table-column label="Type" class-name="history-type"
                                      width="60">
                         <template slot-scope="scope">
                             <img v-if="scope.row.type === 'word'" src="../../static/icons/word-app.svg" width="20px"
@@ -24,9 +25,28 @@
                     <el-table-column prop="file"
                                      label="Name">
                     </el-table-column>
-                    <el-table-column label="Action" width="70">
+                    <el-table-column label="Action" width="70" class-name="history-action">
                         <template slot-scope="scope">
-                            <el-button round icon="el-icon-more" circle></el-button>
+                            <el-popover
+                                    placement="left"
+                                    width="160"
+                                    v-model="scope.row.actionMenuVisible">
+                                <div class="history-action__options">
+                                    <el-radio v-model="chosenOption" label="read">Open Protected</el-radio>
+                                    <el-radio v-model="chosenOption" label="edit">Open Editable</el-radio>
+                                    <el-radio v-model="chosenOption" label="online">Open Online</el-radio>
+                                    <el-radio v-model="chosenOption" label="download">Download</el-radio>
+                                </div>
+                                <div style="text-align: right; margin: 0">
+                                    <el-button size="mini" type="text" @click="scope.row.actionMenuVisible = false">
+                                        cancel
+                                    </el-button>
+                                    <el-button type="primary" size="mini" @click="scope.row.actionMenuVisible = false">
+                                        confirm
+                                    </el-button>
+                                </div>
+                                <el-button slot="reference" round icon="el-icon-more" circle></el-button>
+                            </el-popover>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -38,10 +58,13 @@
                         <el-switch v-model="settings.linkHistoryActive" @change="onSubmit"></el-switch>
                     </el-form-item>
                     <el-form-item label="Maximum Link History">
-                        <el-input-number v-model="settings.maxLinkHistory" @change="onSubmit" :disabled="!settings.linkHistoryActive" controls-position="right"></el-input-number>
+                        <el-input-number v-model="settings.maxLinkHistory" @change="onSubmit"
+                                         :disabled="!settings.linkHistoryActive" :max="100" :min="5"
+                                         controls-position="right"></el-input-number>
                     </el-form-item>
                     <el-form-item label="Default Link Action">
-                        <el-select v-model="settings.linkDefaultAction" placeholder="please select your zone" @change="onDefaultActionChange">
+                        <el-select v-model="settings.linkDefaultAction" placeholder="please select your zone"
+                                   @change="onDefaultActionChange">
                             <el-option label="Original" value="original"></el-option>
                             <el-option label="Show option dialog" value="dialog"></el-option>
                             <el-option label="Open in edit mode" value="edit"></el-option>
@@ -60,9 +83,9 @@
 </template>
 
 <script>
-import FormEntry from '../assets/components/FormEntry';
+  import FormEntry from '../assets/components/FormEntry';
 
-export default {
+  export default {
   components: {
     FormEntry
   },
@@ -74,6 +97,8 @@ export default {
       openInNewTab: false,
       maxLinkHistory: 10
     },
+    actionPopoverVisible: true,
+    chosenOption: 'online',
     tableData: []
   }),
   created() {
@@ -118,6 +143,7 @@ export default {
 </script>
 <style lang="scss">
 @import '../assets/css/element-ui.scss';
+
 body {
   font-family: Google Sans, Roboto, sans-serif;
 }
@@ -130,7 +156,7 @@ hr {
 .popup {
   .el-table th,
   .el-table td {
-    padding: 5px 0;
+    padding: 2px 0;
   }
 
   .el-tabs__item {
@@ -167,6 +193,24 @@ hr {
 .popup-tabs__history {
   .show-history-btn {
     margin: 5px 0 0 0;
+  }
+}
+
+.history-type {
+  img {
+    vertical-align: middle;
+  }
+}
+
+.history-action__options {
+  padding: 0 0 5px 0;
+  font-size: 10px;
+  line-height: 2;
+
+  .el-radio {
+    & + .el-radio {
+      margin-left: 0;
+    }
   }
 }
 </style>
