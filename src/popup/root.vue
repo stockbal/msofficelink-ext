@@ -41,8 +41,8 @@
                                     <el-button size="mini" type="text" @click="scope.row.actionMenuVisible = false">
                                         cancel
                                     </el-button>
-                                    <el-button type="primary" size="mini" @click="scope.row.actionMenuVisible = false">
-                                        confirm
+                                    <el-button type="primary" size="mini" @click="confirmHistoryLinkAction(scope.row)">
+                                        Confirm
                                     </el-button>
                                 </div>
                                 <el-button slot="reference" round icon="el-icon-more" circle></el-button>
@@ -88,6 +88,7 @@
 <script>
 import FormEntry from '../assets/components/FormEntry';
 import { ExtStorage } from '../ext/storage';
+import { LinkHandler } from '../util';
 
 export default {
   components: {
@@ -123,6 +124,11 @@ export default {
       ExtStorage.clearLinkHistory();
       this.history = [];
       this.$message('Link history was deleted');
+    },
+    confirmHistoryLinkAction(linkRow) {
+      // hide popover
+      linkRow.actionMenuVisible = false;
+      new LinkHandler(this.chosenOption, linkRow.link).sendTabUpdateImmediately(true);
     },
     onDefaultActionChange(newValue) {
       if (newValue === 'original') {

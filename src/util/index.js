@@ -27,6 +27,8 @@ export const buildLinkActionUrl = (action, protocol, url) => {
       return `${url}?web=1`;
     case 'download':
       return url;
+    case 'original':
+      return url;
     default:
       throw new Error('unrecognized link action');
   }
@@ -77,7 +79,7 @@ export class LinkHandler {
     this._fileType = protocol;
     this._finalTabUrl = buildLinkActionUrl(action, protocol, linkUrl);
   }
-  async _updateLinkHistory() {
+  async updateLinkHistory() {
     const settings = await ExtStorage.getSettings();
     if (!settings.linkHistoryActive) {
       return;
@@ -93,7 +95,7 @@ export class LinkHandler {
    * @returns {Promise<void>}
    */
   async sendTabUpdateViaMessage() {
-    this._updateLinkHistory();
+    this.updateLinkHistory();
     chrome.runtime.sendMessage({
       action: 'handleLink',
       url: this._finalTabUrl,
@@ -116,8 +118,10 @@ export class LinkHandler {
    * NOTE: cannot be used inside of content script
    * @returns {Promise<void>}
    */
-  async sendTabUpdateImmediately() {
-    this._updateLinkHistory();
+  async sendTabUpdateImmediately(preventHistoryUpdate = false) {
+    if (!preventHistoryUpdate) {
+      this.updateLinkHistory();
+    }
     openUrlInTab(await this._isOpenInNewTab(), this._finalTabUrl);
   }
 }

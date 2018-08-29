@@ -5,10 +5,10 @@
         <div class="notification-text">You are about to open the file <em><u>{{file}}</u></em></div>
         <div class="notification-text">Choose the file operation</div>
         <div class="file-options">
-            <el-button @click="confirm('read')" type="primary">Open in protected mode</el-button>
-            <el-button @click="confirm('edit')" type="primary">Open in edit mode</el-button>
-            <el-button @click="confirm('online')" type="primary">Open online</el-button>
-            <el-button @click="confirm('download')" type="primary">Download</el-button>
+            <el-button @click="confirm('read')"  size="medium" type="primary">Open in protected mode</el-button>
+            <el-button @click="confirm('edit')"  size="medium" type="primary">Open in edit mode</el-button>
+            <el-button @click="confirm('online')"  size="medium" type="primary">Open online</el-button>
+            <el-button @click="confirm('download')"  size="medium" type="primary">Download</el-button>
         </div>
     </el-dialog>
 </template>
@@ -73,7 +73,7 @@ export default {
   padding: 5px;
   .el-button {
     margin: 2px;
-    width: 200px;
+    /*width: 200px;*/
   }
 }
 

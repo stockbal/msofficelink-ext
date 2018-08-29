@@ -52,6 +52,7 @@ const updateOfficeLinks = async () => {
           const settings = await ExtStorage.getSettings();
           const defaultAction = settings.linkDefaultAction;
           if (defaultAction === 'original') {
+            new LinkHandler(settings.linkDefaultAction, link.href).updateLinkHistory();
           } else {
             evt.preventDefault();
             evt.stopPropagation();
@@ -82,7 +83,7 @@ const updateOfficeLinks = async () => {
       link.parentNode.replaceChild(newLink, link);
     } else if (settings.linkHistoryActive) {
       link.addEventListener('mousedown', evt => {
-        // TODO: store link in history
+        new LinkHandler(settings.linkDefaultAction, link.href).updateLinkHistory();
       });
     }
   }
