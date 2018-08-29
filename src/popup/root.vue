@@ -83,9 +83,9 @@
 </template>
 
 <script>
-  import FormEntry from '../assets/components/FormEntry';
+import FormEntry from '../assets/components/FormEntry';
 
-  export default {
+export default {
   components: {
     FormEntry
   },

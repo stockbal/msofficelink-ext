@@ -14,9 +14,9 @@
 </template>
 
 <script>
-  import { getProtocol, LinkHandler } from '../util';
+import { getProtocol, LinkHandler } from '../util';
 
-  export default {
+export default {
   name: 'LinkOptions',
   data: () => ({
     dialogVisible: false,

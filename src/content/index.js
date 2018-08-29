@@ -59,7 +59,7 @@ const updateOfficeLinks = async () => {
             if (defaultAction === 'dialog') {
               popover.$emit('openDialog', newLink, evt);
             } else {
-              new LinkHandler(newLink.href, defaultAction).sendTabUpdateViaMessage();
+              new LinkHandler(defaultAction, newLink.href).sendTabUpdateViaMessage();
             }
 
             return true;
