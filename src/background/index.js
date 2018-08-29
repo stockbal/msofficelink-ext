@@ -57,7 +57,10 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     case 'handleLink':
       // retrieve settings to check if
       if (openNewTab) {
-        chrome.tabs.create({ url: url });
+        // insert new tab next to current tab
+        chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+          chrome.tabs.create({ url: url, index: tabs[0].index + 1 });
+        });
       } else {
         chrome.tabs.update({ url: url });
       }
