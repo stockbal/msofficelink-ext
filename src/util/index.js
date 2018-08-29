@@ -1,3 +1,5 @@
+import { ExtStorage } from '../ext/storage';
+
 export const TIMER_DURATION = 200;
 
 export const runsSharepoint = () => {
@@ -9,25 +11,6 @@ export const runsSharepoint = () => {
   return false;
 };
 
-/**
- * Returns the extension settings (if configured)
- * @return {Promise<any>}
- */
-export const getExtSettings = () =>
-  new Promise((resolve, reject) => {
-    // read current extension settings
-    chrome.storage.sync.get('settings', ({ settings }) => {
-      if (!settings) {
-        settings = {
-          linkHistoryActive: false,
-          linkDefaultAction: 'original',
-          maxLinkHistory: 10
-        };
-      }
-
-      resolve(settings);
-    });
-  });
 /**
  * Builds the url for the tab update
  * @param action
@@ -54,9 +37,7 @@ export const buildLinkActionUrl = (action, url) => {
   }
 };
 
-export const sendUpdateTabRequest = url => {
-  chrome.runtime.sendMessage({ action: 'handleLink', url });
-};
+export const sendUpdateTabRequest = (url, openNewTab) => {};
 
 export const getProtocol = link => {
   if (/\.(docx|doc|docm)$/.test(link)) {
@@ -69,3 +50,31 @@ export const getProtocol = link => {
     return '';
   }
 };
+
+export class LinkHandler {
+  constructor(action, linkUrl) {
+    this._linkUrl = linkUrl;
+    this._action = action;
+    this._finalTabUrl = buildLinkActionUrl(action, linkUrl);
+  }
+  async sendTabUpdateViaMessage() {
+    chrome.runtime.sendMessage({
+      action: 'handleLink',
+      url: this._finalTabUrl,
+      openNewTab: await this._isOpenInNewTab()
+    });
+  }
+  async _isOpenInNewTab() {
+    const settings = await ExtStorage.getSettings();
+    return settings.openInNewTab && this._action === 'online';
+  }
+  async sendTabUpdateImmediately() {
+    // retrieve settings to check if
+    const openInNewTab = await this._isOpenInNewTab();
+    if (openInNewTab) {
+      chrome.tabs.create({ url: this._finalTabUrl });
+    } else {
+      chrome.tabs.update({ url: this._finalTabUrl });
+    }
+  }
+}

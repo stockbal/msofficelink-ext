@@ -1,25 +1,23 @@
-/**
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Storage/LocalStorage}
- */
-export default {
-  get(key) {
-    try {
-      return JSON.parse(localStorage.getItem(key));
-    } catch (e) {}
-  },
-  set(key, val) {
-    try {
-      localStorage.setItem(key, JSON.stringify(val));
-    } catch (e) {}
-  },
-  remove(key) {
-    try {
-      localStorage.removeItem(key);
-    } catch (e) {}
-  },
-  clear() {
-    try {
-      localStorage.clear();
-    } catch (e) {}
+export class ExtStorage {
+  /**
+   * Returns the current extension settings
+   * @returns {Promise<any>}
+   */
+  static getSettings() {
+    return new Promise((resolve, reject) => {
+      // read current extension settings
+      chrome.storage.sync.get('settings', ({ settings }) => {
+        if (!settings) {
+          settings = {
+            linkHistoryActive: false,
+            linkDefaultAction: 'original',
+            maxLinkHistory: 10,
+            openInNewTab: false
+          };
+        }
+
+        resolve(settings);
+      });
+    });
   }
-};
+}

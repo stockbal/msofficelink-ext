@@ -4,7 +4,8 @@ import ElementUI from 'element-ui';
 import Vue from 'vue';
 import localeEN from 'element-ui/lib/locale/lang/en';
 import localeDE from 'element-ui/lib/locale/lang/de';
-import { buildLinkActionUrl, getExtSettings, sendUpdateTabRequest } from '../util';
+import { LinkHandler } from '../util';
+import { ExtStorage } from '../ext/storage';
 
 Vue.config.productionTip = false;
 
@@ -26,7 +27,7 @@ const updateOfficeLinks = async () => {
   const links = document.querySelectorAll('a[href]');
 
   let officeLinkCount = 0;
-  const settings = await getExtSettings();
+  const settings = await ExtStorage.getSettings();
 
   for (const link of links) {
     if (!/.(doc|docx|docm|xls|xlsx|xlsm|csv|ppt|pptx|pptm)$/.test(link.href)) {
@@ -48,7 +49,7 @@ const updateOfficeLinks = async () => {
       newLink.addEventListener('mousedown', async evt => {
         if (!evt.button) {
           // check the required option
-          const settings = await getExtSettings();
+          const settings = await ExtStorage.getSettings();
           const defaultAction = settings.linkDefaultAction;
           if (defaultAction === 'original') {
           } else {
@@ -58,7 +59,7 @@ const updateOfficeLinks = async () => {
             if (defaultAction === 'dialog') {
               popover.$emit('openDialog', newLink, evt);
             } else {
-              sendUpdateTabRequest(buildLinkActionUrl(defaultAction, newLink.href));
+              new LinkHandler(newLink.href, defaultAction).sendTabUpdateViaMessage();
             }
 
             return true;

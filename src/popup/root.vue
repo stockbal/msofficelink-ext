@@ -73,7 +73,7 @@
                             <el-option label="Download file" value="download"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="Open in new Tab" v-show="showInNewTabEnabled">
+                    <el-form-item label="Open in new Tab">
                         <el-switch v-model="settings.openInNewTab" @change="onSubmit"></el-switch>
                     </el-form-item>
                 </el-form>
@@ -108,12 +108,6 @@
         this.currentTab = 'history';
       }
     });
-  },
-  computed: {
-    showInNewTabEnabled() {
-      const { linkDefaultAction } = this.settings;
-      return linkDefaultAction === 'online' || linkDefaultAction === 'dialog';
-    }
   },
   methods: {
     openHistory() {

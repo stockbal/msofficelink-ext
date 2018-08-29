@@ -1,4 +1,5 @@
-import { buildLinkActionUrl } from '../util';
+import { LinkHandler } from '../util';
+// import { ExtStorage } from '../ext/storage';
 
 const patterns = ['docx', 'doc', 'docm', 'xls', 'xlsx', 'csv', 'xlsm', 'pptx', 'ppt', 'pptm'].map(
   el => `*://*/*.${el}`
@@ -42,18 +43,23 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   }
 
   try {
-    chrome.tabs.update({ url: buildLinkActionUrl(info.menuItemId, info.linkUrl) });
+    new LinkHandler(info.menuItemId, info.linkUrl).sendTabUpdateImmediately();
   } catch (e) {
     console.log(e);
   }
 });
 
 // handle messages from content scripts or popup pages
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  switch (request.action) {
+chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
+  const { action, url, openNewTab = false } = request;
+
+  switch (action) {
     case 'handleLink':
-      if (request.url) {
-        chrome.tabs.update({ url: request.url });
+      // retrieve settings to check if
+      if (openNewTab) {
+        chrome.tabs.create({ url: url });
+      } else {
+        chrome.tabs.update({ url: url });
       }
       sendResponse({ success: true });
       break;

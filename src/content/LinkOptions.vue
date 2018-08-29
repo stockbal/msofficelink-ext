@@ -14,7 +14,7 @@
 </template>
 
 <script>
-  import { getProtocol, sendUpdateTabRequest } from '../util';
+  import { getProtocol, LinkHandler } from '../util';
 
   export default {
   name: 'LinkOptions',
@@ -38,33 +38,10 @@
   },
   methods: {
     confirm(option) {
-      switch (option) {
-        case 'read':
-          this.viewLocally();
-          break;
-        case 'edit':
-          this.editLocally();
-          break;
-        case 'online':
-          this.viewOnline();
-          break;
-        case 'download':
-          this.downloadFile();
-          break;
-      }
       this.dialogVisible = false;
-    },
-    viewLocally() {
-      sendUpdateTabRequest(this.type + ':ofv|u|' + this.linkUrl);
-    },
-    editLocally() {
-      sendUpdateTabRequest(this.type + ':ofe|u|' + this.linkUrl);
-    },
-    viewOnline() {
-      sendUpdateTabRequest(this.linkUrl + '?web=1');
-    },
-    downloadFile() {
-      sendUpdateTabRequest(this.linkUrl);
+      window.setTimeout(() => {
+        new LinkHandler(option, this.linkUrl).sendTabUpdateViaMessage();
+      }, 300);
     }
   }
 };
