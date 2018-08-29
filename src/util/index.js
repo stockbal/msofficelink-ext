@@ -17,12 +17,7 @@ export const runsSharepoint = () => {
  * @param url
  * @returns {*}
  */
-export const buildLinkActionUrl = (action, url) => {
-  const protocol = getProtocol(url);
-  if (!protocol) {
-    throw new Error('unrecognized protocol');
-  }
-
+export const buildLinkActionUrl = (action, protocol, url) => {
   switch (action) {
     case 'read':
       return `${protocol}:ofv|u|${decodeURI(url)}`;
@@ -51,30 +46,78 @@ export const getProtocol = link => {
   }
 };
 
+/**
+ * Updates the tab url with the given url with an option to
+ * create a new tab with the given url
+ * @param openNewTab
+ * @param url
+ */
+export const openUrlInTab = (openNewTab, url) => {
+  if (openNewTab) {
+    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+      chrome.tabs.create({ url: url, index: tabs[0].index + 1 });
+    });
+  } else {
+    chrome.tabs.update({ url: this._finalTabUrl });
+  }
+};
+
+/**
+ * Link Handler for creating and sending office
+ * document links to the chrome tabs api
+ */
 export class LinkHandler {
   constructor(action, linkUrl) {
     this._linkUrl = linkUrl;
     this._action = action;
-    this._finalTabUrl = buildLinkActionUrl(action, linkUrl);
+    const protocol = getProtocol(this._linkUrl);
+    if (!protocol) {
+      throw new Error('unrecognized protocol');
+    }
+    this._fileType = protocol;
+    this._finalTabUrl = buildLinkActionUrl(action, protocol, linkUrl);
   }
+  async _updateLinkHistory() {
+    const settings = await ExtStorage.getSettings();
+    if (!settings.linkHistoryActive) {
+      return;
+    }
+    const fileNameMatch = this._linkUrl.match(new RegExp('/([^/]+\\.\\w+$)'));
+    if (fileNameMatch && fileNameMatch.length > 0) {
+      ExtStorage.addLinkToHistory(this._linkUrl, decodeURI(fileNameMatch[1]), this._fileType);
+    }
+  }
+
+  /**
+   * Sends update tab command via runtime chrome runtime message
+   * @returns {Promise<void>}
+   */
   async sendTabUpdateViaMessage() {
+    this._updateLinkHistory();
     chrome.runtime.sendMessage({
       action: 'handleLink',
       url: this._finalTabUrl,
       openNewTab: await this._isOpenInNewTab()
     });
   }
+
+  /**
+   * Returns the OpenInNewTab option from extension settings
+   * @returns {Promise<boolean>}
+   * @private
+   */
   async _isOpenInNewTab() {
     const settings = await ExtStorage.getSettings();
     return settings.openInNewTab && this._action === 'online';
   }
+
+  /**
+   * Sends update tab command immediately
+   * NOTE: cannot be used inside of content script
+   * @returns {Promise<void>}
+   */
   async sendTabUpdateImmediately() {
-    // retrieve settings to check if
-    const openInNewTab = await this._isOpenInNewTab();
-    if (openInNewTab) {
-      chrome.tabs.create({ url: this._finalTabUrl });
-    } else {
-      chrome.tabs.update({ url: this._finalTabUrl });
-    }
+    this._updateLinkHistory();
+    openUrlInTab(await this._isOpenInNewTab(), this._finalTabUrl);
   }
 }

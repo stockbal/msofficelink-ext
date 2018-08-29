@@ -8,15 +8,15 @@
     </header>
     <main>
       <section class="history__data">
-        <el-table :data="tableData"
+        <el-table :data="history"
                   border
                   style="width: 100%">
           <el-table-column label="Type"
                            width="60">
             <template slot-scope="scope">
-              <img v-if="scope.row.type === 'word'" src="../../static/icons/word-app.svg" width="20px"
+              <img v-if="scope.row.type === 'ms-word'" src="../../static/icons/word-app.svg" width="20px"
                    alt="word">
-              <img v-else-if="scope.row.type === 'excel'" src="../../static/icons/excel-app.svg"
+              <img v-else-if="scope.row.type === 'ms-excel'" src="../../static/icons/excel-app.svg"
                    width="20px"
                    alt="word">
               <img v-else src="../../static/icons/powerpoint-app.svg" width="20px" alt="word">
@@ -36,14 +36,29 @@
   </div>
 </template>
 <script>
+import { ExtStorage } from '../ext/storage';
+
 export default {
   data: () => ({
-    tableData: []
+    history: []
   }),
   computed: {},
-  created() {},
-  mounted() {},
-  methods: {}
+  async created() {
+    // read history
+    const history = await ExtStorage.getLinkHistory();
+    this.history = history.links;
+  },
+  methods: {
+    openHistory() {
+      chrome.tabs.create({ url: 'pages/history.html' });
+    },
+    clearHistory() {
+      ExtStorage.clearLinkHistory();
+      this.history = [];
+      this.$message('Link history was deleted');
+    }
+  },
+  mounted() {}
 };
 </script>
 <style lang="scss">

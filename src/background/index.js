@@ -1,5 +1,4 @@
-import { LinkHandler } from '../util';
-// import { ExtStorage } from '../ext/storage';
+import { LinkHandler, openUrlInTab } from '../util';
 
 const patterns = ['docx', 'doc', 'docm', 'xls', 'xlsx', 'csv', 'xlsm', 'pptx', 'ppt', 'pptm'].map(
   el => `*://*/*.${el}`
@@ -55,15 +54,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 
   switch (action) {
     case 'handleLink':
-      // retrieve settings to check if
-      if (openNewTab) {
-        // insert new tab next to current tab
-        chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-          chrome.tabs.create({ url: url, index: tabs[0].index + 1 });
-        });
-      } else {
-        chrome.tabs.update({ url: url });
-      }
+      openUrlInTab(openNewTab, url);
       sendResponse({ success: true });
       break;
     case 'updateBadge':

@@ -20,4 +20,24 @@ export class ExtStorage {
       });
     });
   }
+  static async getLinkHistory() {
+    return new Promise(resolve => {
+      chrome.storage.local.get('history', ({ history }) => {
+        if (!history) {
+          history = {
+            links: []
+          };
+        }
+        resolve(history);
+      });
+    });
+  }
+  static async addLinkToHistory(link, file, type) {
+    const history = await ExtStorage.getLinkHistory();
+    history.links.push({ link, type, file });
+    chrome.storage.local.set({ history });
+  }
+  static clearLinkHistory() {
+    chrome.storage.local.remove('history');
+  }
 }

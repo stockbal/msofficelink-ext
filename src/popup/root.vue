@@ -7,16 +7,16 @@
         <el-tabs class="popup-tabs" :value="currentTab">
             <el-tab-pane v-if="settings.linkHistoryActive" label="Link History" name="history"
                          class="popup-tabs__history flex flex--column">
-                <el-table :data="tableData"
+                <el-table :data="history"
                           border
                           height="350"
                           style="width: 100%">
                     <el-table-column label="Type" class-name="history-type"
                                      width="60">
                         <template slot-scope="scope">
-                            <img v-if="scope.row.type === 'word'" src="../../static/icons/word-app.svg" width="20px"
+                            <img v-if="scope.row.type === 'ms-word'" src="../../static/icons/word-app.svg" width="20px"
                                  alt="word">
-                            <img v-else-if="scope.row.type === 'excel'" src="../../static/icons/excel-app.svg"
+                            <img v-else-if="scope.row.type === 'ms-excel'" src="../../static/icons/excel-app.svg"
                                  width="20px"
                                  alt="word">
                             <img v-else src="../../static/icons/powerpoint-app.svg" width="20px" alt="word">
@@ -50,7 +50,10 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <div class="history__actions flex flex--row">
                 <el-button class="show-history-btn" @click="openHistory">Show full history</el-button>
+                <el-button class="show-history-btn" @click="clearHistory">Clear History</el-button>
+                </div>
             </el-tab-pane>
             <el-tab-pane label="Options" name="options">
                 <el-form ref="settings" :model="settings" label-width="170px">
@@ -84,6 +87,7 @@
 
 <script>
 import FormEntry from '../assets/components/FormEntry';
+import { ExtStorage } from '../ext/storage';
 
 export default {
   components: {
@@ -99,19 +103,26 @@ export default {
     },
     actionPopoverVisible: true,
     chosenOption: 'online',
-    tableData: []
+    history: []
   }),
-  created() {
-    chrome.storage.sync.get('settings', ({ settings }) => {
-      Object.assign(this.settings, settings);
-      if (this.settings.linkHistoryActive) {
-        this.currentTab = 'history';
-      }
-    });
+  async created() {
+    const settings = await ExtStorage.getSettings();
+    Object.assign(this.settings, settings);
+    if (this.settings.linkHistoryActive) {
+      this.currentTab = 'history';
+    }
+    // read history
+    const history = await ExtStorage.getLinkHistory();
+    this.history = history.links;
   },
   methods: {
     openHistory() {
       chrome.tabs.create({ url: 'pages/history.html' });
+    },
+    clearHistory() {
+      ExtStorage.clearLinkHistory();
+      this.history = [];
+      this.$message('Link history was deleted');
     },
     onDefaultActionChange(newValue) {
       if (newValue === 'original') {
