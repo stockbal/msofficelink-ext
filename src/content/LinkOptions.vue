@@ -4,23 +4,19 @@
                width="30%">
         <div class="notification-text">You are about to open the file <em><u>{{file}}</u></em></div>
         <div class="notification-text">Choose the file operation</div>
-        <el-radio-group class="file-option-radio" v-model="fileOpenOption">
-            <el-radio :label="'read'">Open in protected mode</el-radio>
-            <el-radio :label="'edit'">Open in edit mode</el-radio>
-            <el-radio :label="'online'">Open online</el-radio>
-            <el-radio :label="'download'">Download file</el-radio>
-        </el-radio-group>
-        <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible = false">Cancel</el-button>
-            <el-button type="primary" @click="confirm">Confirm</el-button>
-        </span>
+        <div class="file-options">
+            <el-button @click="confirm('read')" type="primary">Open in protected mode</el-button>
+            <el-button @click="confirm('edit')" type="primary">Open in edit mode</el-button>
+            <el-button @click="confirm('online')" type="primary">Open online</el-button>
+            <el-button @click="confirm('download')" type="primary">Download</el-button>
+        </div>
     </el-dialog>
 </template>
 
 <script>
-import { getProtocol, sendUpdateTabRequest } from '../util';
+  import { getProtocol, sendUpdateTabRequest } from '../util';
 
-export default {
+  export default {
   name: 'LinkOptions',
   data: () => ({
     dialogVisible: false,
@@ -41,8 +37,8 @@ export default {
     });
   },
   methods: {
-    confirm() {
-      switch (this.fileOpenOption) {
+    confirm(option) {
+      switch (option) {
         case 'read':
           this.viewLocally();
           break;
@@ -76,7 +72,7 @@ export default {
 
 <style lang="scss">
 @import '../assets/css/base';
-@import '../assets/css/element-ui';
+@import '../assets/css/vars';
 
 .el-radio-group {
   display: block;
@@ -96,9 +92,16 @@ export default {
   font-family: Google Sans, Roboto, sans-serif;
 }
 
-.file-option-radio {
-  border: 1px solid $--color-primary;
-  border-radius: 5px;
+.file-options {
+  padding: 5px;
+  .el-button {
+    margin: 2px;
+    width: 200px;
+  }
+}
+
+.el-dialog__title {
+  font-size: 20px;
 }
 
 .notification-text {
