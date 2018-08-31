@@ -60,7 +60,7 @@ export const openUrlInTab = (openNewTab, url) => {
       chrome.tabs.create({ url: url, index: tabs[0].index + 1 });
     });
   } else {
-    chrome.tabs.update({ url: this._finalTabUrl });
+    chrome.tabs.update({ url: url });
   }
 };
 
@@ -86,7 +86,15 @@ export class LinkHandler {
     }
     const fileNameMatch = this._linkUrl.match(new RegExp('/([^/]+\\.\\w+$)'));
     if (fileNameMatch && fileNameMatch.length > 0) {
-      ExtStorage.addLinkToHistory(this._linkUrl, decodeURI(fileNameMatch[1]), this._fileType);
+      const origin = window.location.origin;
+      const linkHasOrigin = new RegExp('^(\\w+):').test(this._linkUrl);
+
+      ExtStorage.addLinkToHistory(
+        origin,
+        !linkHasOrigin ? origin + '/' + this._linkUrl : this._linkUrl,
+        decodeURI(fileNameMatch[1]),
+        this._fileType
+      );
     }
   }
 

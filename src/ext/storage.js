@@ -32,9 +32,9 @@ export class ExtStorage {
       });
     });
   }
-  static async addLinkToHistory(link, file, type) {
+  static async addLinkToHistory(origin, link, file, type) {
     const history = await ExtStorage.getLinkHistory();
-    history.links.push({ link, type, file });
+    history.links.push({ origin, link, type, file });
     chrome.storage.local.set({ history });
   }
   static clearLinkHistory() {
