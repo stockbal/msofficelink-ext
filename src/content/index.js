@@ -94,6 +94,13 @@ const updateOfficeLinks = async () => {
 
 updateOfficeLinks();
 
+window.addEventListener('popstate', evt => {
+  updateOfficeLinks();
+});
+window.addEventListener('pushstate', evt => {
+  updateOfficeLinks();
+});
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action && request.action === 'updateLinks') {
     updateOfficeLinks();

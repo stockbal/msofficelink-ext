@@ -1,44 +1,24 @@
 <template>
-  <div class="history">
-    <header>
-      <div class="history-header flex flex--row flex--align-center">
-        <img src="../../static/icons/icon.svg">
-        <h1>Document Link History</h1>
-      </div>
-    </header>
-    <main>
-      <section class="history__data">
-        <el-table :data="history"
-                  border
-                  style="width: 100%">
-          <el-table-column label="Type"
-                           width="60">
-            <template slot-scope="scope">
-              <img v-if="scope.row.type === 'ms-word'" src="../../static/icons/word-app.svg" width="20px"
-                   alt="word">
-              <img v-else-if="scope.row.type === 'ms-excel'" src="../../static/icons/excel-app.svg"
-                   width="20px"
-                   alt="word">
-              <img v-else src="../../static/icons/powerpoint-app.svg" width="20px" alt="word">
-            </template>
-          </el-table-column>
-          <el-table-column prop="file"
-                           label="Name">
-          </el-table-column>
-          <el-table-column label="Action" width="70">
-            <template slot-scope="scope">
-              <el-button round icon="el-icon-more" circle></el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </section>
-    </main>
-  </div>
+    <div class="history">
+        <header>
+            <div class="history-header flex flex--row flex--align-center">
+                <img src="../../static/icons/icon.svg">
+                <h1>Document Link History</h1>
+            </div>
+        </header>
+        <main>
+            <section class="history__links">
+                <history-link v-for="(linkData, idx) in history" :key="idx" :link="linkData"></history-link>
+            </section>
+        </main>
+    </div>
 </template>
 <script>
 import { ExtStorage } from '../ext/storage';
+import HistoryLink from './HistoryLink';
 
 export default {
+  components: { HistoryLink },
   data: () => ({
     history: []
   }),
@@ -46,7 +26,10 @@ export default {
   async created() {
     // read history
     const history = await ExtStorage.getLinkHistory();
-    this.history = history.links;
+    this.history = [];
+    Object.entries(history.links).forEach(([, value]) => {
+      this.history.push(value);
+    });
   },
   methods: {
     openHistory() {
@@ -135,7 +118,7 @@ main {
   }
 }
 
-.history__data {
+.history__links {
   padding: 5px;
 }
 </style>

@@ -25,7 +25,7 @@ export class ExtStorage {
       chrome.storage.local.get('history', ({ history }) => {
         if (!history) {
           history = {
-            links: []
+            links: {}
           };
         }
         resolve(history);
@@ -34,7 +34,11 @@ export class ExtStorage {
   }
   static async addLinkToHistory(origin, link, file, type) {
     const history = await ExtStorage.getLinkHistory();
-    history.links.push({ origin, link, type, file });
+    const settings = await ExtStorage.getSettings();
+    if (!history.links[link] && Object.keys(history.links).length === settings.maxLinkHistory) {
+      return;
+    }
+    history.links[link] = { origin, link, type, file, openedOn: new Date() };
     chrome.storage.local.set({ history });
   }
   static clearLinkHistory() {

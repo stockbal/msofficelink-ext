@@ -25,34 +25,20 @@
                     <el-table-column prop="file"
                                      label="Name">
                     </el-table-column>
-                    <el-table-column label="Action" width="70" class-name="history-action">
+                    <el-table-column label="Action" width="70">
                         <template slot-scope="scope">
-                            <el-popover
-                                    placement="left"
-                                    width="160"
-                                    v-model="scope.row.actionMenuVisible">
-                                <div class="history-action__options">
-                                    <el-radio v-model="chosenOption" label="read">Open Protected</el-radio>
-                                    <el-radio v-model="chosenOption" label="edit">Open Editable</el-radio>
-                                    <el-radio v-model="chosenOption" label="online">Open Online</el-radio>
-                                    <el-radio v-model="chosenOption" label="download">Download</el-radio>
-                                </div>
-                                <div style="text-align: right; margin: 0">
-                                    <el-button size="mini" type="text" @click="scope.row.actionMenuVisible = false">
-                                        cancel
-                                    </el-button>
-                                    <el-button type="primary" size="mini" @click="confirmHistoryLinkAction(scope.row)">
-                                        Confirm
-                                    </el-button>
-                                </div>
-                                <el-button slot="reference" round icon="el-icon-more" circle></el-button>
+                            <el-popover placement="left"
+                                        popper-class="history-action"
+                                        v-model="scope.row.actionMenuVisible">
+                                <link-actions @action="confirmHistoryLinkAction(scope.row, $event)"></link-actions>
+                                <el-button slot="reference" round type="text" icon="el-icon-more" circle></el-button>
                             </el-popover>
                         </template>
                     </el-table-column>
                 </el-table>
                 <div class="history__actions flex flex--row">
-                <el-button class="show-history-btn" @click="openHistory">Show full history</el-button>
-                <el-button class="show-history-btn" @click="clearHistory">Clear History</el-button>
+                    <el-button class="show-history-btn" @click="openHistory">Show full history</el-button>
+                    <el-button class="show-history-btn" @click="clearHistory">Clear History</el-button>
                 </div>
             </el-tab-pane>
             <el-tab-pane label="Options" name="options">
@@ -89,9 +75,11 @@
 import FormEntry from '../assets/components/FormEntry';
 import { ExtStorage } from '../ext/storage';
 import { LinkHandler } from '../util';
+import LinkActions from '../assets/components/LinkActions';
 
 export default {
   components: {
+    LinkActions,
     FormEntry
   },
   data: () => ({
@@ -102,8 +90,6 @@ export default {
       openInNewTab: false,
       maxLinkHistory: 10
     },
-    actionPopoverVisible: true,
-    chosenOption: 'online',
     history: []
   }),
   async created() {
@@ -114,7 +100,10 @@ export default {
     }
     // read history
     const history = await ExtStorage.getLinkHistory();
-    this.history = history.links;
+    this.history = [];
+    Object.entries(history.links).forEach(([, value]) => {
+      this.history.push(value);
+    });
   },
   methods: {
     openHistory() {
@@ -125,10 +114,10 @@ export default {
       this.history = [];
       this.$message('Link history was deleted');
     },
-    confirmHistoryLinkAction(linkRow) {
+    confirmHistoryLinkAction(linkRow, option) {
       // hide popover
       linkRow.actionMenuVisible = false;
-      new LinkHandler(this.chosenOption, linkRow.link).sendTabUpdateImmediately(true);
+      new LinkHandler(option, linkRow.link).sendTabUpdateImmediately(true);
     },
     onDefaultActionChange(newValue) {
       if (newValue === 'original') {
@@ -214,14 +203,28 @@ hr {
 }
 
 .history-action__options {
-  padding: 0 0 5px 0;
   font-size: 10px;
   line-height: 2;
+}
 
-  .el-radio {
-    & + .el-radio {
-      margin-left: 0;
-    }
+.history-action__option {
+  font-size: 13px;
+  padding: 5px 7px;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    background: #f3f3f3;
+  }
+  &:active {
+    background: darken(#e5e5e5, 5%);
+    font-weight: 600;
+  }
+}
+
+.history-action {
+  &.el-popover {
+    padding: 0;
   }
 }
 </style>
