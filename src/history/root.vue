@@ -15,7 +15,7 @@
 </template>
 <script>
 import { ExtStorage } from '../ext/storage';
-import HistoryLink from './HistoryLink';
+import HistoryLink from '../assets/components/HistoryLink';
 
 export default {
   components: { HistoryLink },

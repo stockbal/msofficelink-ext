@@ -7,35 +7,9 @@
         <el-tabs class="popup-tabs" :value="currentTab">
             <el-tab-pane v-if="settings.linkHistoryActive" label="Link History" name="history"
                          class="popup-tabs__history flex flex--column">
-                <el-table :data="history"
-                          border
-                          height="350"
-                          style="width: 100%">
-                    <el-table-column label="Type" class-name="history-type"
-                                     width="60">
-                        <template slot-scope="scope">
-                            <img v-if="scope.row.type === 'ms-word'" src="../../static/icons/word-app.svg" width="20px"
-                                 alt="word">
-                            <img v-else-if="scope.row.type === 'ms-excel'" src="../../static/icons/excel-app.svg"
-                                 width="20px"
-                                 alt="word">
-                            <img v-else src="../../static/icons/powerpoint-app.svg" width="20px" alt="word">
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="file"
-                                     label="Name">
-                    </el-table-column>
-                    <el-table-column label="Action" width="70">
-                        <template slot-scope="scope">
-                            <el-popover placement="left"
-                                        popper-class="history-action"
-                                        v-model="scope.row.actionMenuVisible">
-                                <link-actions @action="confirmHistoryLinkAction(scope.row, $event)"></link-actions>
-                                <el-button slot="reference" round type="text" icon="el-icon-more" circle></el-button>
-                            </el-popover>
-                        </template>
-                    </el-table-column>
-                </el-table>
+                <div class="history-links">
+                    <history-link v-for="(linkData, idx) in history" :key="idx" :link="linkData"></history-link>
+                </div>
                 <div class="history__actions flex flex--row">
                     <el-button class="show-history-btn" @click="openHistory">Show full history</el-button>
                     <el-button class="show-history-btn" @click="clearHistory">Clear History</el-button>
@@ -76,11 +50,13 @@ import FormEntry from '../assets/components/FormEntry';
 import { ExtStorage } from '../ext/storage';
 import { LinkHandler } from '../util';
 import LinkActions from '../assets/components/LinkActions';
+import HistoryLink from '../assets/components/HistoryLink';
 
 export default {
   components: {
     LinkActions,
-    FormEntry
+    FormEntry,
+    HistoryLink
   },
   data: () => ({
     currentTab: 'options',
@@ -142,7 +118,7 @@ export default {
 };
 </script>
 <style lang="scss">
-@import '../assets/css/element-ui.scss';
+@import '../assets/css/base';
 
 body {
   font-family: Google Sans, Roboto, sans-serif;
@@ -226,5 +202,10 @@ hr {
   &.el-popover {
     padding: 0;
   }
+}
+
+.history-links {
+  height: 350px;
+  overflow: auto;
 }
 </style>
