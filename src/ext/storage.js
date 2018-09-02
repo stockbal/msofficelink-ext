@@ -32,13 +32,21 @@ export class ExtStorage {
       });
     });
   }
-  static async addLinkToHistory(origin, link, file, type) {
+  static async addLinkToHistory(origin, ownerPage, link, file, protocol, type) {
     const history = await ExtStorage.getLinkHistory();
     const settings = await ExtStorage.getSettings();
     if (!history.links[link] && Object.keys(history.links).length === settings.maxLinkHistory) {
       return;
     }
-    history.links[link] = { origin, link, type, file, openedOn: new Date() };
+    history.links[link] = {
+      origin,
+      link,
+      ownerPage,
+      protocol,
+      file,
+      type,
+      openedOn: new Date()
+    };
     chrome.storage.local.set({ history });
   }
   static clearLinkHistory() {

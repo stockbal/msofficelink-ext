@@ -14,20 +14,22 @@
 </template>
 
 <script>
-import { getProtocol, LinkHandler } from '../util';
+import { LinkHandler } from '../util';
 
 export default {
   name: 'LinkOptions',
   data: () => ({
     dialogVisible: false,
     fileOpenOption: 'read',
-    type: '',
-    file: ''
+    file: '',
+    origin: '',
+    ownerPage: ''
   }),
   created() {
-    this.$parent.$on('openDialog', (link, evt) => {
-      this.type = getProtocol(link.href);
+    this.$parent.$on('openDialog', (link, origin, ownerPage) => {
       this.linkUrl = link.href;
+      this.origin = origin;
+      this.ownerPage = ownerPage;
       const files = link.href.match(/\/(?:.(?!\/))+$/gi);
       this.file = files.length > 0 ? files[0] : link.innerText;
       if (this.file.startsWith('/')) {

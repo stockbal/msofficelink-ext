@@ -48,7 +48,6 @@
 <script>
 import FormEntry from '../assets/components/FormEntry';
 import { ExtStorage } from '../ext/storage';
-import { LinkHandler } from '../util';
 import LinkActions from '../assets/components/LinkActions';
 import HistoryLink from '../assets/components/HistoryLink';
 
@@ -90,11 +89,6 @@ export default {
       this.history = [];
       this.$message('Link history was deleted');
     },
-    confirmHistoryLinkAction(linkRow, option) {
-      // hide popover
-      linkRow.actionMenuVisible = false;
-      new LinkHandler(option, linkRow.link).sendTabUpdateImmediately(true);
-    },
     onDefaultActionChange(newValue) {
       if (newValue === 'original') {
         // page refresh may be needed
@@ -119,6 +113,7 @@ export default {
 </script>
 <style lang="scss">
 @import '../assets/css/base';
+@import '../assets/css/scrollbar';
 
 body {
   font-family: Google Sans, Roboto, sans-serif;

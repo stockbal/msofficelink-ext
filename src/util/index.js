@@ -1,7 +1,5 @@
 import { ExtStorage } from '../ext/storage';
 
-export const TIMER_DURATION = 200;
-
 export const runsSharepoint = () => {
   for (const script of document.querySelectorAll('script')) {
     if (/_layouts\/15\/sp\.init\.js/.test(script.src)) {
@@ -9,43 +7,6 @@ export const runsSharepoint = () => {
     }
   }
   return false;
-};
-
-/**
- * Builds the url for the tab update
- * @param action
- * @param url
- * @returns {*}
- */
-export const buildLinkActionUrl = (action, protocol, url) => {
-  switch (action) {
-    case 'read':
-      return `${protocol}:ofv|u|${decodeURI(url)}`;
-    case 'edit':
-      return `${protocol}:ofe|u|${decodeURI(url)}`;
-    case 'online':
-      return `${url}?web=1`;
-    case 'download':
-      return url;
-    case 'original':
-      return url;
-    default:
-      throw new Error('unrecognized link action');
-  }
-};
-
-export const sendUpdateTabRequest = (url, openNewTab) => {};
-
-export const getProtocol = link => {
-  if (/\.(docx|doc|docm)$/.test(link)) {
-    return 'ms-word';
-  } else if (/\.(xlsx|xls|xlsm|csv)$/.test(link)) {
-    return 'ms-excel';
-  } else if (/\.(pptx|ppt|pptm)$/.test(link)) {
-    return 'ms-powerpoint';
-  } else {
-    return '';
-  }
 };
 
 /**
@@ -69,15 +30,54 @@ export const openUrlInTab = (openNewTab, url) => {
  * document links to the chrome tabs api
  */
 export class LinkHandler {
-  constructor(action, linkUrl) {
+  constructor(action, linkUrl, origin, ownerPage, historyLinkInfo = {}) {
     this._linkUrl = linkUrl;
     this._action = action;
-    const protocol = getProtocol(this._linkUrl);
+    this._origin = origin;
+    this._ownerPage = ownerPage;
+    const { protocol, type } = this._getLinkInfo();
     if (!protocol) {
       throw new Error('unrecognized protocol');
     }
-    this._fileType = protocol;
-    this._finalTabUrl = buildLinkActionUrl(action, protocol, linkUrl);
+    this._fileProtocol = protocol;
+    this._fileType = type;
+    this._finalTabUrl = this._buildLinkActionUrl();
+  }
+  /**
+   * Builds the url for the tab update
+   * @returns {*}
+   */
+  _buildLinkActionUrl() {
+    switch (this._action) {
+      case 'read':
+        return `${this._fileProtocol}:ofv|u|${decodeURI(this._linkUrl)}`;
+      case 'edit':
+        return `${this._fileProtocol}:ofe|u|${decodeURI(this._linkUrl)}`;
+      case 'online':
+        return `${this._linkUrl}?web=1`;
+      case 'download':
+        return this._linkUrl;
+      case 'original':
+        return this._linkUrl;
+      case 'parent':
+        const lastSlash = this._linkUrl.lastIndexOf('/');
+        return this._linkUrl.substring(0, lastSlash);
+      case 'owner':
+        return this._ownerPage || '';
+      default:
+        throw new Error('unrecognized link action');
+    }
+  }
+  _getLinkInfo() {
+    if (/\.(docx|doc|docm)$/.test(this._linkUrl)) {
+      return { protocol: 'ms-word', type: 'word' };
+    } else if (/\.(xlsx|xls|xlsm|csv)$/.test(this._linkUrl)) {
+      return { protocol: 'ms-excel', type: 'excel' };
+    } else if (/\.(pptx|ppt|pptm)$/.test(this._linkUrl)) {
+      return { protocol: 'ms-powerpoint', type: 'powerpoint' };
+    } else {
+      return { protocol: '', type: '' };
+    }
   }
   async updateLinkHistory() {
     const settings = await ExtStorage.getSettings();
@@ -86,13 +86,14 @@ export class LinkHandler {
     }
     const fileNameMatch = this._linkUrl.match(new RegExp('/([^/]+\\.\\w+$)'));
     if (fileNameMatch && fileNameMatch.length > 0) {
-      const origin = window.location.origin;
       const linkHasOrigin = new RegExp('^(\\w+):').test(this._linkUrl);
 
       ExtStorage.addLinkToHistory(
-        origin,
-        !linkHasOrigin ? origin + '/' + this._linkUrl : this._linkUrl,
+        this._origin,
+        this._ownerPage,
+        !linkHasOrigin ? this._origin + '/' + this._linkUrl : this._linkUrl,
         decodeURI(fileNameMatch[1]),
+        this._fileProtocol,
         this._fileType
       );
     }
@@ -118,7 +119,10 @@ export class LinkHandler {
    */
   async _isOpenInNewTab() {
     const settings = await ExtStorage.getSettings();
-    return settings.openInNewTab && this._action === 'online';
+    return (
+      settings.openInNewTab &&
+      (this._action === 'online' || this._action === 'parent' || this._action === 'owner')
+    );
   }
 
   /**

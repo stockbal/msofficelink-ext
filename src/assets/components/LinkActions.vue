@@ -1,5 +1,5 @@
 <template>
-    <div class="link-actions">
+    <div class="link-actions" :class="appClass">
         <div class="link-actions__action" @click="onAction('read')">
             <font-awesome-icon icon="glasses" fixed-width></font-awesome-icon>
             Open in protected mode
@@ -16,12 +16,33 @@
             <font-awesome-icon icon="download" fixed-width></font-awesome-icon>
             Download file
         </div>
+        <div class="link-actions__separator"></div>
+        <div class="link-actions__action" @click="onAction('parent')">
+            <font-awesome-icon icon="folder-open" fixed-width></font-awesome-icon>
+            Open Parent folder
+        </div>
+        <div class="link-actions__action" @click="onAction('owner')">
+            <font-awesome-icon icon="file-alt" fixed-width></font-awesome-icon>
+            Open Link Webpage
+        </div>
     </div>
 </template>
 
 <script>
 export default {
   name: 'LinkActions',
+  props: {
+    appType: {
+      type: String,
+      default: 'word'
+    }
+  },
+  computed: {
+    appClass() {
+      return `link-actions--${this.appType}`;
+    }
+  },
+  created() {},
   methods: {
     onAction(action) {
       this.$emit('action', action);
@@ -31,6 +52,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../css/base';
+
 .link-actions {
   font-size: 10px;
   line-height: 2;
@@ -44,10 +67,45 @@ export default {
 
   &:hover {
     background: #f3f3f3;
+    color: $--color-primary;
   }
   &:active {
     background: darken(#e5e5e5, 5%);
     font-weight: 600;
+    color: $--color-primary;
+  }
+}
+
+.link-actions__separator {
+  background: #ccc;
+  margin: 0 5px;
+  height: 1px;
+}
+
+.link-actions--word {
+  .link-actions__action {
+    &:hover,
+    &:active {
+      color: $--word;
+    }
+  }
+}
+
+.link-actions--excel {
+  .link-actions__action {
+    &:hover,
+    &:active {
+      color: $--excel;
+    }
+  }
+}
+
+.link-actions--powerpoint {
+  .link-actions__action {
+    &:hover,
+    &:active {
+      color: $--powerpoint;
+    }
   }
 }
 </style>

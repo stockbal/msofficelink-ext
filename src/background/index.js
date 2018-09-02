@@ -42,7 +42,10 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   }
 
   try {
-    new LinkHandler(info.menuItemId, info.linkUrl).sendTabUpdateImmediately();
+    // Origin has to be extracted from url, because window.location.origin does not work here
+    const urlPaths = info.linkUrl.split('/');
+    const origin = urlPaths.length >= 3 ? urlPaths[2] : '';
+    new LinkHandler(info.menuItemId, info.linkUrl, origin, info.pageUrl).sendTabUpdateImmediately();
   } catch (e) {
     console.log(e);
   }

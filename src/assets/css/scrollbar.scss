@@ -1,0 +1,21 @@
+/* Scroll bar style */
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar {
+  background-color: transparent;
+
+  &:horizontal {
+    height: 8px;
+  }
+
+  &:vertical {
+    width: 8px;
+  }
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: #bbb;
+}

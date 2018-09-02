@@ -1,9 +1,9 @@
 <template>
     <div class="history-link flex flex--row flex--align-center">
         <div class="history-link__icon">
-            <img v-if="link.type === 'ms-word'" src="../../../static/icons/word-app.svg" width="20px"
+            <img v-if="link.protocol === 'ms-word'" src="../../../static/icons/word-app.svg" width="20px"
                  alt="word">
-            <img v-else-if="link.type === 'ms-excel'" src="../../../static/icons/excel-app.svg"
+            <img v-else-if="link.protocol === 'ms-excel'" src="../../../static/icons/excel-app.svg"
                  width="20px"
                  alt="word">
             <img v-else src="../../../static/icons/powerpoint-app.svg" width="20px" alt="word">
@@ -16,7 +16,7 @@
             <el-popover placement="left"
                         popper-class="history-link__action-popper"
                         v-model="actionPopoverVisible">
-                <link-actions @action="performLinkAction"></link-actions>
+                <link-actions @action="performLinkAction" :app-type="link.type"></link-actions>
                 <el-button slot="reference" round type="text" icon="el-icon-more" circle></el-button>
             </el-popover>
         </div>
@@ -39,7 +39,8 @@ export default {
   methods: {
     performLinkAction(action) {
       this.actionPopoverVisible = false;
-      new LinkHandler(action, this.link.link).sendTabUpdateImmediately(true);
+      const { origin, link, ownerPage } = this.link;
+      new LinkHandler(action, link, origin, ownerPage).sendTabUpdateImmediately(true);
     }
   },
   created() {},

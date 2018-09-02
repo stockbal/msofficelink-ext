@@ -46,6 +46,7 @@ export default {
 </script>
 <style lang="scss">
 @import '../assets/css/base';
+@import '../assets/css/scrollbar';
 
 $maxWidth: 1024px;
 

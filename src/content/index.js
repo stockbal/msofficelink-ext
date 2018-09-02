@@ -47,20 +47,27 @@ const updateOfficeLinks = async () => {
 
       // handle the link click
       newLink.addEventListener('mousedown', async evt => {
+        const { origin, href } = window.location;
+
         if (!evt.button) {
           // check the required option
           const settings = await ExtStorage.getSettings();
           const defaultAction = settings.linkDefaultAction;
           if (defaultAction === 'original') {
-            new LinkHandler(settings.linkDefaultAction, link.href).updateLinkHistory();
+            new LinkHandler(
+              settings.linkDefaultAction,
+              link.href,
+              origin,
+              href
+            ).updateLinkHistory();
           } else {
             evt.preventDefault();
             evt.stopPropagation();
 
             if (defaultAction === 'dialog') {
-              popover.$emit('openDialog', newLink, evt);
+              popover.$emit('openDialog', newLink, origin, href);
             } else {
-              new LinkHandler(defaultAction, newLink.href).sendTabUpdateViaMessage();
+              new LinkHandler(defaultAction, newLink.href, origin, href).sendTabUpdateViaMessage();
             }
 
             return true;
@@ -83,7 +90,15 @@ const updateOfficeLinks = async () => {
       link.parentNode.replaceChild(newLink, link);
     } else if (settings.linkHistoryActive) {
       link.addEventListener('mousedown', evt => {
-        new LinkHandler(settings.linkDefaultAction, link.href).updateLinkHistory();
+        if (evt.button) {
+          return;
+        }
+        new LinkHandler(
+          settings.linkDefaultAction,
+          link.href,
+          window.location.origin,
+          window.location.href
+        ).updateLinkHistory();
       });
     }
   }
