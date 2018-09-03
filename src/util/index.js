@@ -41,7 +41,9 @@ export class LinkHandler {
     }
     this._fileProtocol = protocol;
     this._fileType = type;
-    this._finalTabUrl = this._buildLinkActionUrl();
+    if (action !== 'markasfav') {
+      this._finalTabUrl = this._buildLinkActionUrl();
+    }
   }
   /**
    * Builds the url for the tab update
@@ -89,6 +91,21 @@ export class LinkHandler {
       const linkHasOrigin = new RegExp('^(\\w+):').test(this._linkUrl);
 
       ExtStorage.addLinkToHistory(
+        this._origin,
+        this._ownerPage,
+        !linkHasOrigin ? this._origin + '/' + this._linkUrl : this._linkUrl,
+        decodeURI(fileNameMatch[1]),
+        this._fileProtocol,
+        this._fileType
+      );
+    }
+  }
+  async createFavorite() {
+    const fileNameMatch = this._linkUrl.match(new RegExp('/([^/]+\\.\\w+$)'));
+    if (fileNameMatch && fileNameMatch.length > 0) {
+      const linkHasOrigin = new RegExp('^(\\w+):').test(this._linkUrl);
+
+      ExtStorage.addLinkToFavorites(
         this._origin,
         this._ownerPage,
         !linkHasOrigin ? this._origin + '/' + this._linkUrl : this._linkUrl,

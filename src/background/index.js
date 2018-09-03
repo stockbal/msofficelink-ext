@@ -30,7 +30,19 @@ chrome.contextMenus.create({
   targetUrlPatterns: patterns
 });
 chrome.contextMenus.create({
-  title: 'Document History',
+  type: 'separator',
+  id: 'sep1',
+  contexts: ['link'],
+  targetUrlPatterns: patterns
+});
+chrome.contextMenus.create({
+  title: 'Add to Favorites',
+  id: 'markasfav',
+  contexts: ['link'],
+  targetUrlPatterns: patterns
+});
+chrome.contextMenus.create({
+  title: 'Document History / Favorites',
   id: 'advoptions',
   contexts: ['browser_action']
 });
@@ -45,7 +57,12 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     // Origin has to be extracted from url, because window.location.origin does not work here
     const urlPaths = info.linkUrl.split('/');
     const origin = urlPaths.length >= 3 ? urlPaths[2] : '';
-    new LinkHandler(info.menuItemId, info.linkUrl, origin, info.pageUrl).sendTabUpdateImmediately();
+    const linkHandler = new LinkHandler(info.menuItemId, info.linkUrl, origin, info.pageUrl);
+    if (info.menuItemId === 'markasfav') {
+      linkHandler.createFavorite();
+    } else {
+      linkHandler.sendTabUpdateImmediately();
+    }
   } catch (e) {
     console.log(e);
   }

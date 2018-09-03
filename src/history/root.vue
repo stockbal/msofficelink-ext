@@ -1,43 +1,40 @@
 <template>
-    <div class="history">
+    <div class="links">
         <header>
-            <div class="history-header flex flex--row flex--align-center">
+            <div class="links-header flex flex--row flex--align-center">
                 <img src="../../static/icons/icon.svg">
-                <h1>Document Link History</h1>
+                <h1>MS Office Document Links</h1>
             </div>
         </header>
         <main>
-            <section class="history__links">
-                <history-link v-for="(linkData, idx) in history" :key="idx" :link="linkData"></history-link>
+            <section class="links__entries">
+                <document-link v-for="(linkData, idx) in documentLinks" :key="idx" :link="linkData"></document-link>
             </section>
         </main>
     </div>
 </template>
 <script>
 import { ExtStorage } from '../ext/storage';
-import HistoryLink from '../assets/components/HistoryLink';
+import DocumentLink from '../assets/components/DocumentLink';
 
 export default {
-  components: { HistoryLink },
+  components: { DocumentLink },
   data: () => ({
-    history: []
+    documentLinks: []
   }),
   computed: {},
   async created() {
     // read history
-    const history = await ExtStorage.getLinkHistory();
-    this.history = [];
-    Object.entries(history.links).forEach(([, value]) => {
-      this.history.push(value);
+    const links = await ExtStorage.getDocumentLinks();
+    this.documentLinks = [];
+    Object.entries(links.entries).forEach(([, link]) => {
+      this.documentLinks.push(link);
     });
   },
   methods: {
-    openHistory() {
-      chrome.tabs.create({ url: 'pages/history.html' });
-    },
     clearHistory() {
       ExtStorage.clearLinkHistory();
-      this.history = [];
+      this.documentLinks = [];
       this.$message('Link history was deleted');
     }
   },
@@ -65,7 +62,7 @@ body {
   font-family: Google Sans, Roboto, sans-serif;
 }
 
-.history-header {
+.links-header {
   img {
     padding: 0 10px 0 0;
     width: 80px;
@@ -98,7 +95,7 @@ main {
 }
 
 @media (max-width: 1080px) {
-  .history-header {
+  .links-header {
     img {
       width: 50px;
     }
@@ -119,7 +116,7 @@ main {
   }
 }
 
-.history__links {
+.links__entries {
   padding: 5px;
 }
 </style>

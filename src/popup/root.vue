@@ -5,17 +5,40 @@
             <h2>MS Doc Link</h2>
         </div>
         <el-tabs class="popup-tabs" :value="currentTab">
-            <el-tab-pane v-if="settings.linkHistoryActive" label="Link History" name="history"
-                         class="popup-tabs__history flex flex--column">
-                <div class="history-links">
-                    <history-link v-for="(linkData, idx) in history" :key="idx" :link="linkData"></history-link>
+            <!-- Favorite document links -->
+            <el-tab-pane name="fav">
+                <span slot="label"><font-awesome-icon :icon="['fas', 'star']"></font-awesome-icon> Favorites</span>
+                <div v-if="favorites.length > 0" class="favorites-links">
+                    <document-link v-for="(linkData, idx) in favorites" :key="idx" :link="linkData" mode="fav"
+                                   @favChanged="onIsFavChanged(linkData)"></document-link>
                 </div>
-                <div class="history__actions flex flex--row">
-                    <el-button class="show-history-btn" @click="openHistory">Show full history</el-button>
+                <div v-else class="favorites--empty flex flex--column flex--align-center">
+                    <span>No Favorites yet</span>
+                </div>
+                <div v-if="favorites.length > 0" class="favorites__actions flex flex--row">
+                    <el-button class="show-history-btn" @click="openFavAndHistory">Show all favorites</el-button>
+                    <el-button class="show-history-btn" @click="clearFavorites">Delete all favorites</el-button>
+                </div>
+            </el-tab-pane>
+            <!-- History entries -->
+            <el-tab-pane name="history" :disabled="!settings.linkHistoryActive"
+                         class="popup-tabs__history flex flex--column">
+                <span slot="label"><font-awesome-icon icon="history"></font-awesome-icon> History</span>
+                <div v-if="history.length > 0" class="history-links">
+                    <document-link v-for="(linkData, idx) in history" :key="idx" :link="linkData"
+                                   @favChanged="onIsFavInHistoryChanged(linkData)"></document-link>
+                </div>
+                <div v-else class="history--empty flex flex--column flex--align-center">
+                    <span>No History entries yet</span>
+                </div>
+                <div v-if="history.length > 0" class="history__actions flex flex--row">
+                    <el-button class="show-history-btn" @click="openFavAndHistory">Show full history</el-button>
                     <el-button class="show-history-btn" @click="clearHistory">Clear History</el-button>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="Options" name="options">
+            <!-- Extension options -->
+            <el-tab-pane name="options">
+                <span slot="label"><font-awesome-icon icon="cog"></font-awesome-icon> Options</span>
                 <el-form ref="settings" :model="settings" label-width="170px">
                     <el-form-item label="Activate Link History">
                         <el-switch v-model="settings.linkHistoryActive" @change="onSubmit"></el-switch>
@@ -46,16 +69,14 @@
 </template>
 
 <script>
-import FormEntry from '../assets/components/FormEntry';
 import { ExtStorage } from '../ext/storage';
 import LinkActions from '../assets/components/LinkActions';
-import HistoryLink from '../assets/components/HistoryLink';
+import DocumentLink from '../assets/components/DocumentLink';
 
 export default {
   components: {
-    LinkActions,
-    FormEntry,
-    HistoryLink
+    DocumentLink,
+    LinkActions
   },
   data: () => ({
     currentTab: 'options',
@@ -65,25 +86,31 @@ export default {
       openInNewTab: false,
       maxLinkHistory: 10
     },
-    history: []
+    history: [],
+    favorites: []
   }),
   async created() {
     const settings = await ExtStorage.getSettings();
     Object.assign(this.settings, settings);
-    if (this.settings.linkHistoryActive) {
+
+    this.history = await ExtStorage.getHistoryLinks();
+
+    this.refreshFavorites();
+
+    if (this.settings.linkHistoryActive && this.history.length > 0) {
       this.currentTab = 'history';
     }
-    // read history
-    const history = await ExtStorage.getLinkHistory();
-    this.history = [];
-    Object.entries(history.links).forEach(([, value]) => {
-      this.history.push(value);
-    });
   },
   methods: {
-    openHistory() {
+    async refreshFavorites() {
+      this.favorites = await ExtStorage.getFavoriteLinks();
+    },
+    onIsFavChanged(link) {},
+    onIsFavInHistoryChanged(link) {},
+    openFavAndHistory() {
       chrome.tabs.create({ url: 'pages/history.html' });
     },
+    clearFavorites() {},
     clearHistory() {
       ExtStorage.clearLinkHistory();
       this.history = [];
@@ -125,6 +152,7 @@ hr {
 }
 
 .popup {
+  user-select: none;
   .el-table th,
   .el-table td {
     padding: 2px 0;
@@ -199,8 +227,18 @@ hr {
   }
 }
 
+.favorites-links,
 .history-links {
   height: 350px;
   overflow: auto;
+}
+
+.favorites--empty,
+.history--empty {
+  span {
+    margin: auto;
+  }
+  height: 350px;
+  font-size: 15px;
 }
 </style>

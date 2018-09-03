@@ -20,36 +20,118 @@ export class ExtStorage {
       });
     });
   }
-  static async getLinkHistory() {
+  static async getHistoryLinks() {
+    const { entries } = await ExtStorage.getDocumentLinks();
+    const links = [];
+    Object.entries(entries).forEach(([, link]) => {
+      if (link.isHistory) {
+        links.push(link);
+      }
+    });
+    return links;
+  }
+  static async getFavoriteLinks() {
+    const { entries } = await ExtStorage.getDocumentLinks();
+    const links = [];
+    Object.entries(entries).forEach(([, link]) => {
+      if (link.isFav) {
+        links.push(link);
+      }
+    });
+    return links;
+  }
+
+  static async getDocumentLinks() {
     return new Promise(resolve => {
-      chrome.storage.local.get('history', ({ history }) => {
-        if (!history) {
-          history = {
-            links: {}
+      chrome.storage.local.get('docLinks', ({ docLinks }) => {
+        if (!docLinks) {
+          docLinks = {
+            entries: {}
           };
         }
-        resolve(history);
+        resolve(docLinks);
       });
     });
   }
-  static async addLinkToHistory(origin, ownerPage, link, file, protocol, type) {
-    const history = await ExtStorage.getLinkHistory();
+
+  /**
+   * Adds link to history/favorite storage
+   *
+   * @param origin
+   * @param ownerPage
+   * @param href
+   * @param file
+   * @param protocol
+   * @param type
+   * @returns {Promise<void>}
+   */
+  static async addLinkToHistory(origin, ownerPage, href, file, protocol, type) {
+    const docLinks = await ExtStorage.getDocumentLinks();
     const settings = await ExtStorage.getSettings();
-    if (!history.links[link] && Object.keys(history.links).length === settings.maxLinkHistory) {
+    if (
+      !docLinks.entries[href] &&
+      Object.keys(docLinks.entries).length === settings.maxLinkHistory
+    ) {
       return;
     }
-    history.links[link] = {
-      origin,
-      link,
-      ownerPage,
-      protocol,
-      file,
-      type,
-      openedOn: new Date()
-    };
-    chrome.storage.local.set({ history });
+    let docLink = docLinks.entries[href];
+    if (docLink) {
+      docLink.openedOn = new Date();
+      docLink.isHistory = true;
+    } else {
+      docLinks.entries[href] = {
+        origin,
+        href,
+        ownerPage,
+        protocol,
+        file,
+        type,
+        isFav: false,
+        isHistory: true,
+        openedOn: new Date()
+      };
+    }
+    chrome.storage.local.set({ docLinks });
+  }
+
+  static async removeLinkFromFavorites(href) {
+    const docLinks = await ExtStorage.getDocumentLinks();
+    const settings = await ExtStorage.getSettings();
+
+    const link = docLinks.entries[href];
+    if (link) {
+      if (settings.linkHistoryActive) {
+        delete docLinks.entries[href];
+      } else {
+        link.isFav = false;
+      }
+
+      chrome.storage.local.set({ docLinks });
+    }
+  }
+
+  static async addLinkToFavorites(origin, ownerPage, href, file, protocol, type) {
+    const docLinks = await ExtStorage.getDocumentLinks();
+    let docLink = docLinks.entries[href];
+    if (docLink) {
+      docLink.openedOn = new Date();
+      docLink.isFav = true;
+    } else {
+      docLinks.entries[href] = {
+        origin,
+        href,
+        ownerPage,
+        protocol,
+        file,
+        type,
+        isFav: true,
+        isHistory: false,
+        openedOn: new Date()
+      };
+    }
+    chrome.storage.local.set({ docLinks });
   }
   static clearLinkHistory() {
-    chrome.storage.local.remove('history');
+    chrome.storage.local.remove('docLinks');
   }
 }

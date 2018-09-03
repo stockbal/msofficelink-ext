@@ -15,7 +15,7 @@ module.exports = {
     tab: resolve('./tab'),
     options: resolve('./options'),
     content: resolve('./content'),
-    history: resolve('./history'),
+    documentLinks: resolve('./history'),
     background: resolve('./background')
   },
   output: {
@@ -100,7 +100,7 @@ module.exports = {
     htmlPage('home', 'app', ['manifest', 'vendor', 'tab']),
     htmlPage('popup', 'popup', ['manifest', 'vendor', 'popup']),
     htmlPage('options', 'options', ['manifest', 'vendor', 'options']),
-    htmlPage('History', 'history', ['manifest', 'vendor', 'history']),
+    htmlPage('Favorites & History', 'history', ['manifest', 'vendor', 'history']),
     htmlPage('background', 'background', ['manifest', 'vendor', 'background']),
     // End customize
     new CopyWebpackPlugin([{ from: path.join(rootDir, 'static') }]),
