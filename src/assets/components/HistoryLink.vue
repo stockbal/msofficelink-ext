@@ -65,12 +65,25 @@ export default {
 .history-link__content {
   flex: 1;
   padding: 0 15px;
+  overflow: hidden;
+
   h3,
   h4 {
     margin: 2px;
   }
   h4 {
     font-weight: 200;
+  }
+}
+
+.popup {
+  .history-link__content {
+    h4 {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 386px;
+    }
   }
 }
 
