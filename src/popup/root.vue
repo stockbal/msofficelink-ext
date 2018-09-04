@@ -16,8 +16,8 @@
                     <span>No Favorites yet</span>
                 </div>
                 <div v-if="favorites.length > 0" class="favorites__actions flex flex--row">
-                    <el-button class="show-history-btn" @click="openFavAndHistory">Show all favorites</el-button>
-                    <el-button class="show-history-btn" @click="clearFavorites">Delete all favorites</el-button>
+                    <el-button class="show-history-btn" @click="openFavAndHistory" size="medium">Show all favorites</el-button>
+                    <el-button class="show-history-btn" @click="clearFavorites" size="medium">Delete all favorites</el-button>
                 </div>
             </el-tab-pane>
             <!-- History entries -->
@@ -32,8 +32,8 @@
                     <span>No History entries yet</span>
                 </div>
                 <div v-if="history.length > 0" class="history__actions flex flex--row">
-                    <el-button class="show-history-btn" @click="openFavAndHistory">Show full history</el-button>
-                    <el-button class="show-history-btn" @click="clearHistory">Clear History</el-button>
+                    <el-button class="show-history-btn" @click="openFavAndHistory" size="medium">Show full history</el-button>
+                    <el-button class="show-history-btn" @click="clearHistory" size="medium">Clear History</el-button>
                 </div>
             </el-tab-pane>
             <!-- Extension options -->
@@ -138,9 +138,9 @@ export default {
       chrome.tabs.create({ url: 'pages/history.html' });
     },
     clearFavorites() {
-      ExtStorage.clearFavorites();
-      this.history = [];
-      this.$message('Link history was deleted');
+      ExtStorage.clearLinkFavorites();
+      this.favorites = [];
+      this.$message('Favorites have been deleted');
     },
     clearHistory() {
       ExtStorage.clearLinkHistory();

@@ -45,7 +45,7 @@ export const openUrlInTab = (openNewTab, url) => {
  * document links to the chrome tabs api
  */
 export class LinkHandler {
-  constructor(action, linkUrl, origin, ownerPage, historyLinkInfo = {}) {
+  constructor(action, linkUrl, origin, ownerPage) {
     this._linkUrl = linkUrl;
     this._action = action;
     this._origin = origin;
