@@ -15,7 +15,7 @@ module.exports = {
     tab: resolve('./tab'),
     options: resolve('./options'),
     content: resolve('./content'),
-    documentLinks: resolve('./history'),
+    history: resolve('./history'),
     background: resolve('./background')
   },
   output: {

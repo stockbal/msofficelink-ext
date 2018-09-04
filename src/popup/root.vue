@@ -6,11 +6,11 @@
         </div>
         <el-tabs class="popup-tabs" :value="currentTab">
             <!-- Favorite document links -->
-            <el-tab-pane name="fav">
+            <el-tab-pane name="favs">
                 <span slot="label"><font-awesome-icon :icon="['fas', 'star']"></font-awesome-icon> Favorites</span>
                 <div v-if="favorites.length > 0" class="favorites-links">
                     <document-link v-for="(linkData, idx) in favorites" :key="idx" :link="linkData" mode="fav"
-                                   @favChanged="onIsFavChanged(linkData)"></document-link>
+                                   @favChanged="onIsFavChanged(linkData, idx)"></document-link>
                 </div>
                 <div v-else class="favorites--empty flex flex--column flex--align-center">
                     <span>No Favorites yet</span>
@@ -40,16 +40,16 @@
             <el-tab-pane name="options">
                 <span slot="label"><font-awesome-icon icon="cog"></font-awesome-icon> Options</span>
                 <el-form ref="settings" :model="settings" label-width="170px">
-                    <el-form-item label="Activate Link History">
-                        <el-switch v-model="settings.linkHistoryActive" @change="onSubmit"></el-switch>
-                    </el-form-item>
-                    <el-form-item label="Maximum Link History">
-                        <el-input-number v-model="settings.maxLinkHistory" @change="onSubmit"
-                                         :disabled="!settings.linkHistoryActive" :max="100" :min="5"
-                                         controls-position="right"></el-input-number>
+                    <el-form-item label="Default Visible Menu">
+                        <el-select v-model="settings.popupDefaultTab"
+                                   @change="onSubmit">
+                            <el-option label="Favorites" value="favs"></el-option>
+                            <el-option label="History" value="history"></el-option>
+                            <el-option label="Options" value="options"></el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="Default Link Action">
-                        <el-select v-model="settings.linkDefaultAction" placeholder="please select your zone"
+                        <el-select v-model="settings.linkDefaultAction"
                                    @change="onDefaultActionChange">
                             <el-option label="Original" value="original"></el-option>
                             <el-option label="Show option dialog" value="dialog"></el-option>
@@ -61,6 +61,14 @@
                     </el-form-item>
                     <el-form-item label="Open in new Tab">
                         <el-switch v-model="settings.openInNewTab" @change="onSubmit"></el-switch>
+                    </el-form-item>
+                    <el-form-item label="Activate Link History">
+                        <el-switch v-model="settings.linkHistoryActive" @change="onSubmit"></el-switch>
+                    </el-form-item>
+                    <el-form-item label="Maximum Link History">
+                        <el-input-number v-model="settings.maxLinkHistory" @change="onSubmit"
+                                         :disabled="!settings.linkHistoryActive" :max="100" :min="5"
+                                         controls-position="right"></el-input-number>
                     </el-form-item>
                 </el-form>
             </el-tab-pane>
@@ -83,6 +91,7 @@ export default {
     settings: {
       linkHistoryActive: false,
       linkDefaultAction: 'original',
+      popupDefaultTab: 'options',
       openInNewTab: false,
       maxLinkHistory: 10
     },
@@ -97,16 +106,34 @@ export default {
 
     this.refreshFavorites();
 
-    if (this.settings.linkHistoryActive && this.history.length > 0) {
-      this.currentTab = 'history';
+    if (this.popupDefaultTab === 'history' && !this.settings.linkHistoryActive) {
+      this.currentTab = 'favs';
+    } else {
+      this.currentTab = this.settings.popupDefaultTab;
     }
   },
   methods: {
     async refreshFavorites() {
       this.favorites = await ExtStorage.getFavoriteLinks();
     },
-    onIsFavChanged(link) {},
-    onIsFavInHistoryChanged(link) {},
+    onIsFavChanged(link, idx) {
+      this.favorites.splice(idx, 1);
+      ExtStorage.removeLinkFromFavorites(link.href);
+    },
+    onIsFavInHistoryChanged(link) {
+      if (link.isFav) {
+        ExtStorage.addLinkToFavorites(link);
+        this.favorites.push(link);
+      } else {
+        // try to remove it from the favories
+        ExtStorage.removeLinkFromFavorites(link.href);
+        // find the favorites link in array
+        const favIndex = this.favorites.findIndex(lnk => lnk.href === link.href);
+        if (favIndex !== -1) {
+          this.favorites.splice(favIndex, 1);
+        }
+      }
+    },
     openFavAndHistory() {
       chrome.tabs.create({ url: 'pages/history.html' });
     },

@@ -75,7 +75,12 @@ export default {
   padding: 5px;
   .el-button {
     margin: 2px;
-    /*width: 200px;*/
+  }
+}
+
+.el-dialog {
+  button {
+    min-width: 1em;
   }
 }
 

@@ -30,7 +30,7 @@ const updateOfficeLinks = async () => {
   const settings = await ExtStorage.getSettings();
 
   for (const link of links) {
-    if (!/.(doc|docx|docm|xls|xlsx|xlsm|csv|ppt|pptx|pptm)$/.test(link.href)) {
+    if (!/\.(doc|docx|docm|xls|xlsx|xlsm|csv|ppt|pptx|pptm)$/.test(link.href)) {
       continue;
     }
 

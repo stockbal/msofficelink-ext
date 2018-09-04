@@ -105,7 +105,7 @@ export class LinkHandler {
     if (fileNameMatch && fileNameMatch.length > 0) {
       const linkHasOrigin = new RegExp('^(\\w+):').test(this._linkUrl);
 
-      ExtStorage.addLinkToFavorites(
+      ExtStorage.addNewLinkToFavorites(
         this._origin,
         this._ownerPage,
         !linkHasOrigin ? this._origin + '/' + this._linkUrl : this._linkUrl,

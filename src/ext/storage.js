@@ -12,7 +12,8 @@ export class ExtStorage {
             linkHistoryActive: false,
             linkDefaultAction: 'original',
             maxLinkHistory: 10,
-            openInNewTab: false
+            openInNewTab: false,
+            popupDefaultTab: 'options'
           };
         }
 
@@ -98,9 +99,10 @@ export class ExtStorage {
     const docLinks = await ExtStorage.getDocumentLinks();
     const settings = await ExtStorage.getSettings();
 
+    console.log(docLinks.entries);
     const link = docLinks.entries[href];
     if (link) {
-      if (settings.linkHistoryActive) {
+      if (!settings.linkHistoryActive) {
         delete docLinks.entries[href];
       } else {
         link.isFav = false;
@@ -108,9 +110,10 @@ export class ExtStorage {
 
       chrome.storage.local.set({ docLinks });
     }
+    console.log(docLinks.entries);
   }
 
-  static async addLinkToFavorites(origin, ownerPage, href, file, protocol, type) {
+  static async addNewLinkToFavorites(origin, ownerPage, href, file, protocol, type) {
     const docLinks = await ExtStorage.getDocumentLinks();
     let docLink = docLinks.entries[href];
     if (docLink) {
@@ -128,6 +131,17 @@ export class ExtStorage {
         isHistory: false,
         openedOn: new Date()
       };
+    }
+    chrome.storage.local.set({ docLinks });
+  }
+  static async addLinkToFavorites(link) {
+    const docLinks = await ExtStorage.getDocumentLinks();
+    let docLink = docLinks.entries[link.href];
+    if (docLink) {
+      docLink.openedOn = new Date();
+      docLink.isFav = true;
+    } else {
+      docLinks.entries[link.href] = link;
     }
     chrome.storage.local.set({ docLinks });
   }
