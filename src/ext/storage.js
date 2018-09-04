@@ -99,7 +99,6 @@ export class ExtStorage {
     const docLinks = await ExtStorage.getDocumentLinks();
     const settings = await ExtStorage.getSettings();
 
-    console.log(docLinks.entries);
     const link = docLinks.entries[href];
     if (link) {
       if (!settings.linkHistoryActive) {
@@ -110,14 +109,12 @@ export class ExtStorage {
 
       chrome.storage.local.set({ docLinks });
     }
-    console.log(docLinks.entries);
   }
 
   static async addNewLinkToFavorites(origin, ownerPage, href, file, protocol, type) {
     const docLinks = await ExtStorage.getDocumentLinks();
     let docLink = docLinks.entries[href];
     if (docLink) {
-      docLink.openedOn = new Date();
       docLink.isFav = true;
     } else {
       docLinks.entries[href] = {
@@ -129,7 +126,7 @@ export class ExtStorage {
         type,
         isFav: true,
         isHistory: false,
-        openedOn: new Date()
+        openedOn: undefined
       };
     }
     chrome.storage.local.set({ docLinks });
@@ -138,14 +135,32 @@ export class ExtStorage {
     const docLinks = await ExtStorage.getDocumentLinks();
     let docLink = docLinks.entries[link.href];
     if (docLink) {
-      docLink.openedOn = new Date();
       docLink.isFav = true;
     } else {
       docLinks.entries[link.href] = link;
     }
     chrome.storage.local.set({ docLinks });
   }
-  static clearLinkHistory() {
-    chrome.storage.local.remove('docLinks');
+  static async clearLinkHistory() {
+    const docLinks = await ExtStorage.getDocumentLinks();
+    Object.entries(docLinks.entries).forEach(([linkHref, link]) => {
+      if (!link.isFav) {
+        delete docLinks.entries[linkHref];
+      } else {
+        link.isHistory = false;
+      }
+    });
+    chrome.storage.local.set({ docLinks });
+  }
+  static async clearLinkFavorites() {
+    const docLinks = await ExtStorage.getDocumentLinks();
+    Object.entries(docLinks.entries).forEach(([linkHref, link]) => {
+      if (!link.isHistory) {
+        delete docLinks.entries[linkHref];
+      } else {
+        link.isFav = false;
+      }
+    });
+    chrome.storage.local.set({ docLinks });
   }
 }
