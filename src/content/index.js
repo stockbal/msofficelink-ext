@@ -6,6 +6,7 @@ import localeEN from 'element-ui/lib/locale/lang/en';
 import localeDE from 'element-ui/lib/locale/lang/de';
 import { LinkHandler } from '../util';
 import { ExtStorage } from '../ext/storage';
+import '../util/initAwesomeIconsForHistory';
 
 Vue.config.productionTip = false;
 

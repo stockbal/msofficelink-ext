@@ -5,10 +5,26 @@
         <div class="notification-text">You are about to open the file <em><u>{{file}}</u></em></div>
         <div class="notification-text">Choose the file operation</div>
         <div class="file-options">
-            <el-button @click="confirm('read')"  size="medium" type="primary">Open in protected mode</el-button>
-            <el-button @click="confirm('edit')"  size="medium" type="primary">Open in edit mode</el-button>
-            <el-button @click="confirm('online')"  size="medium" type="primary">Open online</el-button>
-            <el-button @click="confirm('download')"  size="medium" type="primary">Download</el-button>
+            <el-tooltip effect="dark" placement="bottom" content="Open in protected mode">
+                <el-button @click="confirm('read')" size="medium" round type="primary">
+                    <font-awesome-icon icon="glasses"></font-awesome-icon>
+                </el-button>
+            </el-tooltip>
+            <el-tooltip effect="dark" placement="bottom" content="Open in edit mode">
+                <el-button @click="confirm('edit')" size="medium" round type="primary">
+                    <font-awesome-icon icon="edit"></font-awesome-icon>
+                </el-button>
+            </el-tooltip>
+            <el-tooltip effect="dark" placement="bottom" content="Open online">
+                <el-button @click="confirm('online')" size="medium" round type="primary">
+                    <font-awesome-icon icon="globe"></font-awesome-icon>
+                </el-button>
+            </el-tooltip>
+            <el-tooltip effect="dark" placement="bottom" content="Download file">
+                <el-button @click="confirm('download')" size="medium" round type="primary">
+                    <font-awesome-icon icon="download"></font-awesome-icon>
+                </el-button>
+            </el-tooltip>
         </div>
     </el-dialog>
 </template>
@@ -75,6 +91,7 @@ export default {
   padding: 5px;
   .el-button {
     margin: 2px;
+    padding: 10px;
   }
 }
 
