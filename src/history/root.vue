@@ -3,7 +3,7 @@
         <header>
             <div class="links-header flex flex--row flex--align-center">
                 <img src="../../static/icons/icon.svg">
-                <h1>MS Office Document Links</h1>
+                <h1>{{$i18n('History_title')}}</h1>
             </div>
         </header>
         <main>

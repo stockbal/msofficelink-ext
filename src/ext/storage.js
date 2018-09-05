@@ -10,6 +10,7 @@ export class ExtStorage {
         if (!settings) {
           settings = {
             linkHistoryActive: false,
+            menuLinkDefaultAction: 'online',
             linkDefaultAction: 'original',
             maxLinkHistory: 10,
             openInNewTab: false,
@@ -163,5 +164,4 @@ export class ExtStorage {
     });
     chrome.storage.local.set({ docLinks });
   }
-  static clearFavorites() {}
 }

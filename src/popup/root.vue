@@ -2,70 +2,79 @@
     <div class="popup">
         <div class="popup-title flex flex--row flex--align-center">
             <img class="popup-icon" src="../../static/icons/icon.svg" alt="image">
-            <h2>MS Doc Link</h2>
+            <h2>{{$i18n('extName')}}</h2>
         </div>
         <el-tabs class="popup-tabs" :value="currentTab">
             <!-- Favorite document links -->
             <el-tab-pane name="favs">
-                <span slot="label"><font-awesome-icon :icon="['fas', 'star']"></font-awesome-icon> Favorites</span>
+                <span slot="label"><font-awesome-icon :icon="['fas', 'star']"></font-awesome-icon> {{$i18n('OptionTab_favs')}}</span>
                 <div v-if="favorites.length > 0" class="favorites-links">
                     <document-link v-for="(linkData, idx) in favorites" :key="idx" :link="linkData" mode="fav"
                                    @favChanged="onIsFavChanged(linkData, idx)"></document-link>
                 </div>
                 <div v-else class="favorites--empty flex flex--column flex--align-center">
-                    <span>No Favorites yet</span>
+                    <span>{{$i18n('MSG_noFavorites')}}</span>
                 </div>
                 <div v-if="favorites.length > 0" class="favorites__actions flex flex--row">
-                    <el-button class="show-history-btn" @click="openFavAndHistory" size="medium">Show all favorites</el-button>
-                    <el-button class="show-history-btn" @click="clearFavorites" size="medium">Delete all favorites</el-button>
+                    <el-button class="show-history-btn" @click="openFavAndHistory" size="medium">{{$i18n('Btn_showAllFavs')}}</el-button>
+                    <el-button class="show-history-btn" @click="clearFavorites" size="medium">{{$i18n('Btn_clearFavs')}}</el-button>
                 </div>
             </el-tab-pane>
             <!-- History entries -->
             <el-tab-pane name="history" :disabled="!settings.linkHistoryActive"
                          class="popup-tabs__history flex flex--column">
-                <span slot="label"><font-awesome-icon icon="history"></font-awesome-icon> History</span>
+                <span slot="label"><font-awesome-icon icon="history"></font-awesome-icon> {{$i18n('OptionTab_history')}}</span>
                 <div v-if="history.length > 0" class="history-links">
                     <document-link v-for="(linkData, idx) in history" :key="idx" :link="linkData"
                                    @favChanged="onIsFavInHistoryChanged(linkData)"></document-link>
                 </div>
                 <div v-else class="history--empty flex flex--column flex--align-center">
-                    <span>No History entries yet</span>
+                    <span>{{$i18n('MSG_noHistory')}}</span>
                 </div>
                 <div v-if="history.length > 0" class="history__actions flex flex--row">
-                    <el-button class="show-history-btn" @click="openFavAndHistory" size="medium">Show full history</el-button>
-                    <el-button class="show-history-btn" @click="clearHistory" size="medium">Clear History</el-button>
+                    <el-button class="show-history-btn" @click="openFavAndHistory" size="medium">{{$i18n('Btn_showHistory')}}</el-button>
+                    <el-button class="show-history-btn" @click="clearHistory" size="medium">{{$i18n('Btn_clearHistory')}}</el-button>
                 </div>
             </el-tab-pane>
             <!-- Extension options -->
             <el-tab-pane name="options">
-                <span slot="label"><font-awesome-icon icon="cog"></font-awesome-icon> Options</span>
-                <el-form ref="settings" :model="settings" label-width="170px">
-                    <el-form-item label="Default Visible Menu">
+                <span slot="label"><font-awesome-icon icon="cog"></font-awesome-icon> {{$i18n('OptionTab_options')}}</span>
+                <el-form ref="settings" :model="settings" label-width="240px" size="medium">
+                    <el-form-item :label="$i18n('Setting_popupDefaultTab')">
                         <el-select v-model="settings.popupDefaultTab"
                                    @change="onSubmit">
-                            <el-option label="Favorites" value="favs"></el-option>
-                            <el-option label="History" value="history"></el-option>
-                            <el-option label="Options" value="options"></el-option>
+                            <el-option :label="$i18n('OptionTab_favs')" value="favs"></el-option>
+                            <el-option :label="$i18n('OptionTab_history')" value="history"></el-option>
+                            <el-option :label="$i18n('OptionTab_options')" value="options"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="Default Link Action">
+                    <el-form-item :label="$i18n('Setting_defaultMenuLinkAction')">
+                        <el-select v-model="settings.menuLinkDefaultAction"
+                                   @change="onDefaultActionChange">
+                            <el-option :label="$i18n('LinkOption_openEdit')" value="edit"></el-option>
+                            <el-option :label="$i18n('LinkOption_openProtected')" value="read"></el-option>
+                            <el-option :label="$i18n('LinkOption_openOnline')" value="online"></el-option>
+                            <el-option :label="$i18n('LinkOption_download')" value="download"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item :label="$i18n('Setting_defaultLinkAction')">
                         <el-select v-model="settings.linkDefaultAction"
                                    @change="onDefaultActionChange">
-                            <el-option label="Original" value="original"></el-option>
-                            <el-option label="Show option popover" value="dialog"></el-option>
-                            <el-option label="Open in edit mode" value="edit"></el-option>
-                            <el-option label="Open in protected mode" value="read"></el-option>
-                            <el-option label="Open online" value="online"></el-option>
-                            <el-option label="Download file" value="download"></el-option>
+                            <el-option :label="$i18n('LinkOption_original')" value="original"></el-option>
+                            <el-option :label="$i18n('LinkOption_popover')" value="dialog"></el-option>
+                            <el-option :label="$i18n('LinkOption_openEdit')" value="edit"></el-option>
+                            <el-option :label="$i18n('LinkOption_openProtected')" value="read"></el-option>
+                            <el-option :label="$i18n('LinkOption_openOnline')" value="online"></el-option>
+                            <el-option :label="$i18n('LinkOption_download')" value="download"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="Open in new Tab">
+                    <el-form-item :label="$i18n('Setting_newTab')">
                         <el-switch v-model="settings.openInNewTab" @change="onSubmit"></el-switch>
                     </el-form-item>
-                    <el-form-item label="Activate Link History">
+                    <el-form-item :label="$i18n('Setting_activateHistory')">
                         <el-switch v-model="settings.linkHistoryActive" @change="onSubmit"></el-switch>
                     </el-form-item>
-                    <el-form-item label="Maximum Link History">
+                    <el-form-item :label="$i18n('Setting_maxHistoryCount')">
                         <el-input-number v-model="settings.maxLinkHistory" @change="onSubmit"
                                          :disabled="!settings.linkHistoryActive" :max="100" :min="5"
                                          controls-position="right"></el-input-number>
@@ -90,6 +99,7 @@ export default {
     currentTab: 'options',
     settings: {
       linkHistoryActive: false,
+      menuLinkDefaultAction: 'online',
       linkDefaultAction: 'original',
       popupDefaultTab: 'options',
       openInNewTab: false,
@@ -140,18 +150,18 @@ export default {
     clearFavorites() {
       ExtStorage.clearLinkFavorites();
       this.favorites = [];
-      this.$message('Favorites have been deleted');
+      this.$message(this.$i18n('MSG_favsWereDeleted'));
     },
     clearHistory() {
       ExtStorage.clearLinkHistory();
       this.history = [];
-      this.$message('Link history was deleted');
+      this.$message(this.$i18n('MSG_historyWasDeleted'));
     },
     onDefaultActionChange(newValue) {
       if (newValue === 'original') {
         // page refresh may be needed
         this.$message({
-          message: 'To get the original link action back a page refresh may be needed',
+          message: this.$i18n('MSG_linkOptionSwitchedToOriginal'),
           type: 'warning'
         });
       }
@@ -193,7 +203,7 @@ hr {
     font-size: 15px;
   }
 
-  width: 500px;
+  width: 520px;
 
   .form-entry__label {
     width: 120px;

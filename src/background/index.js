@@ -1,30 +1,32 @@
 import { LinkHandler, openUrlInTab } from '../util';
 
+const i18n = chrome.i18n.getMessage;
+
 const patterns = ['docx', 'doc', 'docm', 'xls', 'xlsx', 'csv', 'xlsm', 'pptx', 'ppt', 'pptm'].map(
   el => `*://*/*.${el}`
 );
 
 // install the context menus to open links in ms office applications
 chrome.contextMenus.create({
-  title: 'Open in read only mode',
+  title: i18n('LinkOption_openProtected'),
   id: 'read',
   contexts: ['link'],
   targetUrlPatterns: patterns
 });
 chrome.contextMenus.create({
-  title: 'Open in edit mode',
+  title: i18n('LinkOption_openEdit'),
   id: 'edit',
   contexts: ['link'],
   targetUrlPatterns: patterns
 });
 chrome.contextMenus.create({
-  title: 'Open in online mode',
+  title: i18n('LinkOption_openOnline'),
   id: 'online',
   contexts: ['link'],
   targetUrlPatterns: patterns
 });
 chrome.contextMenus.create({
-  title: 'Download file',
+  title: i18n('LinkOption_download'),
   id: 'download',
   contexts: ['link'],
   targetUrlPatterns: patterns
@@ -36,13 +38,13 @@ chrome.contextMenus.create({
   targetUrlPatterns: patterns
 });
 chrome.contextMenus.create({
-  title: 'Add to Favorites',
+  title: i18n('LinkOption_addToFavs'),
   id: 'markasfav',
   contexts: ['link'],
   targetUrlPatterns: patterns
 });
 chrome.contextMenus.create({
-  title: 'Document History / Favorites',
+  title: i18n('History_ctxMenuOpen'),
   id: 'advoptions',
   contexts: ['browser_action']
 });

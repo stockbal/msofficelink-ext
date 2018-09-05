@@ -2,8 +2,8 @@
  * @see {@link https://developer.chrome.com/extensions/manifest}
  */
 module.exports = {
-  name: 'MS Doc Link',
-  description: 'Handle MS Office Document links in a better way',
+  name: '__MSG_extName__',
+  description: '__MSG_extDescription__',
   author: 'Ludwig Stockbauer-Muhr <ludwig.stockbauer-muhr@msg.group>',
   version: '1.0.0',
   icons: {
@@ -34,7 +34,6 @@ module.exports = {
     persistent: false,
     page: 'pages/background.html'
   },
-  options_page: 'pages/options.html',
   content_scripts: [
     {
       js: ['js/manifest.js', 'js/vendor.js', 'js/content.js'],
@@ -44,6 +43,7 @@ module.exports = {
       all_frames: true
     }
   ],
+  default_locale: 'en',
   manifest_version: 2,
   content_security_policy: "script-src 'self'; object-src 'self'",
   web_accessible_resources: ['js/content.js', 'css/content.css']

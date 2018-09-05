@@ -1,27 +1,27 @@
 <template>
     <div class="popper" v-show="popperVisible">
         <div class="file-options">
-            <el-tooltip effect="dark" placement="bottom" content="Open in protected mode" :open-delay="500">
+            <el-tooltip effect="dark" placement="bottom" :content="$i18n('LinkOption_openProtected')" :open-delay="500">
                 <el-button @click="confirm('read')" size="medium" round type="primary">
                     <font-awesome-icon icon="glasses"></font-awesome-icon>
                 </el-button>
             </el-tooltip>
-            <el-tooltip effect="dark" placement="bottom" content="Open in edit mode" :open-delay="500">
+            <el-tooltip effect="dark" placement="bottom" :content="$i18n('LinkOption_openEdit')" :open-delay="500">
                 <el-button @click="confirm('edit')" size="medium" round type="primary">
                     <font-awesome-icon icon="edit"></font-awesome-icon>
                 </el-button>
             </el-tooltip>
-            <el-tooltip effect="dark" placement="bottom" content="Open online" :open-delay="500">
+            <el-tooltip effect="dark" placement="bottom" :content="$i18n('LinkOption_openOnline')" :open-delay="500">
                 <el-button @click="confirm('online')" size="medium" round type="primary">
                     <font-awesome-icon icon="globe"></font-awesome-icon>
                 </el-button>
             </el-tooltip>
-            <el-tooltip effect="dark" placement="bottom" content="Download file" :open-delay="500">
+            <el-tooltip effect="dark" placement="bottom" :content="$i18n('LinkOption_download')" :open-delay="500">
                 <el-button @click="confirm('download')" size="medium" round type="primary">
                     <font-awesome-icon icon="download"></font-awesome-icon>
                 </el-button>
             </el-tooltip>
-            <el-tooltip effect="dark" placement="bottom" content="Add To Favorites" :open-delay="500">
+            <el-tooltip effect="dark" placement="bottom" :content="$i18n('LinkOption_addToFavs')" :open-delay="500">
                 <el-button @click="confirm('markasfav')" size="medium" round type="primary">
                     <font-awesome-icon icon="star"></font-awesome-icon>
                 </el-button>
@@ -108,14 +108,8 @@ export default {
   font-size: 15px;
 }
 
-/*.popper {*/
-/*background: white;*/
-/*padding: 5px;*/
-/*box-shadow: 2px 2px 7px grey;*/
-/*border-radius: 5px;*/
-/*}*/
-
 .popper {
+  user-select: none;
   width: auto;
   background-color: #fafafa;
   color: #212121;
