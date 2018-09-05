@@ -1,6 +1,5 @@
 <template>
-    <el-popover placement="bottom"
-                v-model="popoverVisible">
+    <div class="popper" v-show="popperVisible">
         <div class="file-options">
             <el-tooltip effect="dark" placement="bottom" content="Open in protected mode" :open-delay="500">
                 <el-button @click="confirm('read')" size="medium" round type="primary">
@@ -28,37 +27,55 @@
                 </el-button>
             </el-tooltip>
         </div>
-        <a href="#" slot="reference" v-html="html" :class="classes"></a>
-    </el-popover>
+        <div class="popper__arrow" x-arrow></div>
+    </div>
 </template>
 
 <script>
-import { LinkHandler } from '../util';
+import { LinkHandler, on, off } from '../util';
 
 export default {
   name: 'LinkPopover',
-  props: ['href', 'text', 'html', 'classes'],
   data: () => ({
-    popoverVisible: false,
-    file: ''
+    linkEl: null,
+    popperVisible: false,
+    fileOpenOption: 'read',
+    file: '',
+    origin: '',
+    ownerPage: ''
   }),
   created() {
-    const files = this.href.match(/\/(?:.(?!\/))+$/gi);
-    this.file = files.length > 0 ? files[0] : this.text;
-    if (this.file.startsWith('/')) {
-      this.file = decodeURI(this.file.substring(1, this.file.length));
-    }
+    on(document, 'click', this.onDocumentClick);
+    this.$parent.$on('showPopper', (linkEl, origin, ownerPage) => {
+      // close popper if the same link is clicked
+      if (this.linkEl === linkEl) {
+        this.popperVisible = false;
+        this.linkEl = null;
+        return;
+      }
+      this.linkEl = linkEl;
+      this.linkUrl = linkEl.href;
+      this.origin = origin;
+      this.ownerPage = ownerPage;
+      const files = linkEl.href.match(/\/(?:.(?!\/))+$/gi);
+      this.file = files.length > 0 ? files[0] : linkEl.innerText;
+      if (this.file.startsWith('/')) {
+        this.file = decodeURI(this.file.substring(1, this.file.length));
+      }
+      this.popperVisible = true;
+    });
+  },
+  destroyed() {
+    off(document, 'click', this.onDocumentClick);
   },
   methods: {
+    onDocumentClick(evt) {
+      this.popperVisible = false;
+    },
     confirm(option) {
-      this.popoverVisible = false;
+      this.popperVisible = false;
       window.setTimeout(() => {
-        const linkHandler = new LinkHandler(
-          option,
-          this.href,
-          window.location.origin,
-          window.location.href
-        );
+        const linkHandler = new LinkHandler(option, this.linkUrl);
         if (option === 'markasfav') {
           linkHandler.createFavorite();
         } else {
@@ -89,5 +106,79 @@ export default {
 .notification-text {
   padding: 0 0 20px 0;
   font-size: 15px;
+}
+
+/*.popper {*/
+/*background: white;*/
+/*padding: 5px;*/
+/*box-shadow: 2px 2px 7px grey;*/
+/*border-radius: 5px;*/
+/*}*/
+
+.popper {
+  width: auto;
+  background-color: #fafafa;
+  color: #212121;
+  text-align: center;
+  padding: 2px;
+  display: inline-block;
+  border-radius: 3px;
+  position: absolute;
+  font-size: 14px;
+  font-weight: normal;
+  border: 1px #ebebeb solid;
+  /*z-index: 200000;*/
+  box-shadow: rgb(58, 58, 58) 0 0 6px 0;
+}
+.popper .popper__arrow {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  position: absolute;
+  margin: 5px;
+}
+.popper[x-placement^='top'] {
+  margin-bottom: 5px;
+}
+.popper[x-placement^='top'] .popper__arrow {
+  border-width: 5px 5px 0 5px;
+  border-color: #fafafa transparent transparent transparent;
+  bottom: -5px;
+  left: calc(50% - 5px);
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.popper[x-placement^='bottom'] {
+  margin-top: 5px;
+}
+.popper[x-placement^='bottom'] .popper__arrow {
+  border-width: 0 5px 5px 5px;
+  border-color: transparent transparent #fafafa transparent;
+  top: -5px;
+  left: calc(50% - 5px);
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.popper[x-placement^='right'] {
+  margin-left: 5px;
+}
+.popper[x-placement^='right'] .popper__arrow {
+  border-width: 5px 5px 5px 0;
+  border-color: transparent #fafafa transparent transparent;
+  left: -5px;
+  top: calc(50% - 5px);
+  margin-left: 0;
+  margin-right: 0;
+}
+.popper[x-placement^='left'] {
+  margin-right: 5px;
+}
+.popper[x-placement^='left'] .popper__arrow {
+  border-width: 5px 0 5px 5px;
+  border-color: transparent transparent transparent #fafafa;
+  right: -5px;
+  top: calc(50% - 5px);
+  margin-left: 0;
+  margin-right: 0;
 }
 </style>

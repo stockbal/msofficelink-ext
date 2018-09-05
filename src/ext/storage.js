@@ -148,4 +148,5 @@ export class ExtStorage {
   static clearLinkHistory() {
     chrome.storage.local.remove('docLinks');
   }
+  static clearFavorites() {}
 }

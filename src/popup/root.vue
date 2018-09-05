@@ -52,7 +52,7 @@
                         <el-select v-model="settings.linkDefaultAction"
                                    @change="onDefaultActionChange">
                             <el-option label="Original" value="original"></el-option>
-                            <el-option label="Show option dialog" value="dialog"></el-option>
+                            <el-option label="Show option popover" value="dialog"></el-option>
                             <el-option label="Open in edit mode" value="edit"></el-option>
                             <el-option label="Open in protected mode" value="read"></el-option>
                             <el-option label="Open online" value="online"></el-option>
@@ -137,7 +137,11 @@ export default {
     openFavAndHistory() {
       chrome.tabs.create({ url: 'pages/history.html' });
     },
-    clearFavorites() {},
+    clearFavorites() {
+      ExtStorage.clearFavorites();
+      this.history = [];
+      this.$message('Link history was deleted');
+    },
     clearHistory() {
       ExtStorage.clearLinkHistory();
       this.history = [];
