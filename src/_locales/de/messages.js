@@ -21,8 +21,8 @@ module.exports = {
   // messages for Extension settings
   Setting_newTab: { message: 'In neuem Tab öffnen' },
   Setting_popupDefaultTab: { message: 'Standard Menu' },
-  Setting_defaultMenuLinkAction: { message: 'Standard Link Aktion in Menü' },
-  Setting_defaultLinkAction: { message: 'Standard Link Aktion' },
+  Setting_defaultMenuLinkAction: { message: 'Link Aktion in Erweiterung' },
+  Setting_defaultLinkAction: { message: 'Link Aktion' },
   Setting_activateHistory: { message: 'Historie aktivieren' },
   Setting_maxHistoryCount: { message: 'Maximale Anzahl Links in Historie' },
 
@@ -45,13 +45,19 @@ module.exports = {
     message:
       'Um die Standard-Aktion der MS Office Links wiederherzustellen ist eine Seiten-Aktualisierung nötig'
   },
+  MSG_historyEmptyInfoText: {
+    message: 'Hier werden die Historie und Favoriten für ihre MS Office Dokumente angezeigt'
+  },
 
   // Texts for single document link
   Link_addFavorite: { message: 'Zu Favoriten hinzufügen' },
   Link_deleteFavorite: { message: 'Favorit löschen' },
 
   // Texts for history / favorites page
-  History_title: { message: 'MS Office Dokumenten Verweise' },
+  History_title: { message: 'MS Office Dokumente' },
   History_pageTitle: { message: 'Favoriten & Historie ' },
-  History_ctxMenuOpen: { message: 'Dokument Historie & Favoriten' }
+  History_ctxMenuOpen: { message: 'Favoriten und Historie' },
+  History_search: { message: 'Suchen' },
+  History_showFavs: { message: 'Favoriten' },
+  History_showHistoryLinks: { message: 'Historieneinträge' }
 };

@@ -21,8 +21,8 @@ module.exports = {
   // messages for Extension settings
   Setting_newTab: { message: 'Open in new Tab' },
   Setting_popupDefaultTab: { message: 'Default Visible Menu' },
-  Setting_defaultMenuLinkAction: { message: 'Default Menu Link Action' },
-  Setting_defaultLinkAction: { message: 'Default Link Action' },
+  Setting_defaultMenuLinkAction: { message: 'Link Action in Extension' },
+  Setting_defaultLinkAction: { message: 'Link Action' },
   Setting_activateHistory: { message: 'Activate Link History' },
   Setting_maxHistoryCount: { message: 'Maximum Link History' },
 
@@ -42,7 +42,10 @@ module.exports = {
   MSG_favsWereDeleted: { message: 'Favorites have been deleted' },
   MSG_historyWasDeleted: { message: 'History links have been deleted' },
   MSG_linkOptionSwitchedToOriginal: {
-    message: 'To get the original link action back a page refresh may be needed'
+    message: 'To get the original link action back you have to do a page refresh'
+  },
+  MSG_historyEmptyInfoText: {
+    message: 'Here you see the history & favorites for your MS Office Documents'
   },
 
   // Texts for single document link
@@ -50,7 +53,10 @@ module.exports = {
   Link_deleteFavorite: { message: 'Delete favorite' },
 
   // Texts for history / favorites page
-  History_title: { message: 'MS Office Document Links' },
+  History_title: { message: 'MS Office Documents' },
   History_pageTitle: { message: 'Favorites & History ' },
-  History_ctxMenuOpen: { message: 'Document History / Favorites' }
+  History_ctxMenuOpen: { message: 'Favorites and History' },
+  History_search: { message: 'Search' },
+  History_showFavs: { message: 'Favorites' },
+  History_showHistoryLinks: { message: 'History entries' }
 };

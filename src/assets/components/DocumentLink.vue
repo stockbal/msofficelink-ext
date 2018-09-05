@@ -1,5 +1,8 @@
 <template>
     <div class="document-link flex flex--row flex--align-center">
+        <div v-if="mode === 'history-page'" class="document-link__check">
+            <el-checkbox :checked="checked" @change="onChecked"></el-checkbox>
+        </div>
         <div class="document-link__icon">
             <img v-if="link.protocol === 'ms-word'" src="../../../static/icons/word-app.svg" width="20px"
                  alt="word">
@@ -13,7 +16,7 @@
             <h4>{{link.href}}</h4>
         </div>
         <div class="document-link__fav-indicator" @click="changeFav" :class="'document-link__fav-indicator--' + link.type">
-            <el-tooltip v-if="mode === 'history'" class="item" effect="dark" :content="favToolTip" placement="bottom" :open-delay="500">
+            <el-tooltip v-if="mode === 'history' || mode === 'history-page'" class="item" effect="dark" :content="favToolTip" placement="bottom" :open-delay="500">
                 <font-awesome-icon :icon="favIcon"></font-awesome-icon>
             </el-tooltip>
             <el-tooltip v-else class="item" effect="dark" :content="$i18n('Link_deleteFavorite')" placement="bottom" :open-delay="500">
@@ -45,7 +48,8 @@ export default {
     mode: {
       type: String,
       default: 'history'
-    }
+    },
+    checked: {}
   },
   components: {
     LinkActions
@@ -62,6 +66,9 @@ export default {
     }
   },
   methods: {
+    onChecked(val) {
+      this.$emit('update:checked', val);
+    },
     performLinkAction(action) {
       this.actionPopoverVisible = false;
       const { origin, href, ownerPage } = this.link;
@@ -150,5 +157,9 @@ export default {
       color: $--word;
     }
   }
+}
+
+.document-link__check {
+  padding: 0 15px 0 5px;
 }
 </style>
