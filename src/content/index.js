@@ -68,13 +68,13 @@ const updateOfficeLinks = async () => {
             evt.stopPropagation();
 
             if (defaultAction === 'dialog') {
-              popover.$emit('showPopper', evt.target, origin, href);
+              popover.$emit('showPopper', newLink, origin, href);
               if (!window.msofficeLinkPopper) {
-                window.msofficeLinkPopper = new Popper(evt.target, popover.$el, {
+                window.msofficeLinkPopper = new Popper(newLink, popover.$el, {
                   placement: 'bottom'
                 });
               } else {
-                window.msofficeLinkPopper.reference = evt.target;
+                window.msofficeLinkPopper.reference = newLink;
                 window.msofficeLinkPopper.update();
               }
             } else {
