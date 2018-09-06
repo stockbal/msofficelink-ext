@@ -4,3 +4,10 @@
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
 @import "~element-ui/packages/theme-chalk/src/index";
+
+@font-face {
+  font-family: 'element-icons';
+  src: url('chrome-extension://__MSG_@@extension_id__/fonts/element-icons.ttf') format('truetype'); /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  font-weight: normal;
+  font-style: normal
+}

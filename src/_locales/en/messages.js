@@ -47,6 +47,14 @@ module.exports = {
   MSG_historyEmptyInfoText: {
     message: 'Here you see the history & favorites for your MS Office Documents'
   },
+  MSG_favAddedInfo: {
+    message: `File '$fav$' was added to the favorites`,
+    placeholders: {
+      fav: {
+        content: '$1'
+      }
+    }
+  },
 
   // Texts for single document link
   Link_addFavorite: { message: 'Mark as favorite' },

@@ -71,6 +71,7 @@ export default {
   methods: {
     onDocumentClick(evt) {
       this.popperVisible = false;
+      this.linkEl = false;
     },
     confirm(option) {
       this.popperVisible = false;
@@ -78,6 +79,11 @@ export default {
         const linkHandler = new LinkHandler(option, this.linkUrl);
         if (option === 'markasfav') {
           linkHandler.createFavorite();
+          this.$notify({
+            title: this.$i18n('extName'),
+            message: this.$i18n('MSG_favAddedInfo', [this.file]),
+            type: 'success'
+          });
         } else {
           linkHandler.sendTabUpdateViaMessage();
         }
