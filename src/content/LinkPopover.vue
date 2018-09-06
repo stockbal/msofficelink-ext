@@ -1,5 +1,5 @@
 <template>
-    <div class="popper" v-show="popperVisible">
+    <div class="link-popper" v-show="popperVisible">
         <div class="file-options">
             <el-tooltip effect="dark" placement="bottom" :content="$i18n('LinkOption_openProtected')" :open-delay="500">
                 <el-button @click="confirm('read')" size="medium" round type="primary">
@@ -108,7 +108,7 @@ export default {
   font-size: 15px;
 }
 
-.popper {
+.link-popper {
   user-select: none;
   width: auto;
   background-color: #fafafa;
@@ -123,56 +123,64 @@ export default {
   border: 1px #ebebeb solid;
   /*z-index: 200000;*/
   box-shadow: rgb(58, 58, 58) 0 0 6px 0;
-}
-.popper .popper__arrow {
-  width: 0;
-  height: 0;
-  border-style: solid;
-  position: absolute;
-  margin: 5px;
-}
-.popper[x-placement^='top'] {
-  margin-bottom: 5px;
-}
-.popper[x-placement^='top'] .popper__arrow {
-  border-width: 5px 5px 0 5px;
-  border-color: #fafafa transparent transparent transparent;
-  bottom: -5px;
-  left: calc(50% - 5px);
-  margin-top: 0;
-  margin-bottom: 0;
-}
-.popper[x-placement^='bottom'] {
-  margin-top: 5px;
-}
-.popper[x-placement^='bottom'] .popper__arrow {
-  border-width: 0 5px 5px 5px;
-  border-color: transparent transparent #fafafa transparent;
-  top: -5px;
-  left: calc(50% - 5px);
-  margin-top: 0;
-  margin-bottom: 0;
-}
-.popper[x-placement^='right'] {
-  margin-left: 5px;
-}
-.popper[x-placement^='right'] .popper__arrow {
-  border-width: 5px 5px 5px 0;
-  border-color: transparent #fafafa transparent transparent;
-  left: -5px;
-  top: calc(50% - 5px);
-  margin-left: 0;
-  margin-right: 0;
-}
-.popper[x-placement^='left'] {
-  margin-right: 5px;
-}
-.popper[x-placement^='left'] .popper__arrow {
-  border-width: 5px 0 5px 5px;
-  border-color: transparent transparent transparent #fafafa;
-  right: -5px;
-  top: calc(50% - 5px);
-  margin-left: 0;
-  margin-right: 0;
+
+  button {
+    min-width: 1em;
+  }
+
+  .popper__arrow {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    position: absolute;
+    margin: 5px;
+  }
+
+  &[x-placement^='bottom'] {
+    margin-top: 5px;
+    .popper__arrow {
+      border-width: 0 5px 5px 5px;
+      border-color: transparent transparent #fafafa transparent;
+      top: -5px;
+      left: calc(50% - 5px);
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  &[x-placement^='top'] {
+    margin-bottom: 5px;
+
+    .popper__arrow {
+      border-width: 5px 5px 0 5px;
+      border-color: #fafafa transparent transparent transparent;
+      bottom: -5px;
+      left: calc(50% - 5px);
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+  &[x-placement^='right'] {
+    margin-left: 5px;
+    .popper__arrow {
+      border-width: 5px 5px 5px 0;
+      border-color: transparent #fafafa transparent transparent;
+      left: -5px;
+      top: calc(50% - 5px);
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+  &[x-placement^='left'] {
+    margin-right: 5px;
+    .popper__arrow {
+      border-width: 5px 0 5px 5px;
+      border-color: transparent transparent transparent #fafafa;
+      right: -5px;
+      top: calc(50% - 5px);
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
 }
 </style>
