@@ -45,6 +45,6 @@ module.exports = {
   ],
   default_locale: 'en',
   manifest_version: 2,
-  content_security_policy: "script-src 'self'; object-src 'self'; font-src 'self'",
+  content_security_policy: "script-src 'self'; object-src 'self'",
   web_accessible_resources: ['js/content.js', 'css/content.css', 'fonts/element-icons.ttf']
 };
