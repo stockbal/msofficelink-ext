@@ -3,12 +3,21 @@
         <header>
             <div class="links-header flex flex--row flex--align-center">
                 <img src="../../static/icons/icon.svg">
-                <h1>MS Office Document Links</h1>
+                <h1>{{$i18n('History_title')}}</h1>
             </div>
         </header>
         <main>
-            <section class="links__entries">
-                <document-link v-for="(linkData, idx) in documentLinks" :key="idx" :link="linkData"></document-link>
+            <section class="links__toolbar flex flex--row flex--align-center">
+                <el-input class="link-search" v-model="search" :placeholder="$i18n('History_search')"></el-input>
+                <el-checkbox :checked="showFavorites" :label="$i18n('History_showFavs')" @change="onShowFavoritesChange"></el-checkbox>
+                <el-checkbox :checked="showHistoryEntries" :label="$i18n('History_showHistoryLinks')"></el-checkbox>
+            </section>
+            <section v-if="documentLinks.length" class="links__entries">
+                <document-link v-for="(linkData, idx) in documentLinks" :key="idx" :link="linkData" mode="history-page"
+                               :checked.sync="linkData.checked"></document-link>
+            </section>
+            <section v-else class="flex links__empty">
+                <h3>{{$i18n('MSG_historyEmptyInfoText')}}</h3>
             </section>
         </main>
     </div>
@@ -20,7 +29,10 @@ import DocumentLink from '../assets/components/DocumentLink';
 export default {
   components: { DocumentLink },
   data: () => ({
-    documentLinks: []
+    documentLinks: [],
+    search: '',
+    showHistoryEntries: true,
+    showFavorites: true
   }),
   computed: {},
   async created() {
@@ -28,10 +40,13 @@ export default {
     const links = await ExtStorage.getDocumentLinks();
     this.documentLinks = [];
     Object.entries(links.entries).forEach(([, link]) => {
-      this.documentLinks.push(link);
+      this.documentLinks.push({ ...link, checked: false });
     });
   },
   methods: {
+    onCheckAllChange(value) {},
+    onShowFavoritesChange(value) {},
+    onCheck(val) {},
     clearHistory() {
       ExtStorage.clearLinkHistory();
       this.documentLinks = [];
@@ -118,5 +133,25 @@ main {
 
 .links__entries {
   padding: 5px;
+}
+
+.links__toolbar {
+  padding: 5px;
+
+  * {
+    padding: 5px;
+  }
+}
+
+.link-search {
+  max-width: 350px;
+}
+
+.links__empty {
+  h2,
+  h3 {
+    margin: 150px auto;
+    font-weight: 200;
+  }
 }
 </style>

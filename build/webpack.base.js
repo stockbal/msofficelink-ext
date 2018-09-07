@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const GenerateJSON = require('generate-json-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const GenerateLocaleJsonPlugin = require('../plugins/GenerateLocaleJsonPlugin');
 const { cssLoaders, htmlPage } = require('./tools');
 
 const rootDir = path.resolve(__dirname, '..');
@@ -13,7 +14,6 @@ module.exports = {
   entry: {
     popup: resolve('./popup'),
     tab: resolve('./tab'),
-    options: resolve('./options'),
     content: resolve('./content'),
     history: resolve('./history'),
     background: resolve('./background')
@@ -99,11 +99,13 @@ module.exports = {
     // Customize your extension structure.
     htmlPage('home', 'app', ['manifest', 'vendor', 'tab']),
     htmlPage('popup', 'popup', ['manifest', 'vendor', 'popup']),
-    htmlPage('options', 'options', ['manifest', 'vendor', 'options']),
     htmlPage('Favorites & History', 'history', ['manifest', 'vendor', 'history']),
     htmlPage('background', 'background', ['manifest', 'vendor', 'background']),
     // End customize
     new CopyWebpackPlugin([{ from: path.join(rootDir, 'static') }]),
+    new GenerateLocaleJsonPlugin({
+      _locales: path.join(rootDir, 'src', '_locales')
+    }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       minChunks: function(module) {

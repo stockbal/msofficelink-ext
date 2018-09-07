@@ -1,5 +1,5 @@
 import '../assets/css/element-ui.scss';
-import LinkOptions from './LinkOptions';
+import LinkPopover from './LinkPopover';
 import ElementUI from 'element-ui';
 import Vue from 'vue';
 import localeEN from 'element-ui/lib/locale/lang/en';
@@ -7,8 +7,10 @@ import localeDE from 'element-ui/lib/locale/lang/de';
 import { LinkHandler } from '../util';
 import { ExtStorage } from '../ext/storage';
 import '../util/initAwesomeIconsForHistory';
+import Popper from 'popper.js';
 
 Vue.config.productionTip = false;
+Vue.prototype.$i18n = chrome.i18n.getMessage;
 
 const currentLocale = chrome.i18n.getUILanguage();
 const locale = currentLocale === 'de' ? localeDE : localeEN;
@@ -21,7 +23,7 @@ document.body.appendChild(popoverEl);
 /* eslint-disable no-new */
 const popover = new Vue({
   el: popoverEl,
-  render: h => h(LinkOptions)
+  render: h => h(LinkPopover)
 });
 
 const updateOfficeLinks = async () => {
@@ -66,7 +68,15 @@ const updateOfficeLinks = async () => {
             evt.stopPropagation();
 
             if (defaultAction === 'dialog') {
-              popover.$emit('openDialog', newLink, origin, href);
+              popover.$emit('showPopper', newLink, origin, href);
+              if (!window.msofficeLinkPopper) {
+                window.msofficeLinkPopper = new Popper(newLink, popover.$el, {
+                  placement: 'bottom'
+                });
+              } else {
+                window.msofficeLinkPopper.reference = newLink;
+                window.msofficeLinkPopper.update();
+              }
             } else {
               new LinkHandler(defaultAction, newLink.href, origin, href).sendTabUpdateViaMessage();
             }

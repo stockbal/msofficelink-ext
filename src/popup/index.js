@@ -7,6 +7,7 @@ import localeDE from 'element-ui/lib/locale/lang/de';
 import '../util/initAwesomeIconsForHistory';
 
 Vue.config.productionTip = false;
+Vue.prototype.$i18n = messageId => chrome.i18n.getMessage(messageId);
 
 const currentLocale = chrome.i18n.getUILanguage();
 const locale = currentLocale === 'de' ? localeDE : localeEN;

@@ -2,28 +2,28 @@
     <div class="link-actions" :class="appClass">
         <div class="link-actions__action" @click="onAction('read')">
             <font-awesome-icon icon="glasses" fixed-width></font-awesome-icon>
-            Open in protected mode
+            {{$i18n('LinkOption_openProtected')}}
         </div>
         <div class="link-actions__action" @click="onAction('edit')">
             <font-awesome-icon icon="edit" fixed-width></font-awesome-icon>
-            Open in edit mode
+            {{$i18n('LinkOption_openEdit')}}
         </div>
         <div class="link-actions__action" @click="onAction('online')">
             <font-awesome-icon icon="globe" fixed-width></font-awesome-icon>
-            Open online
+            {{$i18n('LinkOption_openOnline')}}
         </div>
         <div class="link-actions__action" @click="onAction('download')">
             <font-awesome-icon icon="download" fixed-width></font-awesome-icon>
-            Download file
+            {{$i18n('LinkOption_download')}}
         </div>
         <div class="link-actions__separator"></div>
         <div class="link-actions__action" @click="onAction('parent')">
             <font-awesome-icon icon="folder-open" fixed-width></font-awesome-icon>
-            Open Parent folder
+            {{$i18n('LinkOption_openParent')}}
         </div>
         <div class="link-actions__action" @click="onAction('owner')">
             <font-awesome-icon icon="file-alt" fixed-width></font-awesome-icon>
-            Open Link Webpage
+            {{$i18n('LinkOption_openOwnerPage')}}
         </div>
     </div>
 </template>

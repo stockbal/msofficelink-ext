@@ -1,5 +1,8 @@
 <template>
     <div class="document-link flex flex--row flex--align-center">
+        <div v-if="mode === 'history-page'" class="document-link__check">
+            <el-checkbox :checked="checked" @change="onChecked"></el-checkbox>
+        </div>
         <div class="document-link__icon">
             <img v-if="link.protocol === 'ms-word'" src="../../../static/icons/word-app.svg" width="20px"
                  alt="word">
@@ -8,15 +11,15 @@
                  alt="word">
             <img v-else src="../../../static/icons/powerpoint-app.svg" width="20px" alt="word">
         </div>
-        <div class="flex flex--column document-link__content">
+        <div class="flex flex--column document-link__content" @click="onLinkClick">
             <h3>{{link.file}}</h3>
             <h4>{{link.href}}</h4>
         </div>
         <div class="document-link__fav-indicator" @click="changeFav" :class="'document-link__fav-indicator--' + link.type">
-            <el-tooltip v-if="mode === 'history'" class="item" effect="dark" :content="favToolTip" placement="bottom" :open-delay="500">
+            <el-tooltip v-if="mode === 'history' || mode === 'history-page'" class="item" effect="dark" :content="favToolTip" placement="bottom" :open-delay="500">
                 <font-awesome-icon :icon="favIcon"></font-awesome-icon>
             </el-tooltip>
-            <el-tooltip v-else class="item" effect="dark" content="Delete Favorite" placement="bottom" :open-delay="500">
+            <el-tooltip v-else class="item" effect="dark" :content="$i18n('Link_deleteFavorite')" placement="bottom" :open-delay="500">
                 <font-awesome-icon :icon="['far', 'trash-alt']"></font-awesome-icon>
             </el-tooltip>
         </div>
@@ -34,6 +37,7 @@
 <script>
 import LinkActions from './LinkActions';
 import { LinkHandler } from '../../util/index';
+import { ExtStorage } from '../../ext/storage';
 
 export default {
   name: 'DocumentLink',
@@ -44,7 +48,8 @@ export default {
     mode: {
       type: String,
       default: 'history'
-    }
+    },
+    checked: {}
   },
   components: {
     LinkActions
@@ -57,14 +62,27 @@ export default {
       return this.link.isFav ? ['fas', 'star'] : ['far', 'star'];
     },
     favToolTip() {
-      return !this.link.isFav ? 'Mark as favorite' : 'Remove favorite';
+      return !this.link.isFav ? this.$i18n('Link_addFavorite') : this.$i18n('Link_deleteFavorite');
     }
   },
   methods: {
+    onChecked(val) {
+      this.$emit('update:checked', val);
+    },
     performLinkAction(action) {
       this.actionPopoverVisible = false;
       const { origin, href, ownerPage } = this.link;
       new LinkHandler(action, href, origin, ownerPage).sendTabUpdateImmediately(true);
+    },
+    async onLinkClick() {
+      const settings = await ExtStorage.getSettings();
+      const { origin, href, ownerPage } = this.link;
+      new LinkHandler(
+        settings.menuLinkDefaultAction,
+        href,
+        origin,
+        ownerPage
+      ).sendTabUpdateImmediately(true);
     },
     changeFav() {
       this.link.isFav = !this.link.isFav;
@@ -95,6 +113,7 @@ export default {
   flex: 1;
   padding: 0 15px;
   overflow: hidden;
+  cursor: pointer;
 
   h3,
   h4 {
@@ -102,17 +121,10 @@ export default {
   }
   h4 {
     font-weight: 200;
-  }
-}
-
-.popup {
-  .document-link__content {
-    h4 {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 386px;
-    }
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 386px;
   }
 }
 
@@ -145,5 +157,9 @@ export default {
       color: $--word;
     }
   }
+}
+
+.document-link__check {
+  padding: 0 15px 0 5px;
 }
 </style>
