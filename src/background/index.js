@@ -3,50 +3,42 @@ import { LinkHandler, openUrlInTab } from '../util';
 const i18n = chrome.i18n.getMessage;
 
 const patterns = ['docx', 'doc', 'docm', 'xls', 'xlsx', 'csv', 'xlsm', 'pptx', 'ppt', 'pptm'].map(
-  el => `*://*/*.${el}`
+  el => `*://*/*.${el}*`
 );
 
+const createContextMenu = (i18nId, id) => {
+  chrome.contextMenus.create({
+    title: i18n(i18nId),
+    id: id,
+    contexts: ['link'],
+    targetUrlPatterns: patterns
+  });
+};
+
 // install the context menus to open links in ms office applications
-chrome.contextMenus.create({
-  title: i18n('LinkOption_openProtected'),
-  id: 'read',
-  contexts: ['link'],
-  targetUrlPatterns: patterns
-});
-chrome.contextMenus.create({
-  title: i18n('LinkOption_openEdit'),
-  id: 'edit',
-  contexts: ['link'],
-  targetUrlPatterns: patterns
-});
-chrome.contextMenus.create({
-  title: i18n('LinkOption_openOnline'),
-  id: 'online',
-  contexts: ['link'],
-  targetUrlPatterns: patterns
-});
-chrome.contextMenus.create({
-  title: i18n('LinkOption_download'),
-  id: 'download',
-  contexts: ['link'],
-  targetUrlPatterns: patterns
-});
+createContextMenu('LinkOption_openProtected', 'read');
+createContextMenu('LinkOption_openEdit', 'edit');
+createContextMenu('LinkOption_openOnline', 'online');
+createContextMenu('LinkOption_download', 'download');
 chrome.contextMenus.create({
   type: 'separator',
   id: 'sep1',
   contexts: ['link'],
   targetUrlPatterns: patterns
 });
-chrome.contextMenus.create({
-  title: i18n('LinkOption_addToFavs'),
-  id: 'markasfav',
-  contexts: ['link'],
-  targetUrlPatterns: patterns
-});
+createContextMenu('LinkOption_addToFavs', 'markasfav');
+createContextMenu('LinkOption_openProtected', 'read');
 chrome.contextMenus.create({
   title: i18n('History_ctxMenuOpen'),
   id: 'advoptions',
   contexts: ['browser_action']
+});
+
+// register command listener to open history/favorites page
+chrome.commands.onCommand.addListener(command => {
+  if (command === 'openLinkHistory') {
+    chrome.tabs.create({ url: 'pages/history.html' });
+  }
 });
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {

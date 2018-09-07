@@ -33,10 +33,9 @@ const updateOfficeLinks = async () => {
   const settings = await ExtStorage.getSettings();
 
   for (const link of links) {
-    if (!/\.(doc|docx|docm|xls|xlsx|xlsm|csv|ppt|pptx|pptm)$/.test(link.href)) {
+    if (!/\.(doc|docx|docm|xls|xlsx|xlsm|csv|ppt|pptx|pptm)/.test(link.href)) {
       continue;
     }
-
     officeLinkCount++;
 
     if (settings.linkDefaultAction !== 'original') {
@@ -71,7 +70,12 @@ const updateOfficeLinks = async () => {
               popover.$emit('showPopper', newLink, origin, href);
               if (!window.msofficeLinkPopper) {
                 window.msofficeLinkPopper = new Popper(newLink, popover.$el, {
-                  placement: 'bottom'
+                  placement: 'bottom',
+                  modifiers: {
+                    preventOverflow: {
+                      enabled: false
+                    }
+                  }
                 });
               } else {
                 window.msofficeLinkPopper.reference = newLink;

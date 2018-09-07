@@ -12,16 +12,21 @@
             <font-awesome-icon icon="globe" fixed-width></font-awesome-icon>
             {{$i18n('LinkOption_openOnline')}}
         </div>
+        <div class="link-actions__separator"></div>
         <div class="link-actions__action" @click="onAction('download')">
             <font-awesome-icon icon="download" fixed-width></font-awesome-icon>
             {{$i18n('LinkOption_download')}}
+        </div>
+        <div v-if="onPage" class="link-actions__action" @click="onAction('markasfav')">
+            <font-awesome-icon icon="star" fixed-width></font-awesome-icon>
+            {{$i18n('LinkOption_addToFavs')}}
         </div>
         <div class="link-actions__separator"></div>
         <div class="link-actions__action" @click="onAction('parent')">
             <font-awesome-icon icon="folder-open" fixed-width></font-awesome-icon>
             {{$i18n('LinkOption_openParent')}}
         </div>
-        <div class="link-actions__action" @click="onAction('owner')">
+        <div v-if="!onPage" class="link-actions__action" @click="onAction('owner')">
             <font-awesome-icon icon="file-alt" fixed-width></font-awesome-icon>
             {{$i18n('LinkOption_openOwnerPage')}}
         </div>
@@ -35,6 +40,10 @@ export default {
     appType: {
       type: String,
       default: 'word'
+    },
+    onPage: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -56,6 +65,7 @@ export default {
 
 .link-actions {
   font-size: 10px;
+  text-align: left;
   line-height: 2;
 }
 

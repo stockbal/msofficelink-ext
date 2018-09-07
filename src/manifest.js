@@ -34,6 +34,16 @@ module.exports = {
     persistent: false,
     page: 'pages/background.html'
   },
+  commands: {
+    openLinkHistory: {
+      suggested_key: {
+        default: 'Ctrl+Shift+H',
+        windows: 'Ctrl+Shift+H',
+        mac: 'Ctrl+Shift+H'
+      },
+      description: 'Opens the favorites/history page'
+    }
+  },
   content_scripts: [
     {
       js: ['js/manifest.js', 'js/vendor.js', 'js/content.js'],

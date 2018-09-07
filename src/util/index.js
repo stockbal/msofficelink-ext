@@ -40,22 +40,55 @@ export const openUrlInTab = (openNewTab, url) => {
   }
 };
 
+export class LinkUtil {
+  /**
+   * Returns information about the link
+   * @param link
+   */
+  static getLinkInfo(link) {
+    const cleanedLink = LinkUtil._removeQueryParams(link);
+    if (/\.(docx|doc|docm)$/.test(cleanedLink)) {
+      return { link: cleanedLink, protocol: 'ms-word', type: 'word' };
+    } else if (/\.(xlsx|xls|xlsm|csv)$/.test(cleanedLink)) {
+      return { link: cleanedLink, protocol: 'ms-excel', type: 'excel' };
+    } else if (/\.(pptx|ppt|pptm)$/.test(cleanedLink)) {
+      return { link: cleanedLink, protocol: 'ms-powerpoint', type: 'powerpoint' };
+    } else {
+      return { link: cleanedLink, protocol: '', type: '' };
+    }
+  }
+
+  /**
+   * Removes all url query parameters from the given link
+   * @param link
+   * @private
+   */
+  static _removeQueryParams(link) {
+    const regexResult = link.match(/(.*\.[^\\?]+)/);
+    if (regexResult.length > 1) {
+      return regexResult[1];
+    } else {
+      throw Error('Link does not match');
+    }
+  }
+}
+
 /**
  * Link Handler for creating and sending office
  * document links to the chrome tabs api
  */
 export class LinkHandler {
   constructor(action, linkUrl, origin, ownerPage) {
-    this._linkUrl = linkUrl;
+    const linkInfo = LinkUtil.getLinkInfo(linkUrl);
+    this._linkUrl = linkInfo.link;
     this._action = action;
     this._origin = origin;
     this._ownerPage = ownerPage;
-    const { protocol, type } = this._getLinkInfo();
-    if (!protocol) {
+    if (!linkInfo.protocol) {
       throw new Error('unrecognized protocol');
     }
-    this._fileProtocol = protocol;
-    this._fileType = type;
+    this._fileProtocol = linkInfo.protocol;
+    this._fileType = linkInfo.protocol;
     if (action !== 'markasfav') {
       this._finalTabUrl = this._buildLinkActionUrl();
     }
@@ -85,7 +118,7 @@ export class LinkHandler {
         throw new Error('unrecognized link action');
     }
   }
-  _getLinkInfo() {
+  getLinkInfo() {
     if (/\.(docx|doc|docm)$/.test(this._linkUrl)) {
       return { protocol: 'ms-word', type: 'word' };
     } else if (/\.(xlsx|xls|xlsm|csv)$/.test(this._linkUrl)) {

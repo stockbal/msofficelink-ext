@@ -1,48 +1,27 @@
 <template>
     <div class="link-popper" v-show="popperVisible">
         <div class="file-options">
-            <el-tooltip effect="dark" placement="bottom" :content="$i18n('LinkOption_openProtected')" :open-delay="500">
-                <el-button @click="confirm('read')" size="medium" round type="primary">
-                    <font-awesome-icon icon="glasses"></font-awesome-icon>
-                </el-button>
-            </el-tooltip>
-            <el-tooltip effect="dark" placement="bottom" :content="$i18n('LinkOption_openEdit')" :open-delay="500">
-                <el-button @click="confirm('edit')" size="medium" round type="primary">
-                    <font-awesome-icon icon="edit"></font-awesome-icon>
-                </el-button>
-            </el-tooltip>
-            <el-tooltip effect="dark" placement="bottom" :content="$i18n('LinkOption_openOnline')" :open-delay="500">
-                <el-button @click="confirm('online')" size="medium" round type="primary">
-                    <font-awesome-icon icon="globe"></font-awesome-icon>
-                </el-button>
-            </el-tooltip>
-            <el-tooltip effect="dark" placement="bottom" :content="$i18n('LinkOption_download')" :open-delay="500">
-                <el-button @click="confirm('download')" size="medium" round type="primary">
-                    <font-awesome-icon icon="download"></font-awesome-icon>
-                </el-button>
-            </el-tooltip>
-            <el-tooltip effect="dark" placement="bottom" :content="$i18n('LinkOption_addToFavs')" :open-delay="500">
-                <el-button @click="confirm('markasfav')" size="medium" round type="primary">
-                    <font-awesome-icon icon="star"></font-awesome-icon>
-                </el-button>
-            </el-tooltip>
+            <link-actions @action="confirm" :app-type="linkAppType" :on-page="true"></link-actions>
         </div>
         <div class="popper__arrow" x-arrow></div>
     </div>
 </template>
 
 <script>
-import { LinkHandler, on, off } from '../util';
+import { LinkHandler, on, off, LinkUtil } from '../util';
+import LinkActions from '../assets/components/LinkActions';
 
 export default {
   name: 'LinkPopover',
+  components: { LinkActions },
   data: () => ({
     linkEl: null,
     popperVisible: false,
     fileOpenOption: 'read',
     file: '',
     origin: '',
-    ownerPage: ''
+    ownerPage: '',
+    linkAppType: 'word'
   }),
   created() {
     on(document, 'click', this.onDocumentClick);
@@ -54,6 +33,7 @@ export default {
         return;
       }
       this.linkEl = linkEl;
+      this.linkAppType = LinkUtil.getLinkInfo(linkEl.href).type;
       this.linkUrl = linkEl.href;
       this.origin = origin;
       this.ownerPage = ownerPage;
@@ -76,7 +56,7 @@ export default {
     confirm(option) {
       this.popperVisible = false;
       window.setTimeout(() => {
-        const linkHandler = new LinkHandler(option, this.linkUrl);
+        const linkHandler = new LinkHandler(option, this.linkUrl, this.origin, this.ownerPage);
         if (option === 'markasfav') {
           linkHandler.createFavorite();
           this.$notify({
@@ -87,7 +67,7 @@ export default {
         } else {
           linkHandler.sendTabUpdateViaMessage();
         }
-      }, 300);
+      }, 250);
     }
   }
 };
@@ -98,7 +78,7 @@ export default {
 @import '../assets/css/vars';
 
 .file-options {
-  padding: 5px;
+  /*padding: 5px;*/
   .el-button {
     margin: 2px;
     padding: 10px;
