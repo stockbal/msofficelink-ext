@@ -88,7 +88,7 @@ export class LinkHandler {
       throw new Error('unrecognized protocol');
     }
     this._fileProtocol = linkInfo.protocol;
-    this._fileType = linkInfo.protocol;
+    this._fileType = linkInfo.type;
     if (action !== 'markasfav') {
       this._finalTabUrl = this._buildLinkActionUrl();
     }

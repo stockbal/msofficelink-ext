@@ -82,3 +82,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
       break;
   }
 });
+
+chrome.runtime.onInstalled.addListener(details => {
+  // maybe show some information about the updated
+});

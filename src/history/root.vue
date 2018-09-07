@@ -62,6 +62,12 @@ export default {
 
 $maxWidth: 1024px;
 
+.el-checkbox {
+  + .el-checkbox {
+    margin: 0;
+  }
+}
+
 *,
 *::after,
 *::before {
@@ -107,6 +113,8 @@ main {
   height: 100%;
   margin: -75px auto 25px;
   border-radius: 2px;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 @media (max-width: 1080px) {
