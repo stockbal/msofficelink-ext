@@ -14,20 +14,31 @@ const createContextMenu = (i18nId, id) => {
     targetUrlPatterns: patterns
   });
 };
+const createCtxMenuSeparator = id => {
+  chrome.contextMenus.create({
+    type: 'separator',
+    id: id,
+    contexts: ['link'],
+    targetUrlPatterns: patterns
+  });
+};
+
+// create default context menu for showing the history
+chrome.contextMenus.create({
+  title: i18n('extName') + ' - ' + i18n('History_ctxMenuOpen'),
+  id: 'advoptions',
+  contexts: ['page']
+});
 
 // install the context menus to open links in ms office applications
 createContextMenu('LinkOption_openProtected', 'read');
 createContextMenu('LinkOption_openEdit', 'edit');
 createContextMenu('LinkOption_openOnline', 'online');
 createContextMenu('LinkOption_download', 'download');
-chrome.contextMenus.create({
-  type: 'separator',
-  id: 'sep1',
-  contexts: ['link'],
-  targetUrlPatterns: patterns
-});
+createCtxMenuSeparator('sep1');
+createContextMenu('LinkOption_openParent', 'parent');
+createCtxMenuSeparator('sep2');
 createContextMenu('LinkOption_addToFavs', 'markasfav');
-createContextMenu('LinkOption_openProtected', 'read');
 chrome.contextMenus.create({
   title: i18n('History_ctxMenuOpen'),
   id: 'advoptions',

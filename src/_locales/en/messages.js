@@ -69,7 +69,7 @@ module.exports = {
   // Texts for history / favorites page
   History_title: { message: 'MS Office Documents' },
   History_pageTitle: { message: 'Favorites & History ' },
-  History_ctxMenuOpen: { message: 'Favorites and History' },
+  History_ctxMenuOpen: { message: 'Favorites && History' },
   History_search: { message: 'Search' },
   History_showFavs: { message: 'Favorites' },
   History_showHistoryLinks: { message: 'History entries' }
