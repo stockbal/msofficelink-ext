@@ -23,31 +23,35 @@ module.exports = {
   Setting_popupDefaultTab: { message: 'Standard Menu' },
   Setting_defaultMenuLinkAction: { message: 'Link Aktion in Erweiterung' },
   Setting_defaultLinkAction: { message: 'Link Aktion' },
-  Setting_activateHistory: { message: 'Historie aktivieren' },
+  Setting_activateHistory: { message: 'Verlauf aktivieren' },
   Setting_maxHistoryCount: { message: 'Maximale Anzahl Links in Historie' },
 
   OptionTab_favs: { message: 'Favoriten' },
-  OptionTab_history: { message: 'Historie' },
+  OptionTab_history: { message: 'Verlauf' },
   OptionTab_options: { message: 'Einstellungen' },
 
   // Button texts
-  Btn_clearHistory: { message: 'Historie löschen' },
+  Btn_clearHistory: { message: 'Verlauf löschen' },
   Btn_clearFavs: { message: 'Alle Favoriten löschen' },
-  Btn_showHistory: { message: 'Vollständige Historie anzeigen' },
+  Btn_showHistory: { message: 'Vollständigen Verlauf anzeigen' },
   Btn_showAllFavs: { message: 'Alle Favoriten anzeigen' },
 
   // All kinds of messages
-  MSG_noHistory: { message: 'Keine Historie vorhanden' },
+  MSG_noHistory: { message: 'Kein Verlauf vorhanden' },
   MSG_noFavorites: { message: 'Keine Favoriten vorhanden' },
   MSG_favsWereDeleted: { message: 'Favoriten wurden gelöscht' },
-  MSG_historyWasDeleted: { message: 'Historie wurde gelöscht' },
+  MSG_historyWasDeleted: { message: 'Verlauf wurde gelöscht' },
   MSG_linkOptionSwitchedToOriginal: {
     message:
       'Um die Standard-Aktion der MS Office Links wiederherzustellen ist eine Seiten-Aktualisierung nötig'
   },
   MSG_historyEmptyInfoText: {
-    message: 'Hier werden die Historie und Favoriten für ihre MS Office Dokumente angezeigt'
+    message: 'Hier wird der Verlauf für ihre MS Office Dokumente angezeigt'
   },
+  MSG_favsEmptyInfoText: {
+    message: 'Hier werden die Favoriten für ihre MS Office Dokumente angezeigt'
+  },
+
   MSG_favAddedInfo: {
     message: `Datei '$fav$' wurde zu den Favoriten hinzugefügt`,
     placeholders: {
@@ -56,6 +60,8 @@ module.exports = {
       }
     }
   },
+  // tooltip texts
+  Tip_searchCleas: { message: 'Suche löschen' },
 
   // Texts for single document link
   Link_addFavorite: { message: 'Zu Favoriten hinzufügen' },
@@ -63,8 +69,8 @@ module.exports = {
 
   // Texts for history / favorites page
   History_title: { message: 'MS Office Dokumente' },
-  History_pageTitle: { message: 'Favoriten & Historie ' },
-  History_ctxMenuOpen: { message: 'Favoriten und Historie' },
+  History_pageTitle: { message: 'Favoriten & Verlauf ' },
+  History_ctxMenuOpen: { message: 'Favoriten und Verlauf' },
   History_search: { message: 'Suchen' },
   History_showFavs: { message: 'Favoriten' },
   History_showHistoryLinks: { message: 'Historieneinträge' }

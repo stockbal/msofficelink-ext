@@ -1,6 +1,6 @@
 <template>
     <div class="document-link flex flex--row flex--align-center">
-        <div v-if="mode === 'history-page'" class="document-link__check">
+        <div v-if="checkable" class="document-link__check">
             <el-checkbox :checked="checked" @change="onChecked"></el-checkbox>
         </div>
         <div class="document-link__icon">
@@ -48,6 +48,10 @@ export default {
     mode: {
       type: String,
       default: 'history'
+    },
+    checkable: {
+      type: Boolean,
+      default: false
     },
     checked: {}
   },

@@ -45,8 +45,12 @@ module.exports = {
     message: 'To get the original link action back you have to do a page refresh'
   },
   MSG_historyEmptyInfoText: {
-    message: 'Here you see the history & favorites for your MS Office Documents'
+    message: 'Here you see the history for your MS Office Documents'
   },
+  MSG_favsEmptyInfoText: {
+    message: 'Here you see the favorites for your MS Office Documents'
+  },
+
   MSG_favAddedInfo: {
     message: `File '$fav$' was added to the favorites`,
     placeholders: {
@@ -55,6 +59,8 @@ module.exports = {
       }
     }
   },
+  // tooltip texts
+  Tip_searchCleas: { message: 'Clear search' },
 
   // Texts for single document link
   Link_addFavorite: { message: 'Mark as favorite' },
