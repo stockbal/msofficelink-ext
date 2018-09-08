@@ -12,7 +12,6 @@ export class ExtStorage {
             linkHistoryActive: false,
             menuLinkDefaultAction: 'online',
             linkDefaultAction: 'original',
-            maxLinkHistory: 10,
             openInNewTab: false,
             popupDefaultTab: 'options'
           };
@@ -22,6 +21,11 @@ export class ExtStorage {
       });
     });
   }
+
+  /**
+   * Returns an array of all the current history links
+   * @returns {Promise<Array>}
+   */
   static async getHistoryLinks() {
     const { entries } = await ExtStorage.getDocumentLinks();
     const links = [];
@@ -69,16 +73,9 @@ export class ExtStorage {
    */
   static async addLinkToHistory(origin, ownerPage, href, file, protocol, type) {
     const docLinks = await ExtStorage.getDocumentLinks();
-    const settings = await ExtStorage.getSettings();
-    if (
-      !docLinks.entries[href] &&
-      Object.keys(docLinks.entries).length === settings.maxLinkHistory
-    ) {
-      return;
-    }
     let docLink = docLinks.entries[href];
     if (docLink) {
-      docLink.openedOn = new Date();
+      docLink.openedOn = new Date().toJSON();
       docLink.isHistory = true;
     } else {
       docLinks.entries[href] = {
@@ -90,7 +87,7 @@ export class ExtStorage {
         type,
         isFav: false,
         isHistory: true,
-        openedOn: new Date()
+        openedOn: new Date().toJSON()
       };
     }
     chrome.storage.local.set({ docLinks });

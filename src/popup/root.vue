@@ -74,11 +74,6 @@
                     <el-form-item :label="$i18n('Setting_activateHistory')">
                         <el-switch v-model="settings.linkHistoryActive" @change="onSubmit"></el-switch>
                     </el-form-item>
-                    <el-form-item :label="$i18n('Setting_maxHistoryCount')">
-                        <el-input-number v-model="settings.maxLinkHistory" @change="onSubmit"
-                                         :disabled="!settings.linkHistoryActive" :max="100" :min="5"
-                                         controls-position="right"></el-input-number>
-                    </el-form-item>
                 </el-form>
             </el-tab-pane>
         </el-tabs>
@@ -102,8 +97,7 @@ export default {
       menuLinkDefaultAction: 'online',
       linkDefaultAction: 'original',
       popupDefaultTab: 'options',
-      openInNewTab: false,
-      maxLinkHistory: 10
+      openInNewTab: false
     },
     history: [],
     favorites: []
@@ -113,6 +107,7 @@ export default {
     Object.assign(this.settings, settings);
 
     this.history = await ExtStorage.getHistoryLinks();
+    this.history.sort((link1, link2) => link1.openedOn < link2.openedOn);
 
     this.refreshFavorites();
 
