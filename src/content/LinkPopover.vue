@@ -33,11 +33,12 @@ export default {
         return;
       }
       this.linkEl = linkEl;
-      this.linkAppType = LinkUtil.getLinkInfo(linkEl.href).type;
-      this.linkUrl = linkEl.href;
+      const { link, type } = LinkUtil.getLinkInfo(linkEl.href);
+      this.linkAppType = type;
+      this.linkUrl = link;
       this.origin = origin;
       this.ownerPage = ownerPage;
-      const files = linkEl.href.match(/\/(?:.(?!\/))+$/gi);
+      const files = this.linkUrl.match(/\/(?:.(?!\/))+$/gi);
       this.file = files.length > 0 ? files[0] : linkEl.innerText;
       if (this.file.startsWith('/')) {
         this.file = decodeURI(this.file.substring(1, this.file.length));
