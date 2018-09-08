@@ -29,14 +29,14 @@ const popover = new Vue({
 const updateOfficeLinks = async () => {
   const links = document.querySelectorAll('a[href]');
 
-  let officeLinkCount = 0;
+  // let officeLinkCount = 0;
   const settings = await ExtStorage.getSettings();
 
   for (const link of links) {
     if (!/\.(doc|docx|docm|xls|xlsx|xlsm|csv|ppt|pptx|pptm)/.test(link.href)) {
       continue;
     }
-    officeLinkCount++;
+    // officeLinkCount++;
 
     if (settings.linkDefaultAction !== 'original') {
       const newLink = document.createElement('a');
@@ -119,7 +119,7 @@ const updateOfficeLinks = async () => {
   }
 
   // retrieve current tab id from background script
-  chrome.runtime.sendMessage({ action: 'updateBadge', officeLinkCount }, tabId => {});
+  // chrome.runtime.sendMessage({ action: 'updateBadge', officeLinkCount }, tabId => {});
 };
 
 updateOfficeLinks();
