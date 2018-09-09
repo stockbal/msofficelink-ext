@@ -65,6 +65,9 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     const linkHandler = new LinkHandler(info.menuItemId, info.linkUrl, origin, info.pageUrl);
     if (info.menuItemId === 'markasfav') {
       linkHandler.createFavorite();
+      chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+        chrome.tabs.sendMessage(tabs[0].id, { action: 'createdFav' });
+      });
     } else {
       linkHandler.sendTabUpdateImmediately();
     }

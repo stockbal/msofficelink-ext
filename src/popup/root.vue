@@ -124,15 +124,11 @@ export default {
     },
     onIsFavChanged(link, idx) {
       this.favorites.splice(idx, 1);
-      ExtStorage.removeLinkFromFavorites(link.href);
     },
     onIsFavInHistoryChanged(link) {
       if (link.isFav) {
-        ExtStorage.addLinkToFavorites(link);
         this.favorites.push(link);
       } else {
-        // try to remove it from the favories
-        ExtStorage.removeLinkFromFavorites(link.href);
         // find the favorites link in array
         const favIndex = this.favorites.findIndex(lnk => lnk.href === link.href);
         if (favIndex !== -1) {

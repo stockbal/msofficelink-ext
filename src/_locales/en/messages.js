@@ -62,6 +62,10 @@ module.exports = {
   // tooltip texts
   Tip_searchClass: { message: 'Clear search' },
 
+  // Some general texts
+  Cancel: { message: 'Abbrechen' },
+  Delete: { message: 'Löschen' },
+
   // Texts for single document link
   Link_addFavorite: { message: 'Mark as favorite' },
   Link_deleteFavorite: { message: 'Delete favorite' },
@@ -72,5 +76,13 @@ module.exports = {
   History_ctxMenuOpen: { message: 'Favorites && History' },
   History_search: { message: 'Search Favorites/History' },
   History_showFavs: { message: 'Favorites' },
-  History_showHistoryLinks: { message: 'History entries' }
+  History_showHistoryLinks: { message: 'History entries' },
+  History_entriesSelected: {
+    message: '$count$ chosen',
+    placeholders: {
+      count: {
+        content: '$1'
+      }
+    }
+  }
 };

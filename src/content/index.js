@@ -132,7 +132,15 @@ window.addEventListener('pushstate', evt => {
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action && request.action === 'updateLinks') {
-    updateOfficeLinks();
+  if (request.action) {
+    if (request.action === 'updateLinks') {
+      updateOfficeLinks();
+      // } else if (request.action === 'createdFav') {
+      //   popover.$notify({
+      //     title: this.$i18n('extName'),
+      //     message: this.$i18n('MSG_favAddedInfo', [this.file]),
+      //     type: 'success'
+      //   });
+    }
   }
 });

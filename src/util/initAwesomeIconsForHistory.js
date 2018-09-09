@@ -10,7 +10,8 @@ import {
   faHistory,
   faCog,
   faStar as faStarSolid,
-  faTimesCircle
+  faTimesCircle,
+  faTimes
 } from '@fortawesome/free-solid-svg-icons';
 import { faStar, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -27,7 +28,8 @@ library.add(
   faStarSolid,
   faCog,
   faTrashAlt,
-  faTimesCircle
+  faTimesCircle,
+  faTimes
 );
 
 Vue.component(FontAwesomeIcon.name, FontAwesomeIcon);

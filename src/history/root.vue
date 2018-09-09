@@ -1,9 +1,8 @@
 <template>
     <div class="links">
         <header class="links__header">
-                <img src="../../static/icons/icon.svg">
-            <div class="search-bar">
-                <!--<h1>{{$i18n('History_title')}}</h1>-->
+            <img src="../../static/icons/icon.svg">
+            <div class="search-bar" v-if="!selectedLinks.length">
                 <el-input autofocus class="link-search" v-model="search" :placeholder="$i18n('History_search')"
                           @change="onSearchChange">
                     <span v-if="search" slot="append" class="link-search__clear" :title="$i18n('Tip_searchClass')"
@@ -12,28 +11,34 @@
                     </span>
                 </el-input>
             </div>
-            <div class="toolbar">
-
+            <div class="toolbar flex flex--row flex--align-center" v-else>
+                <el-button class="toolbar__cancel" type="text" :title="$i18n('Cancel')" @click="cancelSelection">
+                    <font-awesome-icon icon="times"></font-awesome-icon>
+                </el-button>
+                <span class="toolbar__select-text">{{$i18n('History_entriesSelected', [selectedLinks.length])}}</span>
+                <el-button type="text" @click="cancelSelection">{{$i18n('Cancel')}}</el-button>
+                <el-button type="text">{{$i18n('Delete')}}</el-button>
             </div>
         </header>
         <main>
-            <section v-if="favorites.length" class="links__entries--favorites">
+            <section v-if="favorites.length && !loading" class="links__entries--favorites">
                 <h2 class="section--header">{{$i18n('OptionTab_favs')}}</h2>
-                <document-link v-for="(linkData, idx) in favorites" :key="idx" :link="linkData" checkable mode="fav"
-                               :checked.sync="linkData.checked" v-on:update:checked="onCheck"></document-link>
+                <document-link v-for="(link, idx) in favorites" :key="idx" :link="link" checkable mode="fav"
+                               v-on:update:checked="onCheck(link, $event)"
+                               @favChanged="onFavChanged(linkData)"></document-link>
             </section>
-            <section v-else class="flex links__empty">
+            <section v-else class="flex links__empty" v-loading="loading">
                 <h3>{{$i18n('MSG_favsEmptyInfoText')}}</h3>
             </section>
-            <div v-if="hasHistory">
+            <div v-if="hasHistory && !loading">
                 <section v-for="(historyByDate, key) in history" :key="key" class="links__entries--history">
                     <h2 class="section--header">{{key}}</h2>
                     <document-link v-for="(link, idx) in historyByDate.links" :key="idx" :link="link" checkable
-                                   mode="history-page"
-                                   :checked.sync="link.checked" v-on:update:checked="onCheck"></document-link>
+                                   mode="history-page" @favChanged="onFavChanged(link)"
+                                   v-on:update:checked="onCheck(link, $event)"></document-link>
                 </section>
             </div>
-            <section v-else class="flex links__empty">
+            <section v-else class="flex links__empty" v-loading="loading">
                 <h3>{{$i18n('MSG_historyEmptyInfoText')}}</h3>
             </section>
         </main>
@@ -48,7 +53,9 @@ export default {
   data: () => ({
     favorites: [],
     search: '',
-    history: {}
+    history: {},
+    loading: true,
+    selectedLinks: []
   }),
   computed: {
     hasHistory() {
@@ -61,7 +68,6 @@ export default {
     const tempHistory = await ExtStorage.getHistoryLinks();
     tempHistory.sort((link1, link2) => link1.openedOn < link2.openedOn);
     tempHistory.forEach(link => {
-      console.log(link.openedOn);
       const openedOn = new Date(link.openedOn).toLocaleDateString(chrome.i18n.getUILanguage(), {
         weekday: 'long',
         year: 'numeric',
@@ -76,6 +82,9 @@ export default {
         this.$set(this.history, openedOn, { links: [link] });
       }
     });
+    window.setTimeout(() => {
+      this.loading = false;
+    }, 300);
   },
   methods: {
     onSearchChange(value) {},
@@ -83,10 +92,37 @@ export default {
       this.search = '';
       // show all links
     },
-    onCheck(val) {},
+    onFavChanged(link) {
+      if (link.isFav) {
+        this.favorites.push(link);
+      } else {
+        const linkToRemove = this.favorites.findIndex(el => el.href === link.href);
+        if (linkToRemove !== -1) {
+          this.favorites.splice(linkToRemove, 1);
+        }
+      }
+    },
+    cancelSelection() {
+      this.selectedLinks.forEach(link => {
+        link.checked = false;
+      });
+      this.selectedLinks = [];
+    },
+    checkSelection() {},
+    onCheck(link, checked) {
+      // link.checked = checked;
+      if (link.checked) {
+        this.selectedLinks.push(link);
+      } else {
+        // find link and remove it
+        const linkToRemove = this.selectedLinks.findIndex(el => el.href === link.href);
+        if (linkToRemove !== -1) {
+          this.selectedLinks.splice(linkToRemove, 1);
+        }
+      }
+    },
     clearHistory() {
       ExtStorage.clearLinkHistory();
-      this.documentLinks = [];
       this.$message('Link history was deleted');
     }
   },
@@ -142,6 +178,24 @@ body {
     max-width: 550px;
   }
   .toolbar {
+    margin: 0 auto;
+    font-size: 13px;
+    max-width: $maxWidth;
+
+    .toolbar__cancel {
+    }
+
+    .toolbar__select-text {
+      flex: 1;
+      color: white;
+      padding: 0 20px;
+    }
+    .el-button {
+      color: white;
+      font-size: inherit;
+      font-family: inherit;
+      text-transform: uppercase;
+    }
   }
 }
 
@@ -212,5 +266,12 @@ main {
   border-bottom: 1px solid #d5d5d5;
   font-weight: 200;
   padding: 10px 8px;
+}
+
+.loading {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 2000;
 }
 </style>

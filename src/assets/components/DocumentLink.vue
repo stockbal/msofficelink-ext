@@ -1,7 +1,7 @@
 <template>
     <div class="document-link flex flex--row flex--align-center">
         <div v-if="checkable" class="document-link__check">
-            <el-checkbox :checked="checked" @change="onChecked"></el-checkbox>
+            <el-checkbox v-model="link.checked" @change="onChecked"></el-checkbox>
         </div>
         <div class="document-link__icon">
             <img v-if="link.protocol === 'ms-word'" src="../../../static/icons/word-app.svg" width="20px"
@@ -91,6 +91,11 @@ export default {
     changeFav() {
       this.link.isFav = !this.link.isFav;
       // update history link in storage
+      if (this.link.isFav) {
+        ExtStorage.addLinkToFavorites(this.link);
+      } else {
+        ExtStorage.removeLinkFromFavorites(this.link.href);
+      }
       this.$emit('favChanged');
     }
   },
