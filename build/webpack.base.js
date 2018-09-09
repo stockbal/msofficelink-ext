@@ -13,7 +13,6 @@ let resolve = dir => path.join(rootDir, 'src', dir);
 module.exports = {
   entry: {
     popup: resolve('./popup'),
-    tab: resolve('./tab'),
     content: resolve('./content'),
     history: resolve('./history'),
     background: resolve('./background')
@@ -97,7 +96,6 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(['*'], { root: path.join(rootDir, 'dist') }),
     // Customize your extension structure.
-    htmlPage('home', 'app', ['manifest', 'vendor', 'tab']),
     htmlPage('popup', 'popup', ['manifest', 'vendor', 'popup']),
     htmlPage('Favorites & History', 'history', ['manifest', 'vendor', 'history']),
     htmlPage('background', 'background', ['manifest', 'vendor', 'background']),

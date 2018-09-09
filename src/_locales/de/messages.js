@@ -61,7 +61,7 @@ module.exports = {
     }
   },
   // tooltip texts
-  Tip_searchCleas: { message: 'Suche löschen' },
+  Tip_searchClass: { message: 'Suche löschen' },
 
   // Texts for single document link
   Link_addFavorite: { message: 'Zu Favoriten hinzufügen' },
@@ -71,7 +71,7 @@ module.exports = {
   History_title: { message: 'MS Office Dokumente' },
   History_pageTitle: { message: 'Favoriten & Verlauf ' },
   History_ctxMenuOpen: { message: 'Favoriten && Verlauf' },
-  History_search: { message: 'Suchen' },
+  History_search: { message: 'Favoriten/Verlauf durchsuchen' },
   History_showFavs: { message: 'Favoriten' },
   History_showHistoryLinks: { message: 'Historieneinträge' }
 };

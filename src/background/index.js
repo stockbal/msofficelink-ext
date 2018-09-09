@@ -26,7 +26,7 @@ const createCtxMenuSeparator = id => {
 // create default context menu for showing the history
 chrome.contextMenus.create({
   title: i18n('extName') + ' - ' + i18n('History_ctxMenuOpen'),
-  id: 'advoptions',
+  id: 'history1',
   contexts: ['page']
 });
 
@@ -41,7 +41,7 @@ createCtxMenuSeparator('sep2');
 createContextMenu('LinkOption_addToFavs', 'markasfav');
 chrome.contextMenus.create({
   title: i18n('History_ctxMenuOpen'),
-  id: 'advoptions',
+  id: 'history2',
   contexts: ['browser_action']
 });
 
@@ -53,7 +53,7 @@ chrome.commands.onCommand.addListener(command => {
 });
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
-  if (info.menuItemId === 'advoptions') {
+  if (info.menuItemId.startsWith('history')) {
     chrome.tabs.create({ url: 'pages/history.html' });
     return;
   }

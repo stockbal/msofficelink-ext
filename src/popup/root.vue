@@ -108,6 +108,7 @@ export default {
 
     this.history = await ExtStorage.getHistoryLinks();
     this.history.sort((link1, link2) => link1.openedOn < link2.openedOn);
+    this.history = this.history.slice(0, 20);
 
     this.refreshFavorites();
 

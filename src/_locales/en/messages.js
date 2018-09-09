@@ -60,7 +60,7 @@ module.exports = {
     }
   },
   // tooltip texts
-  Tip_searchCleas: { message: 'Clear search' },
+  Tip_searchClass: { message: 'Clear search' },
 
   // Texts for single document link
   Link_addFavorite: { message: 'Mark as favorite' },
@@ -70,7 +70,7 @@ module.exports = {
   History_title: { message: 'MS Office Documents' },
   History_pageTitle: { message: 'Favorites & History ' },
   History_ctxMenuOpen: { message: 'Favorites && History' },
-  History_search: { message: 'Search' },
+  History_search: { message: 'Search Favorites/History' },
   History_showFavs: { message: 'Favorites' },
   History_showHistoryLinks: { message: 'History entries' }
 };
