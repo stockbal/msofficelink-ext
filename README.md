@@ -1,21 +1,24 @@
 # msofficelink-ext
 
-> Chrome Extension to handle MS Office links
+> Chrome Extension to handle MS Office Document links
+
+## Features
+
+- Enables several options for MS Office Document Links (Word, Excel and Powerpoint)
+- Searchable History for opened/handled documents
+- Create Favorites
+- Overwrite the default action upon link click
 
 ## Build Setup
 
 ``` bash
 # install dependencies
-npm install
+yarn install
 
 # serve with hot reload at localhost:8080
-npm run dev
+yarn dev
 
 # build for production with minification
-npm run build
+yarn build
 
-# lint all *.js and *.vue files
-npm run lint
 ```
-
-For more information see the [docs for vueify](https://github.com/vuejs/vueify).
