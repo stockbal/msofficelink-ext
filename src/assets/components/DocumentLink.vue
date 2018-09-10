@@ -3,13 +3,8 @@
         <div v-if="checkable" class="document-link__check">
             <el-checkbox v-model="link.checked" @change="onChecked"></el-checkbox>
         </div>
-        <div class="document-link__icon">
-            <img v-if="link.protocol === 'ms-word'" src="../../../static/icons/word-app.svg" width="20px"
-                 alt="word">
-            <img v-else-if="link.protocol === 'ms-excel'" src="../../../static/icons/excel-app.svg"
-                 width="20px"
-                 alt="word">
-            <img v-else src="../../../static/icons/powerpoint-app.svg" width="20px" alt="word">
+        <div class="document-link__icon" :class="'document-link__icon--' + link.type">
+            <font-awesome-icon :icon="'file-'+link.type" fixed-width></font-awesome-icon>
         </div>
         <div v-if="showOpenedOn" class="document-link__opened-on">
             {{link.openedOn}}
@@ -123,6 +118,7 @@ export default {
 
 .document-link__icon {
   margin: 0 auto;
+  font-size: 20px;
 }
 
 .document-link__content {
@@ -151,6 +147,16 @@ export default {
   &.el-popover {
     padding: 0;
   }
+}
+
+.document-link__icon--powerpoint {
+  color: $--powerpoint;
+}
+.document-link__icon--excel {
+  color: $--excel;
+}
+.document-link__icon--word {
+  color: $--word;
 }
 
 .document-link__fav-indicator {
