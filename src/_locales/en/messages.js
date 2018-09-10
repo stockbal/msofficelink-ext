@@ -43,6 +43,12 @@ module.exports = {
   MSG_historyWasDeleted: { message: 'History links have been deleted' },
   MSG_deleteAllFavsWarning: { message: 'Do you really want to delete all favorites?' },
   MSG_deleteHistoryWarning: { message: 'Do you really want to delete the complete history?' },
+  MSG_deactivateHistoryWarning: {
+    message:
+      'By deactivating the history all existing ' +
+      'entries in the history will be deleted. ' +
+      'Are you sure you want to continue?'
+  },
   MSG_linkOptionSwitchedToOriginal: {
     message: 'To get the original link action back you have to do a page refresh'
   },
@@ -53,7 +59,7 @@ module.exports = {
     message: 'Here you see the favorites for your MS Office Documents'
   },
   MSG_searchResultText: {
-    message: '$count$ Ergebnis$plural$ in $type$ für "$searchText$" gefunden',
+    message: 'Found $count$ result$plural$ in $type$ for "$searchText$"',
     placeholders: {
       count: {
         content: '$1'
@@ -85,6 +91,8 @@ module.exports = {
   Cancel: { message: 'Cancel' },
   Delete: { message: 'Delete' },
   Ok: { message: 'Ok' },
+  Yes: { message: 'Yes' },
+  No: { message: 'No' },
   Warning: { message: 'Warning' },
   ResultPluralSuffix: { message: 's' },
 

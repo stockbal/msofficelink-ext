@@ -43,6 +43,12 @@ module.exports = {
   MSG_historyWasDeleted: { message: 'Verlauf wurde gelöscht' },
   MSG_deleteAllFavsWarning: { message: 'Wollen Sie wirklich alle Favoriten löschen?' },
   MSG_deleteHistoryWarning: { message: 'Wollen Sie den Verlauf wirklich vollständig löschen?' },
+  MSG_deactivateHistoryWarning: {
+    message:
+      'Durch das Ausschalten der Verlaufsfunktion ' +
+      'wird der gesamte Verlauf gelöscht. ' +
+      'Sind Sie sicher, dass Sie fortfahren möchten?'
+  },
   MSG_linkOptionSwitchedToOriginal: {
     message:
       'Um die Standard-Aktion der MS Office Links wiederherzustellen ist eine Seiten-Aktualisierung nötig'
@@ -86,6 +92,8 @@ module.exports = {
   Cancel: { message: 'Abbrechen' },
   Delete: { message: 'Löschen' },
   Ok: { message: 'Ok' },
+  Yes: { message: 'Ja' },
+  No: { message: 'Nein' },
   Warning: { message: 'Warnung' },
   ResultPluralSuffix: { message: 'se' },
 

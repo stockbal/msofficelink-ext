@@ -74,7 +74,7 @@
                         <el-switch v-model="settings.openInNewTab" @change="onSubmit"></el-switch>
                     </el-form-item>
                     <el-form-item :label="$i18n('Setting_activateHistory')">
-                        <el-switch v-model="settings.linkHistoryActive" @change="onSubmit"></el-switch>
+                        <el-switch v-model="settings.linkHistoryActive" @change="onHistoryActivate"></el-switch>
                     </el-form-item>
                 </el-form>
             </el-tab-pane>
@@ -144,6 +144,24 @@ export default {
     },
     openFavAndHistory() {
       chrome.tabs.create({ url: 'pages/history.html' });
+    },
+    async onHistoryActivate(newValue) {
+      if (!newValue) {
+        try {
+          await this.$confirm(this.$i18n('MSG_deactivateHistoryWarning'), this.$i18n('Warning'), {
+            confirmButtonText: this.$i18n('Yes'),
+            cancelButtonText: this.$i18n('No'),
+            type: 'warning'
+          });
+          this.onSubmit();
+          // delete the history
+          ExtStorage.clearLinkHistory();
+        } catch (e) {
+          this.settings.linkHistoryActive = true;
+        }
+      } else {
+        this.onSubmit();
+      }
     },
     onDefaultActionChange(newValue) {
       if (newValue === 'original') {
