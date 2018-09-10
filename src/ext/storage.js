@@ -108,6 +108,27 @@ export class ExtStorage {
       chrome.storage.local.set({ docLinks });
     }
   }
+  static async removeLinks(links) {
+    const docLinks = await ExtStorage.getDocumentLinks();
+
+    links.forEach(link => {
+      const storageLink = docLinks.entries[link.href];
+      if (storageLink) {
+        if (link.deleteFav && link.deleteHistory) {
+          delete docLinks.entries[link.href];
+        } else {
+          if (link.deleteFav) {
+            storageLink.isFav = false;
+          }
+          if (link.deleteHistory) {
+            storageLink.isHistory = false;
+          }
+        }
+      }
+    });
+
+    chrome.storage.local.set({ docLinks });
+  }
 
   static async addNewLinkToFavorites(origin, ownerPage, href, file, protocol, type) {
     const docLinks = await ExtStorage.getDocumentLinks();
@@ -148,7 +169,11 @@ export class ExtStorage {
         link.isHistory = false;
       }
     });
-    chrome.storage.local.set({ docLinks });
+    return new Promise(resolve => {
+      chrome.storage.local.set({ docLinks }, result => {
+        resolve();
+      });
+    });
   }
   static async clearLinkFavorites() {
     const docLinks = await ExtStorage.getDocumentLinks();
@@ -159,6 +184,10 @@ export class ExtStorage {
         link.isFav = false;
       }
     });
-    chrome.storage.local.set({ docLinks });
+    return new Promise(resolve => {
+      chrome.storage.local.set({ docLinks }, result => {
+        resolve();
+      });
+    });
   }
 }

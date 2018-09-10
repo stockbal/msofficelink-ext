@@ -17,7 +17,8 @@
                 </div>
                 <div v-if="favorites.length > 0" class="favorites__actions flex flex--row">
                     <el-button class="show-history-btn" @click="openFavAndHistory" size="medium">{{$i18n('Btn_showAllFavs')}}</el-button>
-                    <el-button class="show-history-btn" @click="clearFavorites" size="medium">{{$i18n('Btn_clearFavs')}}</el-button>
+                    <!--<el-button class="show-history-btn" @click="clearFavorites" size="medium">{{$i18n('Btn_clearFavs')}}</el-button>-->
+                    <clear-favorites-button class="show-history-btn" size="medium" @cleared="history = []"></clear-favorites-button>
                 </div>
             </el-tab-pane>
             <!-- History entries -->
@@ -33,7 +34,8 @@
                 </div>
                 <div v-if="history.length > 0" class="history__actions flex flex--row">
                     <el-button class="show-history-btn" @click="openFavAndHistory" size="medium">{{$i18n('Btn_showHistory')}}</el-button>
-                    <el-button class="show-history-btn" @click="clearHistory" size="medium">{{$i18n('Btn_clearHistory')}}</el-button>
+                    <!--<el-button class="show-history-btn" @click="clearHistory" size="medium">{{$i18n('Btn_clearHistory')}}</el-button>-->
+                    <clear-history-button class="show-history-btn" @cleared="history = []" size="medium"></clear-history-button>
                 </div>
             </el-tab-pane>
             <!-- Extension options -->
@@ -84,9 +86,13 @@
 import { ExtStorage } from '../ext/storage';
 import LinkActions from '../assets/components/LinkActions';
 import DocumentLink from '../assets/components/DocumentLink';
+import ClearFavoritesButton from '../assets/components/ClearFavoritesButton';
+import ClearHistoryButton from '../assets/components/ClearHistoryButton';
 
 export default {
   components: {
+    ClearHistoryButton,
+    ClearFavoritesButton,
     DocumentLink,
     LinkActions
   },
@@ -138,16 +144,6 @@ export default {
     },
     openFavAndHistory() {
       chrome.tabs.create({ url: 'pages/history.html' });
-    },
-    clearFavorites() {
-      ExtStorage.clearLinkFavorites();
-      this.favorites = [];
-      this.$message(this.$i18n('MSG_favsWereDeleted'));
-    },
-    clearHistory() {
-      ExtStorage.clearLinkHistory();
-      this.history = [];
-      this.$message(this.$i18n('MSG_historyWasDeleted'));
     },
     onDefaultActionChange(newValue) {
       if (newValue === 'original') {

@@ -41,6 +41,8 @@ module.exports = {
   MSG_noFavorites: { message: 'No Favorites yet' },
   MSG_favsWereDeleted: { message: 'Favorites have been deleted' },
   MSG_historyWasDeleted: { message: 'History links have been deleted' },
+  MSG_deleteAllFavsWarning: { message: 'Do you really want to delete all favorites?' },
+  MSG_deleteHistoryWarning: { message: 'Do you really want to delete the complete history?' },
   MSG_linkOptionSwitchedToOriginal: {
     message: 'To get the original link action back you have to do a page refresh'
   },
@@ -49,6 +51,23 @@ module.exports = {
   },
   MSG_favsEmptyInfoText: {
     message: 'Here you see the favorites for your MS Office Documents'
+  },
+  MSG_searchResultText: {
+    message: '$count$ Ergebnis$plural$ in $type$ für "$searchText$" gefunden',
+    placeholders: {
+      count: {
+        content: '$1'
+      },
+      plural: {
+        content: '$2'
+      },
+      type: {
+        content: '$3'
+      },
+      searchText: {
+        content: '$4'
+      }
+    }
   },
 
   MSG_favAddedInfo: {
@@ -63,8 +82,11 @@ module.exports = {
   Tip_searchClass: { message: 'Clear search' },
 
   // Some general texts
-  Cancel: { message: 'Abbrechen' },
-  Delete: { message: 'Löschen' },
+  Cancel: { message: 'Cancel' },
+  Delete: { message: 'Delete' },
+  Ok: { message: 'Ok' },
+  Warning: { message: 'Warning' },
+  ResultPluralSuffix: { message: 's' },
 
   // Texts for single document link
   Link_addFavorite: { message: 'Mark as favorite' },
@@ -78,7 +100,7 @@ module.exports = {
   History_showFavs: { message: 'Favorites' },
   History_showHistoryLinks: { message: 'History entries' },
   History_entriesSelected: {
-    message: '$count$ chosen',
+    message: '$count$ selected',
     placeholders: {
       count: {
         content: '$1'

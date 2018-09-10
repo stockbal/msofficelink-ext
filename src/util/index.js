@@ -196,9 +196,9 @@ export class LinkHandler {
    * @returns {Promise<void>}
    */
   async sendTabUpdateImmediately(preventHistoryUpdate = false) {
-    if (!preventHistoryUpdate) {
-      this.updateLinkHistory();
-    }
+    // if (!preventHistoryUpdate) {
+    this.updateLinkHistory();
+    // }
     openUrlInTab(await this._isOpenInNewTab(), this._finalTabUrl);
   }
 }

@@ -41,6 +41,8 @@ module.exports = {
   MSG_noFavorites: { message: 'Keine Favoriten vorhanden' },
   MSG_favsWereDeleted: { message: 'Favoriten wurden gelöscht' },
   MSG_historyWasDeleted: { message: 'Verlauf wurde gelöscht' },
+  MSG_deleteAllFavsWarning: { message: 'Wollen Sie wirklich alle Favoriten löschen?' },
+  MSG_deleteHistoryWarning: { message: 'Wollen Sie den Verlauf wirklich vollständig löschen?' },
   MSG_linkOptionSwitchedToOriginal: {
     message:
       'Um die Standard-Aktion der MS Office Links wiederherzustellen ist eine Seiten-Aktualisierung nötig'
@@ -50,6 +52,23 @@ module.exports = {
   },
   MSG_favsEmptyInfoText: {
     message: 'Hier werden die Favoriten für ihre MS Office Dokumente angezeigt'
+  },
+  MSG_searchResultText: {
+    message: '$count$ Ergebnis$plural$ in $type$ für "$searchText$" gefunden',
+    placeholders: {
+      count: {
+        content: '$1'
+      },
+      plural: {
+        content: '$2'
+      },
+      type: {
+        content: '$3'
+      },
+      searchText: {
+        content: '$4'
+      }
+    }
   },
 
   MSG_favAddedInfo: {
@@ -66,9 +85,11 @@ module.exports = {
   // Some general texts
   Cancel: { message: 'Abbrechen' },
   Delete: { message: 'Löschen' },
+  Ok: { message: 'Ok' },
+  Warning: { message: 'Warnung' },
+  ResultPluralSuffix: { message: 'se' },
 
   // Texts for single document link
-
   Link_addFavorite: { message: 'Zu Favoriten hinzufügen' },
   Link_deleteFavorite: { message: 'Favorit löschen' },
 

@@ -11,6 +11,9 @@
                  alt="word">
             <img v-else src="../../../static/icons/powerpoint-app.svg" width="20px" alt="word">
         </div>
+        <div v-if="showOpenedOn" class="document-link__opened-on">
+            {{link.openedOn}}
+        </div>
         <div class="flex flex--column document-link__content" @click="onLinkClick">
             <h3>{{link.file}}</h3>
             <h4>{{link.href}}</h4>
@@ -48,6 +51,10 @@ export default {
     mode: {
       type: String,
       default: 'history'
+    },
+    showOpenedOn: {
+      type: Boolean,
+      default: false
     },
     checkable: {
       type: Boolean,
@@ -169,5 +176,10 @@ export default {
 
 .document-link__check {
   padding: 0 15px 0 5px;
+}
+
+.document-link__opened-on {
+  padding: 0 0 0 15px;
+  min-width: 80px;
 }
 </style>
