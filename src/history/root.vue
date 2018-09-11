@@ -173,7 +173,7 @@ export default {
 
           const search = (source, result) => {
             source.forEach(link => {
-              if (link.href.toLowerCase().includes(value) || link.file.includes(value)) {
+              if (link.file.toLowerCase().includes(value)) {
                 result.push(link);
               }
             });
