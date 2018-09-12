@@ -418,13 +418,6 @@ main {
   }
 }
 
-.loading {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  z-index: 2000;
-}
-
 @media (max-width: 1170px) {
   .links__header {
     img {

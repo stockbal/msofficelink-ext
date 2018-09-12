@@ -108,8 +108,8 @@ export default {
   font-size: 14px;
   font-weight: normal;
   border: 1px #ebebeb solid;
-  /*z-index: 200000;*/
   box-shadow: rgb(58, 58, 58) 0 0 6px 0;
+  z-index: 1100;
 
   button {
     min-width: 1em;
