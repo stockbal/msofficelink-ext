@@ -1,49 +1,5 @@
 import { LinkHandler, openUrlInTab } from '../util';
-
-const i18n = chrome.i18n.getMessage;
-
-const patterns = ['docx', 'doc', 'docm', 'xls', 'xlsx', 'csv', 'xlsm', 'pptx', 'ppt', 'pptm'].map(
-  el => `*://*/*.${el}*`
-);
-
-const createContextMenu = (i18nId, id) => {
-  chrome.contextMenus.create({
-    title: i18n(i18nId),
-    id: id,
-    contexts: ['link'],
-    targetUrlPatterns: patterns
-  });
-};
-const createCtxMenuSeparator = id => {
-  chrome.contextMenus.create({
-    type: 'separator',
-    id: id,
-    contexts: ['link'],
-    targetUrlPatterns: patterns
-  });
-};
-
-// create default context menu for showing the history
-chrome.contextMenus.create({
-  title: i18n('extName') + ' - ' + i18n('History_ctxMenuOpen'),
-  id: 'history1',
-  contexts: ['page']
-});
-
-// install the context menus to open links in ms office applications
-createContextMenu('LinkOption_openProtected', 'read');
-createContextMenu('LinkOption_openEdit', 'edit');
-createContextMenu('LinkOption_openOnline', 'online');
-createContextMenu('LinkOption_download', 'download');
-createCtxMenuSeparator('sep1');
-createContextMenu('LinkOption_openParent', 'parent');
-createCtxMenuSeparator('sep2');
-createContextMenu('LinkOption_addToFavs', 'markasfav');
-chrome.contextMenus.create({
-  title: i18n('History_ctxMenuOpen'),
-  id: 'history2',
-  contexts: ['browser_action']
-});
+import { installContextMenu } from './contextMenu';
 
 // register command listener to open history/favorites page
 chrome.commands.onCommand.addListener(command => {
@@ -98,5 +54,5 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 });
 
 chrome.runtime.onInstalled.addListener(details => {
-  // maybe show some information about the updated
+  installContextMenu();
 });
