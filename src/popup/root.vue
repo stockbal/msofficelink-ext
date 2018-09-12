@@ -17,8 +17,7 @@
                 </div>
                 <div v-if="favorites.length > 0" class="favorites__actions flex flex--row">
                     <el-button class="show-history-btn" @click="openFavAndHistory" size="medium">{{$i18n('Btn_showAllFavs')}}</el-button>
-                    <!--<el-button class="show-history-btn" @click="clearFavorites" size="medium">{{$i18n('Btn_clearFavs')}}</el-button>-->
-                    <clear-favorites-button class="show-history-btn" size="medium" @cleared="history = []"></clear-favorites-button>
+                    <clear-favorites-button class="show-history-btn" size="medium" @cleared="favorites = []"></clear-favorites-button>
                 </div>
             </el-tab-pane>
             <!-- History entries -->
@@ -34,7 +33,6 @@
                 </div>
                 <div v-if="history.length > 0" class="history__actions flex flex--row">
                     <el-button class="show-history-btn" @click="openFavAndHistory" size="medium">{{$i18n('Btn_showHistory')}}</el-button>
-                    <!--<el-button class="show-history-btn" @click="clearHistory" size="medium">{{$i18n('Btn_clearHistory')}}</el-button>-->
                     <clear-history-button class="show-history-btn" @cleared="history = []" size="medium"></clear-history-button>
                 </div>
             </el-tab-pane>

@@ -46,7 +46,12 @@ export class LinkUtil {
    * @param link
    */
   static getLinkInfo(link) {
-    const cleanedLink = LinkUtil._removeQueryParams(link);
+    let cleanedLink = LinkUtil._removeQueryParams(link);
+    // check if link is wopi frame link
+    if (LinkUtil._isWopiFrameLink(cleanedLink)) {
+      // extract source link from wopi frame link
+      cleanedLink = LinkUtil._extractWopiFrameSourceLink(cleanedLink);
+    }
     if (/\.(docx|doc|docm)$/.test(cleanedLink)) {
       return { link: cleanedLink, protocol: 'ms-word', type: 'word' };
     } else if (/\.(xlsx|xls|xlsm|csv)$/.test(cleanedLink)) {
@@ -64,12 +69,21 @@ export class LinkUtil {
    * @private
    */
   static _removeQueryParams(link) {
-    const regexResult = link.match(/(.*\.[^\\?]+)/);
+    const regexResult = link.match(/(.*\.[a-zA-Z]+)/);
     if (regexResult.length > 1) {
       return regexResult[1];
     } else {
       throw Error('Link does not match');
     }
+  }
+  static _isWopiFrameLink(link) {
+    return link.includes('WopiFrame.aspx?sourcedoc');
+  }
+  static _extractWopiFrameSourceLink(link) {
+    const tokens = link.split('/');
+    const origin = `${tokens[0]}/${tokens[2]}`;
+    const sourcedoc = link.match(/sourcedoc=(.*\.[a-zA-Z]+)/)[1];
+    return `${origin}${sourcedoc}`;
   }
 }
 
@@ -116,17 +130,6 @@ export class LinkHandler {
         return this._ownerPage || '';
       default:
         throw new Error('unrecognized link action');
-    }
-  }
-  getLinkInfo() {
-    if (/\.(docx|doc|docm)$/.test(this._linkUrl)) {
-      return { protocol: 'ms-word', type: 'word' };
-    } else if (/\.(xlsx|xls|xlsm|csv)$/.test(this._linkUrl)) {
-      return { protocol: 'ms-excel', type: 'excel' };
-    } else if (/\.(pptx|ppt|pptm)$/.test(this._linkUrl)) {
-      return { protocol: 'ms-powerpoint', type: 'powerpoint' };
-    } else {
-      return { protocol: '', type: '' };
     }
   }
   async updateLinkHistory() {
