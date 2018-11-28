@@ -1,7 +1,7 @@
 import { ExtStorage } from '../ext/storage';
 
 const excelFileEndings = ['doc', 'docx', 'docm'];
-const wordFileEndings = ['xls', 'xlsx', 'xlsm', 'csv'];
+const wordFileEndings = ['xls', 'xlsx', 'xlsm', 'csv', 'xlsb'];
 const powerPointFileEndings = ['ppt', 'pptx', 'pptm'];
 
 /**
