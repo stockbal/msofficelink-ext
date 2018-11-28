@@ -1,5 +1,54 @@
 import { ExtStorage } from '../ext/storage';
 
+const excelFileEndings = ['doc', 'docx', 'docm'];
+const wordFileEndings = ['xls', 'xlsx', 'xlsm', 'csv'];
+const powerPointFileEndings = ['ppt', 'pptx', 'pptm'];
+
+/**
+ * Utility class for checking office link file endings
+ */
+export class OfficeFileEnding {
+  /**
+   * Checks if the link points to an Excel file
+   * @param link {String} url to check
+   * @returns {boolean} <code>true</code> if link is Excel file
+   */
+  static isExcelFileEnding(link) {
+    return new RegExp(`\\.(${excelFileEndings.join('|')})$`).test(link);
+  }
+  /**
+   * Checks if the link points to an PowerPoint file
+   * @param link {String} url to check
+   * @returns {boolean} <code>true</code> if link is PowerPoint file
+   */
+  static isPowerPointFileEnding(link) {
+    return new RegExp(`\\.(${powerPointFileEndings.join('|')})$`).test(link);
+  }
+
+  /**
+   * Checks if the link points to an Word file
+   * @param link {String} url to check
+   * @returns {boolean} <code>true</code> if link is Word file
+   */
+  static isWordFileEnding(link) {
+    return new RegExp(`\\.(${wordFileEndings.join('|')})$`).test(link);
+  }
+
+  static getAllEndingsAsRegex() {
+    return new RegExp(
+      `\\.(${excelFileEndings.concat(wordFileEndings, powerPointFileEndings).join('|')})`
+    );
+  }
+
+  /**
+   * Returns all valid Office file endings that the extension can handle
+   * @returns {string[]}
+   */
+  static getAllFileEndings() {
+    return excelFileEndings.concat(wordFileEndings, powerPointFileEndings);
+  }
+}
+
 export function on(element, event, handler) {
   if (element && event && handler) {
     document.addEventListener
@@ -52,11 +101,11 @@ export class LinkUtil {
       // extract source link from wopi frame link
       cleanedLink = LinkUtil._extractWopiFrameSourceLink(cleanedLink);
     }
-    if (/\.(docx|doc|docm)$/.test(cleanedLink)) {
+    if (OfficeFileEnding.isWordFileEnding(cleanedLink)) {
       return { link: cleanedLink, protocol: 'ms-word', type: 'word' };
-    } else if (/\.(xlsx|xls|xlsm|csv)$/.test(cleanedLink)) {
+    } else if (OfficeFileEnding.isExcelFileEnding(cleanedLink)) {
       return { link: cleanedLink, protocol: 'ms-excel', type: 'excel' };
-    } else if (/\.(pptx|ppt|pptm)$/.test(cleanedLink)) {
+    } else if (OfficeFileEnding.isPowerPointFileEnding(cleanedLink)) {
       return { link: cleanedLink, protocol: 'ms-powerpoint', type: 'powerpoint' };
     } else {
       return { link: cleanedLink, protocol: '', type: '' };

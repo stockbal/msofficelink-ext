@@ -1,9 +1,10 @@
+import { OfficeFileEnding } from '../util';
+
 const i18n = chrome.i18n.getMessage;
 
-const fileEndings = ['docx', 'doc', 'docm', 'xls', 'xlsx', 'csv', 'xlsm', 'pptx', 'ppt', 'pptm'];
-const patterns = fileEndings
+const patterns = OfficeFileEnding.getAllFileEndings()
   .map(el => `https://*/*.${el}*`)
-  .concat(fileEndings.map(el => `http://*/*.${el}*`));
+  .concat(OfficeFileEnding.getAllFileEndings().map(el => `http://*/*.${el}*`));
 
 const createContextMenu = (i18nId, id) => {
   chrome.contextMenus.create({
