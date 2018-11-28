@@ -1,60 +1,86 @@
 <template>
-    <div class="links">
-        <header class="links__header">
-            <img src="../../static/icons/icon.svg">
-            <div class="search-bar" v-if="!selectedLinksCount">
-                <el-input autofocus class="link-search" v-model="search" :placeholder="$i18n('History_search')"
-                          @input="onSearchChange">
-                    <span v-if="search" slot="append" class="link-search__clear" :title="$i18n('Tip_searchClass')"
-                          @click="onClearSearch">
-                        <font-awesome-icon icon="times-circle"></font-awesome-icon>
-                    </span>
-                </el-input>
-            </div>
-            <div class="toolbar flex flex--row flex--align-center" v-else>
-                <el-button class="toolbar__cancel" type="text" :title="$i18n('Cancel')" @click="cancelSelection">
-                    <font-awesome-icon icon="times"></font-awesome-icon>
-                </el-button>
-                <span class="toolbar__select-text">{{$i18n('History_entriesSelected', [selectedLinksCount])}}</span>
-                <el-button type="text" @click="cancelSelection">{{$i18n('Cancel')}}</el-button>
-                <el-button type="text" @click="deleteSelection">{{$i18n('Delete')}}</el-button>
-            </div>
-        </header>
-        <main>
-            <section v-if="favorites.length && !loading" class="links__entries--favorites">
-                <h2 v-if="!search" class="section--header flex flex--row">
-                    <span>{{$i18n('OptionTab_favs')}}</span>
-                    <clear-favorites-button @cleared="clearFavs" type="text"></clear-favorites-button>
-                </h2>
-                <h2 v-else class="section--header flex flex--row">
-                    {{favSearchResultText}}
-                </h2>
-                <document-link v-if="isInFavSearchResult(link)" v-for="(link, idx) in favorites" :key="idx" :link="link"
-                               checkable mode="fav"
-                               v-on:update:checked="onCheck('fav', link)"
-                               @favChanged="onFavChanged(link)"></document-link>
-            </section>
-            <section v-else class="flex links__empty" v-loading="loading">
-                <h3>{{$i18n('MSG_favsEmptyInfoText')}}</h3>
-            </section>
-            <section v-if="history.length && !loading" class="links__entries--history">
-                <h2 v-if="!search" class="section--header flex flex--row">
-                    <span>{{$i18n('OptionTab_history')}}</span>
-                    <clear-history-button @cleared="history = []" type="text"></clear-history-button>
-                </h2>
-                <h2 v-else class="section--header flex flex--row">
-                    {{historySearchResultText}}
-                </h2>
-                <document-link v-if="isInHistorySearchResult(link)" v-for="(link, idx) in history" :key="idx"
-                               :link="link" checkable
-                               mode="history-page" @favChanged="onFavChanged(link)" :show-opened-on="true"
-                               v-on:update:checked="onCheck('hist', link)"></document-link>
-            </section>
-            <section v-else class="flex links__empty" v-loading="loading">
-                <h3>{{$i18n('MSG_historyEmptyInfoText')}}</h3>
-            </section>
-        </main>
-    </div>
+  <div class="links">
+    <header class="links__header">
+      <img src="../../static/icons/icon.svg" />
+      <div class="search-bar" v-if="!selectedLinksCount">
+        <el-input
+          autofocus
+          class="link-search"
+          v-model="search"
+          :placeholder="$i18n('History_search')"
+          @input="onSearchChange"
+        >
+          <span
+            v-if="search"
+            slot="append"
+            class="link-search__clear"
+            :title="$i18n('Tip_searchClass')"
+            @click="onClearSearch"
+          >
+            <font-awesome-icon icon="times-circle"></font-awesome-icon>
+          </span>
+        </el-input>
+      </div>
+      <div class="toolbar flex flex--row flex--align-center" v-else>
+        <el-button
+          class="toolbar__cancel"
+          type="text"
+          :title="$i18n('Cancel')"
+          @click="cancelSelection"
+        >
+          <font-awesome-icon icon="times"></font-awesome-icon>
+        </el-button>
+        <span class="toolbar__select-text">{{
+          $i18n('History_entriesSelected', [selectedLinksCount])
+        }}</span>
+        <el-button type="text" @click="cancelSelection">{{ $i18n('Cancel') }}</el-button>
+        <el-button type="text" @click="deleteSelection">{{ $i18n('Delete') }}</el-button>
+      </div>
+    </header>
+    <main>
+      <section v-if="favorites.length && !loading" class="links__entries--favorites">
+        <h2 v-if="!search" class="section--header flex flex--row">
+          <span>{{ $i18n('OptionTab_favs') }}</span>
+          <clear-favorites-button @cleared="clearFavs" type="text"></clear-favorites-button>
+        </h2>
+        <h2 v-else class="section--header flex flex--row">{{ favSearchResultText }}</h2>
+        <document-link
+          v-if="isInFavSearchResult(link)"
+          v-for="(link, idx) in favorites"
+          :key="idx"
+          :link="link"
+          checkable
+          mode="fav"
+          v-on:update:checked="onCheck('fav', link);"
+          @favChanged="onFavChanged(link);"
+        ></document-link>
+      </section>
+      <section v-else class="flex links__empty" v-loading="loading">
+        <h3>{{ $i18n('MSG_favsEmptyInfoText') }}</h3>
+      </section>
+      <section v-if="history.length && !loading" class="links__entries--history">
+        <h2 v-if="!search" class="section--header flex flex--row">
+          <span>{{ $i18n('OptionTab_history') }}</span>
+          <clear-history-button @cleared="history = [];" type="text"></clear-history-button>
+        </h2>
+        <h2 v-else class="section--header flex flex--row">{{ historySearchResultText }}</h2>
+        <document-link
+          v-if="isInHistorySearchResult(link)"
+          v-for="(link, idx) in history"
+          :key="idx"
+          :link="link"
+          checkable
+          mode="history-page"
+          @favChanged="onFavChanged(link);"
+          :show-opened-on="true"
+          v-on:update:checked="onCheck('hist', link);"
+        ></document-link>
+      </section>
+      <section v-else class="flex links__empty" v-loading="loading">
+        <h3>{{ $i18n('MSG_historyEmptyInfoText') }}</h3>
+      </section>
+    </main>
+  </div>
 </template>
 <script>
 import { ExtStorage } from '../ext/storage';

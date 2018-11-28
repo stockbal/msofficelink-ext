@@ -1,5 +1,5 @@
 <template>
-    <el-button @click="clear" :type="type" :size="size">{{$i18n('Btn_clearHistory')}}</el-button>
+  <el-button @click="clear" :type="type" :size="size">{{ $i18n('Btn_clearHistory') }}</el-button>
 </template>
 
 <script>
@@ -38,5 +38,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

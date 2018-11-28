@@ -1,35 +1,53 @@
 <template>
-    <div class="document-link flex flex--row flex--align-center">
-        <div v-if="checkable" class="document-link__check">
-            <el-checkbox v-model="link.checked" @change="onChecked"></el-checkbox>
-        </div>
-        <div class="document-link__icon" :class="'document-link__icon--' + link.type">
-            <font-awesome-icon :icon="'file-'+link.type" fixed-width></font-awesome-icon>
-        </div>
-        <div v-if="showOpenedOn" class="document-link__opened-on">
-            {{link.openedOn}}
-        </div>
-        <div class="flex flex--column document-link__content" @click="onLinkClick">
-            <h3>{{link.file}}</h3>
-            <h4>{{link.href}}</h4>
-        </div>
-        <div class="document-link__fav-indicator" @click="changeFav" :class="'document-link__fav-indicator--' + link.type">
-            <el-tooltip v-if="mode === 'history' || mode === 'history-page'" class="item" effect="dark" :content="favToolTip" placement="bottom" :open-delay="500">
-                <font-awesome-icon :icon="favIcon"></font-awesome-icon>
-            </el-tooltip>
-            <el-tooltip v-else class="item" effect="dark" :content="$i18n('Link_deleteFavorite')" placement="bottom" :open-delay="500">
-                <font-awesome-icon :icon="['far', 'trash-alt']"></font-awesome-icon>
-            </el-tooltip>
-        </div>
-        <div class="flex flex--row flex--align-center document-link__action">
-            <el-popover placement="left"
-                        popper-class="document-link__action-popper"
-                        v-model="actionPopoverVisible">
-                <link-actions @action="performLinkAction" :app-type="link.type"></link-actions>
-                <el-button slot="reference" round type="text" icon="el-icon-more" circle></el-button>
-            </el-popover>
-        </div>
+  <div class="document-link flex flex--row flex--align-center">
+    <div v-if="checkable" class="document-link__check">
+      <el-checkbox v-model="link.checked" @change="onChecked"></el-checkbox>
     </div>
+    <div class="document-link__icon" :class="'document-link__icon--' + link.type">
+      <font-awesome-icon :icon="'file-' + link.type" fixed-width></font-awesome-icon>
+    </div>
+    <div v-if="showOpenedOn" class="document-link__opened-on">{{ link.openedOn }}</div>
+    <div class="flex flex--column document-link__content" @click="onLinkClick">
+      <h3>{{ link.file }}</h3>
+      <h4>{{ link.href }}</h4>
+    </div>
+    <div
+      class="document-link__fav-indicator"
+      @click="changeFav"
+      :class="'document-link__fav-indicator--' + link.type"
+    >
+      <el-tooltip
+        v-if="mode === 'history' || mode === 'history-page'"
+        class="item"
+        effect="dark"
+        :content="favToolTip"
+        placement="bottom"
+        :open-delay="500"
+      >
+        <font-awesome-icon :icon="favIcon"></font-awesome-icon>
+      </el-tooltip>
+      <el-tooltip
+        v-else
+        class="item"
+        effect="dark"
+        :content="$i18n('Link_deleteFavorite')"
+        placement="bottom"
+        :open-delay="500"
+      >
+        <font-awesome-icon :icon="['far', 'trash-alt']"></font-awesome-icon>
+      </el-tooltip>
+    </div>
+    <div class="flex flex--row flex--align-center document-link__action">
+      <el-popover
+        placement="left"
+        popper-class="document-link__action-popper"
+        v-model="actionPopoverVisible"
+      >
+        <link-actions @action="performLinkAction" :app-type="link.type"></link-actions>
+        <el-button slot="reference" round type="text" icon="el-icon-more" circle></el-button>
+      </el-popover>
+    </div>
+  </div>
 </template>
 
 <script>

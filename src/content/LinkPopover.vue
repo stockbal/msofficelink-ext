@@ -1,10 +1,10 @@
 <template>
-    <div class="link-popper" v-show="popperVisible">
-        <div class="file-options">
-            <link-actions @action="confirm" :app-type="linkAppType" :on-page="true"></link-actions>
-        </div>
-        <div class="popper__arrow" x-arrow></div>
+  <div class="link-popper" v-show="popperVisible">
+    <div class="file-options">
+      <link-actions @action="confirm" :app-type="linkAppType" :on-page="true"></link-actions>
     </div>
+    <div class="popper__arrow" x-arrow></div>
+  </div>
 </template>
 
 <script>
