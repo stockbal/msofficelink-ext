@@ -118,13 +118,19 @@ export class LinkUtil {
    * @private
    */
   static _removeQueryParams(link) {
-    const regexResult = link.match(/(.*\.[a-zA-Z]+)/);
-    if (regexResult.length > 1) {
-      return regexResult[1];
+    const regexResult = link.match(/(.*\.[a-zA-Z]{3,4})($|\?|#)+/);
+    if (regexResult !== null && regexResult.length > 1) {
+      let matchWithLink = regexResult[1];
+      if (/[\\?#&]+/.test(matchWithLink)) {
+        throw Error('Linb does not match');
+      } else {
+        return matchWithLink;
+      }
     } else {
       throw Error('Link does not match');
     }
   }
+
   static _isWopiFrameLink(link) {
     return link.includes('WopiFrame.aspx?sourcedoc');
   }

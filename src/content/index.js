@@ -43,6 +43,15 @@ const updateOfficeLinks = async () => {
       // this link is not really shown or existing in a state that it is clickable
       continue;
     }
+
+    if (link.href.startsWith('file://')) {
+      continue;
+    }
+    // test if it as a link which points to a file
+    const regexResult = link.href.match(/(.*\.[a-zA-Z]{3,4})($|\?|#)+/);
+    if (regexResult === null || regexResult.length < 2) {
+      continue;
+    }
     // test if the link points to an ms office document
     if (
       !new RegExp(`\\.(${OfficeFileEnding.getAllFileEndings().join('|')})([\\?#&].*)?`).test(
