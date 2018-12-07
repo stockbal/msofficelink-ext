@@ -1,3 +1,9 @@
+### v1.0.3
+
+#### Fixes
+
+- RegEx for correct link detection was approved
+
 ### v1.0.2
 
 #### Fixes
