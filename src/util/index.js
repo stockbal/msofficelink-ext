@@ -113,6 +113,32 @@ export class LinkUtil {
   }
 
   /**
+   * Checks if the given link is relevant for the extension
+   * @param link
+   */
+  static isLinkRelevant(link) {
+    // exclude file protocol links -> they are not working with the office URI protocols
+    if (link.startsWith('file://')) {
+      return false;
+    }
+    // only consider segment after last slash
+    const lastSlashSegment = link.substr(link.lastIndexOf('/'), link.length);
+    if (!lastSlashSegment || lastSlashSegment === '') {
+      return false;
+    }
+
+    // test if it as a link which points to a file
+    const regexResult = lastSlashSegment.match(/(.*\.[a-zA-Z]{3,4})($|\?|#)+/);
+    if (regexResult === null || regexResult.length < 2) {
+      return false;
+    }
+    // test if the link points to an ms office document
+    return new RegExp(`\\.(${OfficeFileEnding.getAllFileEndings().join('|')})([\\?#&].*)?`).test(
+      lastSlashSegment
+    );
+  }
+
+  /**
    * Removes all url query parameters from the given link
    * @param link
    * @private

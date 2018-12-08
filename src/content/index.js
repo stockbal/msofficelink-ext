@@ -4,7 +4,7 @@ import ElementUI from 'element-ui';
 import Vue from 'vue';
 import localeEN from 'element-ui/lib/locale/lang/en';
 import localeDE from 'element-ui/lib/locale/lang/de';
-import { LinkHandler, OfficeFileEnding } from '../util';
+import { LinkHandler, LinkUtil } from '../util';
 import { ExtStorage } from '../ext/storage';
 import '../util/initAwesomeIconsForHistory';
 import Popper from 'popper.js';
@@ -44,21 +44,7 @@ const updateOfficeLinks = async () => {
       continue;
     }
 
-    if (link.href.startsWith('file://')) {
-      continue;
-    }
-    // test if it as a link which points to a file
-    const regexResult = link.href.match(/(.*\.[a-zA-Z]{3,4})($|\?|#)+/);
-    if (regexResult === null || regexResult.length < 2) {
-      continue;
-    }
-    // test if the link points to an ms office document
-    if (
-      !new RegExp(`\\.(${OfficeFileEnding.getAllFileEndings().join('|')})([\\?#&].*)?`).test(
-        link.href
-      )
-    ) {
-      // link is no document so link, so it will not be changed by the extension
+    if (!LinkUtil.isLinkRelevant(link.href)) {
       continue;
     }
 
