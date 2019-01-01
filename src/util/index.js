@@ -95,11 +95,13 @@ export class LinkUtil {
    * @param link
    */
   static getLinkInfo(link) {
-    let cleanedLink = LinkUtil._removeQueryParams(link);
+    let cleanedLink = null;
     // check if link is wopi frame link
-    if (LinkUtil._isWopiFrameLink(cleanedLink)) {
+    if (LinkUtil.isWopiFrameLink(link)) {
       // extract source link from wopi frame link
-      cleanedLink = LinkUtil._extractWopiFrameSourceLink(cleanedLink);
+      cleanedLink = LinkUtil._extractWopiFrameSourceLink(link);
+    } else {
+      cleanedLink = LinkUtil._removeQueryParams(link);
     }
     if (OfficeFileEnding.isWordFileEnding(cleanedLink)) {
       return { link: cleanedLink, protocol: 'ms-word', type: 'word' };
@@ -120,6 +122,10 @@ export class LinkUtil {
     // exclude file protocol links -> they are not working with the office URI protocols
     if (link.startsWith('file://')) {
       return false;
+    }
+
+    if (LinkUtil.isWopiFrameLink(link)) {
+      return true;
     }
     // only consider segment after last slash
     const lastSlashSegment = link.substr(link.lastIndexOf('/'), link.length);
@@ -148,7 +154,7 @@ export class LinkUtil {
     if (regexResult !== null && regexResult.length > 1) {
       let matchWithLink = regexResult[1];
       if (/[\\?#&]+/.test(matchWithLink)) {
-        throw Error('Linb does not match');
+        throw Error('Link does not match');
       } else {
         return matchWithLink;
       }
@@ -157,14 +163,26 @@ export class LinkUtil {
     }
   }
 
-  static _isWopiFrameLink(link) {
+  /**
+   * Checks if the given link is a WOPI Frame link
+   * @param link {String} the link to be checked
+   * @return {boolean}
+   */
+  static isWopiFrameLink(link) {
     return link.includes('WopiFrame.aspx?sourcedoc');
   }
+
+  /**
+   * Extracts source document link from WOPI frame link
+   * @param link {String}
+   * @return {String} the extracted WOPI Frame link
+   * @private
+   */
   static _extractWopiFrameSourceLink(link) {
     const tokens = link.split('/');
     const origin = `${tokens[0]}/${tokens[2]}`;
     const sourcedoc = link.match(/sourcedoc=(.*\.[a-zA-Z]+)/)[1];
-    return `${origin}${sourcedoc}`;
+    return LinkUtil._removeQueryParams(`${origin}${sourcedoc}`);
   }
 }
 

@@ -9,7 +9,7 @@ export class LinkObserver {
     });
   }
   start() {
-    this._observer.observe(document.body, { childList: true });
+    this._observer.observe(document.body, { childList: true, subtree: true });
   }
   stop() {
     this._observer.disconnect();
