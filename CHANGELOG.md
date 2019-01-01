@@ -1,3 +1,9 @@
+### v1.0.4
+
+#### Fixes
+
+- Minor fixes and improvements regarding correct MS Office link detection
+
 ### v1.0.3
 
 #### Fixes
