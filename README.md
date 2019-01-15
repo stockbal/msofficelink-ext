@@ -1,4 +1,5 @@
 # msofficelink-ext
+###### _Version 1.1.0_
 
 > Chrome Extension to handle MS Office Document links
 
@@ -8,6 +9,10 @@
 - Searchable History for opened/handled documents
 - Create Favorites
 - Overwrite the default action upon link click
+- Copy the link to the clipboard
+  - the original link (WOPI-Frame is removed)
+  - open Excel in Read-Only/Edit mode
+  - open Online
 
 ## Build Setup
 

@@ -1,3 +1,14 @@
+### v1.1.0
+
+#### Features
+
+- Added new 'Copy to Clipboard' - action
+
+#### Fixes
+
+- RegEx for correct link detection was improved
+
+
 ### v1.0.4
 
 #### Fixes
