@@ -14,7 +14,9 @@ import {
   faTimes,
   faFileWord,
   faFileExcel,
-  faFilePowerpoint
+  faFilePowerpoint,
+  faLink,
+  faCopy
 } from '@fortawesome/free-solid-svg-icons';
 import { faStar, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -35,7 +37,9 @@ library.add(
   faTimes,
   faFileExcel,
   faFileWord,
-  faFilePowerpoint
+  faFilePowerpoint,
+  faLink,
+  faCopy
 );
 
 Vue.component(FontAwesomeIcon.name, FontAwesomeIcon);

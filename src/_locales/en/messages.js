@@ -8,6 +8,8 @@ module.exports = {
   extDescription: {
     message: 'Handle MS Office Document links in a better way'
   },
+  // messages for context menus
+  CTX_copyLinkAddressAs: { message: 'Copy address of the document as...' },
   // messages for link open options
   LinkOption_openOnline: { message: 'Open online' },
   LinkOption_openProtected: { message: 'Open in protected mode' },
@@ -18,6 +20,7 @@ module.exports = {
   LinkOption_addToFavs: { message: 'Add to favorites' },
   LinkOption_openParent: { message: 'Open Parent folder' },
   LinkOption_openOwnerPage: { message: 'Open owning Website' },
+  LinkOption_copyDocLink: { message: 'Copy address of the document' },
   // messages for Extension settings
   Setting_newTab: { message: 'Open in new Tab' },
   Setting_popupDefaultTab: { message: 'Default Visible Menu' },
@@ -25,6 +28,7 @@ module.exports = {
   Setting_defaultLinkAction: { message: 'Link Action' },
   Setting_activateHistory: { message: 'Activate Link History' },
   Setting_maxHistoryCount: { message: 'Maximum Link History' },
+  Setting_copyLinkMode: { message: `Copy document address` },
 
   OptionTab_favs: { message: 'Favorites' },
   OptionTab_history: { message: 'History' },
@@ -84,6 +88,7 @@ module.exports = {
       }
     }
   },
+  MSG_linkCopiedInfo: { message: `Address of the document was copied to the clipboard` },
   // tooltip texts
   Tip_searchClass: { message: 'Clear search' },
 

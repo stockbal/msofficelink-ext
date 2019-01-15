@@ -71,7 +71,13 @@
         <span slot="label"
           ><font-awesome-icon icon="cog"></font-awesome-icon> {{ $i18n('OptionTab_options') }}</span
         >
-        <el-form ref="settings" :model="settings" label-width="240px" size="medium">
+        <el-form
+          ref="settings"
+          :model="settings"
+          label-width="240px"
+          size="medium"
+          class="popup-tabs__options"
+        >
           <el-form-item :label="$i18n('Setting_popupDefaultTab')">
             <el-select v-model="settings.popupDefaultTab" @change="onSubmit">
               <el-option :label="$i18n('OptionTab_favs')" value="favs"></el-option>
@@ -95,6 +101,14 @@
               <el-option :label="$i18n('LinkOption_openProtected')" value="read"></el-option>
               <el-option :label="$i18n('LinkOption_openOnline')" value="online"></el-option>
               <el-option :label="$i18n('LinkOption_download')" value="download"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item :label="$i18n('Setting_copyLinkMode')">
+            <el-select v-model="settings.copyLinkMode" @change="onSubmit">
+              <el-option :label="$i18n('LinkOption_original')" value="original"></el-option>
+              <el-option :label="$i18n('LinkOption_openEdit')" value="edit"></el-option>
+              <el-option :label="$i18n('LinkOption_openProtected')" value="read"></el-option>
+              <el-option :label="$i18n('LinkOption_openOnline')" value="online"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item :label="$i18n('Setting_newTab')">
@@ -130,6 +144,7 @@ export default {
       menuLinkDefaultAction: 'online',
       linkDefaultAction: 'original',
       popupDefaultTab: 'options',
+      copyLinkMode: 'original',
       openInNewTab: false
     },
     history: [],
@@ -236,7 +251,7 @@ hr {
     font-size: 15px;
   }
 
-  width: 520px;
+  width: 540px;
 
   .form-entry__label {
     width: 120px;
@@ -266,6 +281,12 @@ hr {
 .popup-tabs__history {
   .show-history-btn {
     margin: 5px 0 0 0;
+  }
+}
+
+.popup-tabs__options {
+  .el-select {
+    width: 250px;
   }
 }
 

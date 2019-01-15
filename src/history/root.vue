@@ -160,6 +160,11 @@ export default {
         }
       }
     },
+    /**
+     * Reads the current history links
+     *
+     * @returns {Promise<void>}
+     */
     async readHistory() {
       const history = await ExtStorage.getHistoryLinks();
       history.sort((link1, link2) => new Date(link2.openedOn) - new Date(link1.openedOn));
@@ -173,9 +178,19 @@ export default {
       });
       this.history = history;
     },
+    /**
+     * Checks if link exists in history
+     * @param link
+     * @returns {boolean}
+     */
     isInHistorySearchResult(link) {
       return !this.search || this.resultInHistory.includes(link);
     },
+    /**
+     * Checks if the link exists in the favorites
+     * @param link
+     * @returns {boolean}
+     */
     isInFavSearchResult(link) {
       return !this.search || this.resultInFavs.includes(link);
     },
@@ -184,6 +199,10 @@ export default {
       this.history = [];
       await this.readHistory();
     },
+    /**
+     * Handler for when the search input changes
+     * @param value
+     */
     onSearchChange(value) {
       if (this.timer) {
         window.clearTimeout(this.timer);
@@ -212,11 +231,18 @@ export default {
         }, 500);
       }
     },
+    /**
+     * Handler for when search input is cleared
+     */
     onClearSearch() {
       this.search = '';
       this.resultInFavs = [];
       this.resultInHistory = [];
     },
+    /**
+     * Handler for when a favorites link was changed
+     * @param link
+     */
     onFavChanged(link) {
       if (link.isFav) {
         const linkClone = Object.assign({}, link);

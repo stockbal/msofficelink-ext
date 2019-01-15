@@ -65,6 +65,15 @@ export default {
             message: this.$i18n('MSG_favAddedInfo', [this.file]),
             type: 'success'
           });
+        } else if (option === 'copylink') {
+          // Copies the link to the clipboard
+          linkHandler.copyLinkAddress();
+          this.$notify({
+            title: this.$i18n('extName'),
+            message: this.$i18n('MSG_linkCopiedInfo'),
+            type: 'info',
+            duration: 2000
+          });
         } else {
           linkHandler.sendTabUpdateViaMessage();
         }

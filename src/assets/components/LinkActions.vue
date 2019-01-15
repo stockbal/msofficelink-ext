@@ -13,6 +13,11 @@
       {{ $i18n('LinkOption_openOnline') }}
     </div>
     <div class="link-actions__separator"></div>
+    <div class="link-actions__action" @click="onAction('copylink');">
+      <font-awesome-icon icon="copy" fixed-width></font-awesome-icon>
+      {{ $i18n('LinkOption_copyDocLink') }}
+    </div>
+    <div class="link-actions__separator"></div>
     <div class="link-actions__action" @click="onAction('download');">
       <font-awesome-icon icon="download" fixed-width></font-awesome-icon>
       {{ $i18n('LinkOption_download') }}
@@ -40,6 +45,10 @@ export default {
     appType: {
       type: String,
       default: 'word'
+    },
+    enableLinkCopy: {
+      type: Boolean,
+      default: false
     },
     onPage: {
       type: Boolean,

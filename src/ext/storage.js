@@ -13,6 +13,7 @@ export class ExtStorage {
             menuLinkDefaultAction: 'online',
             linkDefaultAction: 'original',
             openInNewTab: false,
+            copyLinkMode: 'original',
             popupDefaultTab: 'options'
           };
         }

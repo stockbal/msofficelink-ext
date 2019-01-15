@@ -1,5 +1,6 @@
 import { LinkHandler, openUrlInTab } from '../util';
 import { installContextMenu } from './contextMenu';
+import { ActionId, ContextId } from '../util/enums';
 
 // register command listener to open history/favorites page
 chrome.commands.onCommand.addListener(command => {
@@ -19,11 +20,13 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     const urlPaths = info.linkUrl.split('/');
     const origin = urlPaths.length >= 3 ? urlPaths[2] : '';
     const linkHandler = new LinkHandler(info.menuItemId, info.linkUrl, origin, info.pageUrl);
-    if (info.menuItemId === 'markasfav') {
+    if (info.menuItemId === ActionId.CREATE_FAV) {
       linkHandler.createFavorite();
       chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
         chrome.tabs.sendMessage(tabs[0].id, { action: 'createdFav' });
       });
+    } else if (info.menuItemId.startsWith(ContextId.CLIP_BOARD)) {
+      linkHandler.copyLinkAddress(info.menuItemId);
     } else {
       linkHandler.sendTabUpdateImmediately();
     }

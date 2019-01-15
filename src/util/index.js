@@ -1,4 +1,5 @@
 import { ExtStorage } from '../ext/storage';
+import { ActionId, ContextId } from './enums';
 
 const wordFileEndings = ['doc', 'docx', 'docm'];
 const excelFileEndings = ['xls', 'xlsx', 'xlsm', 'csv', 'xlsb'];
@@ -191,6 +192,14 @@ export class LinkUtil {
  * document links to the chrome tabs api
  */
 export class LinkHandler {
+  /**
+   * Creates new link handler instance for performing the chosen
+   * user action for a document link
+   * @param action
+   * @param linkUrl
+   * @param origin
+   * @param ownerPage
+   */
   constructor(action, linkUrl, origin, ownerPage) {
     const linkInfo = LinkUtil.getLinkInfo(linkUrl);
     this._linkUrl = linkInfo.link;
@@ -202,7 +211,13 @@ export class LinkHandler {
     }
     this._fileProtocol = linkInfo.protocol;
     this._fileType = linkInfo.type;
-    if (action !== 'markasfav') {
+
+    // check if the final link url should already be built
+    if (
+      action !== ActionId.CREATE_FAV &&
+      action !== ActionId.COPY_LINK &&
+      !action.startsWith(ContextId.CLIP_BOARD)
+    ) {
       this._finalTabUrl = this._buildLinkActionUrl();
     }
   }
@@ -212,25 +227,30 @@ export class LinkHandler {
    */
   _buildLinkActionUrl() {
     switch (this._action) {
-      case 'read':
+      case ActionId.OPEN_TO_READ:
         return `${this._fileProtocol}:ofv|u|${decodeURI(this._linkUrl)}`;
-      case 'edit':
+      case ActionId.OPEN_TO_EDIT:
         return `${this._fileProtocol}:ofe|u|${decodeURI(this._linkUrl)}`;
-      case 'online':
+      case ActionId.OPEN_ONLINE:
         return `${this._linkUrl}?web=1`;
-      case 'download':
+      case ActionId.DOWNLOAD_FILE:
         return this._linkUrl;
-      case 'original':
+      case ActionId.ORIGINAL_LINK:
         return this._linkUrl;
-      case 'parent':
+      case ActionId.OPEN_PARENT_FOLDER:
         const lastSlash = this._linkUrl.lastIndexOf('/');
         return this._linkUrl.substring(0, lastSlash);
-      case 'owner':
+      case ActionId.OPEN_OWNER_PAGE:
         return this._ownerPage || '';
       default:
         throw new Error('unrecognized link action');
     }
   }
+
+  /**
+   * Updates the link history
+   * @returns {Promise<void>}
+   */
   async updateLinkHistory() {
     const settings = await ExtStorage.getSettings();
     if (!settings.linkHistoryActive) {
@@ -250,6 +270,11 @@ export class LinkHandler {
       );
     }
   }
+
+  /**
+   * Creates new favorite
+   * @returns {Promise<void>}
+   */
   async createFavorite() {
     const fileNameMatch = this._linkUrl.match(new RegExp('/([^/]+\\.\\w+$)'));
     if (fileNameMatch && fileNameMatch.length > 0) {
@@ -298,9 +323,52 @@ export class LinkHandler {
    * @returns {Promise<void>}
    */
   async sendTabUpdateImmediately(preventHistoryUpdate = false) {
+    if (this._action === 'copylink') {
+      this.copyLinkAddress();
+      return;
+    }
     // if (!preventHistoryUpdate) {
     this.updateLinkHistory();
     // }
     openUrlInTab(await this._isOpenInNewTab(), this._finalTabUrl);
+  }
+
+  /**
+   * Copy the address of the link to the clipboard
+   *
+   * @param {String} copyToClipboardAction clip board action
+   */
+  async copyLinkAddress(copyToClipboardAction = null) {
+    // read settings to determine the correct link copy action
+    debugger;
+    if (copyToClipboardAction) {
+      switch (copyToClipboardAction) {
+        case ContextId.ORIGINAL_TO_CLIPBOARD:
+          this._action = ActionId.DOWNLOAD_FILE;
+          break;
+        case ContextId.OPEN_ONLINE_TO_CLIPBOARD:
+          this._action = ActionId.OPEN_ONLINE;
+          break;
+        case ContextId.OPEN_TO_EDIT_TO_CLIPBOARD:
+          this._action = ActionId.OPEN_TO_EDIT;
+          break;
+        case ContextId.OPEN_PROTECTED_TO_CLIPBOARD:
+          this._action = ActionId.OPEN_TO_READ;
+          break;
+      }
+    } else {
+      const settings = await ExtStorage.getSettings();
+      this._action = settings.copyLinkMode;
+    }
+    this._finalTabUrl = this._buildLinkActionUrl();
+
+    const input = document.createElement('textarea');
+    input.style.position = 'fixed';
+    input.style.opacity = 0;
+    input.value = this._finalTabUrl;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand('Copy');
+    document.body.removeChild(input);
   }
 }

@@ -8,6 +8,8 @@ module.exports = {
   extDescription: {
     message: 'Öffnet / Verwaltet Hyperlinks auf MS Office Dokumente'
   },
+  // messages for context menus
+  CTX_copyLinkAddressAs: { message: 'Adresse des Dokuments kopieren als...' },
   // messages for link open options
   LinkOption_openOnline: { message: 'Online öffnen' },
   LinkOption_openProtected: { message: 'Schreibgeschützt öffnen' },
@@ -18,6 +20,7 @@ module.exports = {
   LinkOption_addToFavs: { message: 'Zu Favoriten hinzufügen' },
   LinkOption_openParent: { message: 'Webseiten-Ordner öffnen' },
   LinkOption_openOwnerPage: { message: 'Seite des Links anzeigen' },
+  LinkOption_copyDocLink: { message: 'Adresse des Dokuments kopieren' },
   // messages for Extension settings
   Setting_newTab: { message: 'In neuem Tab öffnen' },
   Setting_popupDefaultTab: { message: 'Standard Menu' },
@@ -25,6 +28,7 @@ module.exports = {
   Setting_defaultLinkAction: { message: 'Link Aktion' },
   Setting_activateHistory: { message: 'Verlauf aktivieren' },
   Setting_maxHistoryCount: { message: 'Maximale Anzahl Links in Historie' },
+  Setting_copyLinkMode: { message: `Adresse des Dokuments kopieren` },
 
   OptionTab_favs: { message: 'Favoriten' },
   OptionTab_history: { message: 'Verlauf' },
@@ -85,6 +89,7 @@ module.exports = {
       }
     }
   },
+  MSG_linkCopiedInfo: { message: `Adresse des Dokuments wurde in die Zwischenablage kopiert` },
   // tooltip texts
   Tip_searchClass: { message: 'Suche löschen' },
 

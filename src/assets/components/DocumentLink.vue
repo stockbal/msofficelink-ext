@@ -63,7 +63,7 @@ export default {
     },
     mode: {
       type: String,
-      default: 'history'
+      default: 'history-page'
     },
     showOpenedOn: {
       type: Boolean,
@@ -93,11 +93,36 @@ export default {
     onChecked(val) {
       this.$emit('update:checked', val);
     },
+    /**
+     * Performs the specified action for the link
+     *
+     * @param action the action to be performed
+     */
     performLinkAction(action) {
       this.actionPopoverVisible = false;
       const { origin, href, ownerPage } = this.link;
       new LinkHandler(action, href, origin, ownerPage).sendTabUpdateImmediately(true);
+      if (action === 'copylink') {
+        if (this.mode === 'history-page') {
+          this.$notify({
+            message: this.$i18n('MSG_linkCopiedInfo'),
+            showClose: false,
+            type: 'info',
+            duration: 2000
+          });
+        } else {
+          this.$message({
+            message: this.$i18n('MSG_linkCopiedInfo'),
+            type: 'info',
+            duration: 2000
+          });
+        }
+      }
     },
+    /**
+     * Handle a direct click on the document link
+     * @returns {Promise<void>}
+     */
     async onLinkClick() {
       const settings = await ExtStorage.getSettings();
       const { origin, href, ownerPage } = this.link;

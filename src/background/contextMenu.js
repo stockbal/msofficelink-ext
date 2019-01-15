@@ -1,4 +1,5 @@
 import { OfficeFileEnding } from '../util';
+import { ContextId } from '../util/enums';
 
 const i18n = chrome.i18n.getMessage;
 
@@ -6,18 +7,18 @@ const patterns = OfficeFileEnding.getAllFileEndings()
   .map(el => `https://*/*.${el}*`)
   .concat(OfficeFileEnding.getAllFileEndings().map(el => `http://*/*.${el}*`));
 
-const createContextMenu = (i18nId, id) => {
+const createContextMenu = (i18nId, id, parentId = null) => {
   chrome.contextMenus.create({
     title: i18n(i18nId),
     id: id,
+    parentId: parentId,
     contexts: ['link'],
     targetUrlPatterns: patterns
   });
 };
-const createCtxMenuSeparator = id => {
+const createCtxMenuSeparator = () => {
   chrome.contextMenus.create({
     type: 'separator',
-    id: id,
     contexts: ['link'],
     targetUrlPatterns: patterns
   });
@@ -35,14 +36,36 @@ export function installContextMenu() {
   });
 
   // install the context menus to open links in ms office applications
-  createContextMenu('LinkOption_openProtected', 'read');
-  createContextMenu('LinkOption_openEdit', 'edit');
-  createContextMenu('LinkOption_openOnline', 'online');
-  createContextMenu('LinkOption_download', 'download');
-  createCtxMenuSeparator('sep1');
-  createContextMenu('LinkOption_openParent', 'parent');
-  createCtxMenuSeparator('sep2');
-  createContextMenu('LinkOption_addToFavs', 'markasfav');
+  // Add menu entry to copy link address
+
+  createContextMenu('CTX_copyLinkAddressAs', ContextId.CLIP_BOARD);
+  createContextMenu('LinkOption_original', ContextId.ORIGINAL_TO_CLIPBOARD, ContextId.CLIP_BOARD);
+  createContextMenu(
+    'LinkOption_openProtected',
+    ContextId.OPEN_PROTECTED_TO_CLIPBOARD,
+    ContextId.CLIP_BOARD
+  );
+  createContextMenu(
+    'LinkOption_openEdit',
+    ContextId.OPEN_TO_EDIT_TO_CLIPBOARD,
+    ContextId.CLIP_BOARD
+  );
+  createContextMenu(
+    'LinkOption_openOnline',
+    ContextId.OPEN_ONLINE_TO_CLIPBOARD,
+    ContextId.CLIP_BOARD
+  );
+
+  createCtxMenuSeparator();
+
+  createContextMenu('LinkOption_openProtected', ContextId.OPEN_TO_READ);
+  createContextMenu('LinkOption_openEdit', ContextId.OPEN_TO_EDIT);
+  createContextMenu('LinkOption_openOnline', ContextId.OPEN_ONLINE);
+  createContextMenu('LinkOption_download', ContextId.DOWNLOAD_FILE);
+  createCtxMenuSeparator();
+  createContextMenu('LinkOption_openParent', ContextId.OPEN_PARENT_FOLDER);
+  createCtxMenuSeparator();
+  createContextMenu('LinkOption_addToFavs', ContextId.CREATE_FAV);
   chrome.contextMenus.create({
     title: i18n('History_ctxMenuOpen'),
     id: 'history2',
