@@ -85,7 +85,7 @@ const updateOfficeLinks = async () => {
                     placement: 'bottom',
                     modifiers: {
                       preventOverflow: {
-                        enabled: false
+                        enabled: true
                       }
                     }
                   });

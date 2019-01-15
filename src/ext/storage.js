@@ -16,6 +16,10 @@ export class ExtStorage {
             copyLinkMode: 'original',
             popupDefaultTab: 'options'
           };
+        } else {
+          if (!settings.copyLinkMode) {
+            settings.copyLinkMode = 'original';
+          }
         }
 
         resolve(settings);
