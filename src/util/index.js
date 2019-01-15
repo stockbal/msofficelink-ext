@@ -139,9 +139,9 @@ export class LinkUtil {
       return false;
     }
     // test if the link points to an ms office document
-    return new RegExp(`\\.(${OfficeFileEnding.getAllFileEndings().join('|')})([\\?#&].*)?`).test(
-      lastSlashSegment
-    );
+    return new RegExp(
+      `\\.(${OfficeFileEnding.getAllFileEndings().join('|')})(^\\.|([\\?#&].*)|$)`
+    ).test(lastSlashSegment);
   }
 
   /**
