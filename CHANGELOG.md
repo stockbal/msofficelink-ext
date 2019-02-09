@@ -1,3 +1,10 @@
+### v1.1.2
+
+#### Fixes
+
+- Minor fix of context menu due to chrome update
+
+
 ### v1.1.1
 
 #### Features

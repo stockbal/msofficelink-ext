@@ -5,7 +5,7 @@ module.exports = {
   name: '__MSG_extName__',
   description: '__MSG_extDescription__',
   author: 'Ludwig Stockbauer-Muhr <ludwig.stockbauer-muhr@msg.group>',
-  version: '1.1.1',
+  version: '1.1.2',
   icons: {
     '16': 'icons/Icon16.png',
     '32': 'icons/Icon32.png',
