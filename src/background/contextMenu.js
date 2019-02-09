@@ -16,9 +16,10 @@ const createContextMenu = (i18nId, id, parentId = null) => {
     targetUrlPatterns: patterns
   });
 };
-const createCtxMenuSeparator = () => {
+const createCtxMenuSeparator = id => {
   chrome.contextMenus.create({
     type: 'separator',
+    id: id,
     contexts: ['link'],
     targetUrlPatterns: patterns
   });
@@ -56,15 +57,15 @@ export function installContextMenu() {
     ContextId.CLIP_BOARD
   );
 
-  createCtxMenuSeparator();
+  createCtxMenuSeparator('sep1');
 
   createContextMenu('LinkOption_openProtected', ContextId.OPEN_TO_READ);
   createContextMenu('LinkOption_openEdit', ContextId.OPEN_TO_EDIT);
   createContextMenu('LinkOption_openOnline', ContextId.OPEN_ONLINE);
   createContextMenu('LinkOption_download', ContextId.DOWNLOAD_FILE);
-  createCtxMenuSeparator();
+  createCtxMenuSeparator('sep2');
   createContextMenu('LinkOption_openParent', ContextId.OPEN_PARENT_FOLDER);
-  createCtxMenuSeparator();
+  createCtxMenuSeparator('sep3');
   createContextMenu('LinkOption_addToFavs', ContextId.CREATE_FAV);
   chrome.contextMenus.create({
     title: i18n('History_ctxMenuOpen'),
