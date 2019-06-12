@@ -1,3 +1,14 @@
+### v1.2.0
+
+#### Features
+
+- Add support fo MS Visio 
+
+#### Fixes
+
+- Fixes bug where Wopi-Frame links which do not point to MS office documents are recognized by the extension as such
+  and the option dialog is shown
+
 ### v1.1.2
 
 #### Fixes
