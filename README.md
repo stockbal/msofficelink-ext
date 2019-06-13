@@ -1,5 +1,5 @@
 # msofficelink-ext
-###### _Version 1.2.0_
+###### _Version 1.2.1_
 
 > Chrome Extension to handle MS Office Document links
 

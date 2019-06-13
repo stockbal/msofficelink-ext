@@ -1,3 +1,9 @@
+### v1.2.1
+
+#### Fixes
+
+- Add missing icon and coloring for MS Visio files
+
 ### v1.2.0
 
 #### Features
