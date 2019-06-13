@@ -293,16 +293,18 @@ export default {
       // clear selected lists
       this.selectedHistory = [];
       this.selectedFavs = [];
-      this.favorites.forEach((fav, index) => {
-        if (fav.checked) {
-          this.favorites.splice(index, 1);
+      for (let i = 0; i < this.favorites.length; i++) {
+        if (this.favorites[i].checked) {
+          this.favorites.splice(i, 1);
+          i--;
         }
-      });
-      this.history.forEach((historyEntry, index) => {
-        if (historyEntry.checked) {
-          this.history.splice(index, 1);
+      }
+      for (let i = 0; i < this.history.length; i++) {
+        if (this.history[i].checked) {
+          this.history.splice(i, 1);
+          i--;
         }
-      });
+      }
     },
     onCheck(type, link) {
       let selectedLinks;

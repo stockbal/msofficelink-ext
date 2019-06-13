@@ -4,7 +4,15 @@
       <el-checkbox v-model="link.checked" @change="onChecked"></el-checkbox>
     </div>
     <div class="document-link__icon" :class="'document-link__icon--' + link.type">
-      <font-awesome-icon :icon="'file-' + link.type" fixed-width></font-awesome-icon>
+      <font-awesome-icon
+        v-if="link.type !== 'visio'"
+        :icon="'file-' + link.type"
+        fixed-width
+      ></font-awesome-icon>
+      <font-awesome-layers v-else fixed-width class="fa-1x">
+        <font-awesome-icon icon="file" />
+        <font-awesome-layers-text class="visio-icon-text" transform="down-2 shrink-8" value="V" />
+      </font-awesome-layers>
     </div>
     <div v-if="showOpenedOn" class="document-link__opened-on">{{ link.openedOn }}</div>
     <div class="flex flex--column document-link__content" @click="onLinkClick">
@@ -201,6 +209,9 @@ export default {
 .document-link__icon--word {
   color: $--word;
 }
+.document-link__icon--visio {
+  color: $--visio;
+}
 
 .document-link__fav-indicator {
   cursor: pointer;
@@ -221,6 +232,15 @@ export default {
       color: $--word;
     }
   }
+  &.document-link__fav-indicator--visio {
+    &:hover {
+      color: $--visio;
+    }
+  }
+}
+
+.visio-icon-text {
+  color: white;
 }
 
 .document-link__check {

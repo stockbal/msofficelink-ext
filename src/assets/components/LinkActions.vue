@@ -127,4 +127,12 @@ export default {
     }
   }
 }
+.link-actions--visio {
+  .link-actions__action {
+    &:hover,
+    &:active {
+      color: $--visio;
+    }
+  }
+}
 </style>
