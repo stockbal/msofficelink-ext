@@ -33,6 +33,7 @@ module.exports = {
   OptionTab_favs: { message: 'Favorites' },
   OptionTab_history: { message: 'History' },
   OptionTab_options: { message: 'Settings' },
+  OptionTab_whiteBlackList: { message: 'White-/Blacklist' },
 
   // Button texts
   Btn_clearHistory: { message: 'Clear History' },
@@ -41,6 +42,22 @@ module.exports = {
   Btn_showAllFavs: { message: 'Show all favorites' },
 
   // All kinds of messages
+  MSG_urlFilterListInfo: {
+    message:
+      '$type$ Rules control, on which Web Pages MS Doc Link should$not$ be active (concerns History Function and Option Popover). One Entry per Line. Invalid Rules are ignored silently',
+    placeholders: {
+      type: {
+        content: '$1'
+      },
+      not: {
+        content: '$2'
+      }
+    }
+  },
+  MSG_whiteList: { message: 'Whitelist' },
+  MSG_blackList: { message: 'Blacklist' },
+  MSG_not: { message: 'not' },
+  MSG_filterListTypeLabel: { message: 'Type' },
   MSG_noHistory: { message: 'No History entries yet' },
   MSG_noFavorites: { message: 'No Favorites yet' },
   MSG_favsWereDeleted: { message: 'Favorites have been deleted' },

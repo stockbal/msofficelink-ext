@@ -119,6 +119,44 @@
           </el-form-item>
         </el-form>
       </el-tab-pane>
+      <!-- Blacklist/Whitelist options for extension -->
+      <el-tab-pane>
+        <span slot="label"
+          ><font-awesome-icon icon="broadcast-tower"></font-awesome-icon>
+          {{ $i18n('OptionTab_whiteBlackList') }}</span
+        >
+        <el-alert
+          :title="whiteListInformation"
+          type="info"
+          show-icon
+          :closable="false"
+          class="popup-whitelist-info"
+        >
+        </el-alert>
+        <el-form
+          ref="settings"
+          :model="settings"
+          label-position="left"
+          size="medium"
+          class="popup-tabs__options"
+        >
+          <el-form-item :label="$i18n('MSG_filterListTypeLabel')">
+            <el-radio-group v-model="settings.filterListType" @change="onSubmit">
+              <el-radio label="black">{{ $i18n('MSG_blackList') }}</el-radio>
+              <el-radio label="white">{{ $i18n('MSG_whiteList') }}</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item>
+            <el-input
+              type="textarea"
+              spellcheck="false"
+              :autosize="{ minRows: 10, maxRows: 10 }"
+              v-model="settings.urlFilterList"
+              @change="onSubmit"
+            ></el-input>
+          </el-form-item>
+        </el-form>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -145,11 +183,26 @@ export default {
       linkDefaultAction: 'original',
       popupDefaultTab: 'options',
       copyLinkMode: 'original',
-      openInNewTab: false
+      openInNewTab: false,
+      filterListType: 'black',
+      urlFilterList: ''
     },
     history: [],
     favorites: []
   }),
+  computed: {
+    whiteListInformation() {
+      let notActiveText = '';
+      let typeText = '';
+      if (this.settings.filterListType === 'white') {
+        typeText = this.$i18n('MSG_whiteList');
+      } else {
+        typeText = this.$i18n('MSG_blackList');
+        notActiveText = ` ${this.$i18n('MSG_not')}`;
+      }
+      return this.$i18n('MSG_urlFilterListInfo', [typeText, notActiveText]);
+    }
+  },
   async created() {
     const settings = await ExtStorage.getSettings();
     Object.assign(this.settings, settings);
@@ -220,6 +273,9 @@ export default {
       });
     },
     onSubmit(afterSetFunction = () => {}) {
+      if (afterSetFunction !== undefined && !afterSetFunction.isPrototypeOf(Function)) {
+        afterSetFunction = () => {};
+      }
       chrome.storage.sync.set({ settings: this.settings }, () => {
         afterSetFunction();
       });
@@ -335,5 +391,17 @@ hr {
   }
   height: 350px;
   font-size: 15px;
+}
+
+.label {
+  font-size: 14px;
+  color: #606266;
+  line-height: 40px;
+  padding: 0 12px 0 0;
+  box-sizing: border-box;
+}
+
+.popup-whitelist-info {
+  color: $--color-primary !important;
 }
 </style>

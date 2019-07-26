@@ -33,6 +33,7 @@ module.exports = {
   OptionTab_favs: { message: 'Favoriten' },
   OptionTab_history: { message: 'Verlauf' },
   OptionTab_options: { message: 'Einstellungen' },
+  OptionTab_whiteBlackList: { message: 'White-/Blacklist' },
 
   // Button texts
   Btn_clearHistory: { message: 'Verlauf löschen' },
@@ -41,6 +42,22 @@ module.exports = {
   Btn_showAllFavs: { message: 'Alle Favoriten anzeigen' },
 
   // All kinds of messages
+  MSG_urlFilterListInfo: {
+    message:
+      '$type$-Regeln schreiben vor, auf welchen Webseiten MS Doc Link$not$ aktiv sein soll (Betrifft Verlaufsfunktion und Optionsmenü). Ein Eintrag pro Zeile. Ungültige Regeln werden stillschweigend ignoriert',
+    placeholders: {
+      type: {
+        content: '$1'
+      },
+      not: {
+        content: '$2'
+      }
+    }
+  },
+  MSG_whiteList: { message: 'Whitelist' },
+  MSG_blackList: { message: 'Blacklist' },
+  MSG_not: { message: 'nicht' },
+  MSG_filterListTypeLabel: { message: 'Typ' },
   MSG_noHistory: { message: 'Kein Verlauf vorhanden' },
   MSG_noFavorites: { message: 'Keine Favoriten vorhanden' },
   MSG_favsWereDeleted: { message: 'Favoriten wurden gelöscht' },
