@@ -10,6 +10,8 @@ import '../util/initAwesomeIconsForHistory';
 import Popper from 'popper.js';
 import { LinkObserver } from './linkObserver';
 
+const LINK_HANDLED = 'msofficelink-link-handled';
+
 export const injectIntoPage = () => {
   Vue.config.productionTip = false;
   Vue.prototype.$i18n = chrome.i18n.getMessage;
@@ -35,11 +37,12 @@ export const injectIntoPage = () => {
     if (observer) {
       observer.stop();
     }
-    const links = document.querySelectorAll('a[href]');
+    const links = document.querySelectorAll(`a[href]:not(.${LINK_HANDLED})`);
 
     const settings = await ExtStorage.getSettings();
 
     for (const link of links) {
+      link.classList.add(LINK_HANDLED);
       if (!link.parentNode) {
         // this link is not really shown or existing in a state that it is clickable
         continue;
@@ -102,7 +105,6 @@ export const injectIntoPage = () => {
                     href
                   ).sendTabUpdateViaMessage();
                 }
-
                 return true;
               }
             }

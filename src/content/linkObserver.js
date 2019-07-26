@@ -3,9 +3,9 @@ export class LinkObserver {
     this._observeCallback = observeCallback;
     // initialize observer to recognize new links
     this._observer = new MutationObserver(mutations => {
-      mutations.forEach(mutation => {
+      if (mutations && mutations.length > 0) {
         this._observeCallback();
-      });
+      }
     });
   }
   start() {
