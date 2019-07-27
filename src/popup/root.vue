@@ -122,7 +122,7 @@
       <!-- Blacklist/Whitelist options for extension -->
       <el-tab-pane>
         <span slot="label"
-          ><font-awesome-icon icon="broadcast-tower"></font-awesome-icon>
+          ><font-awesome-icon icon="clipboard-check"></font-awesome-icon>
           {{ $i18n('OptionTab_whiteBlackList') }}</span
         >
         <el-alert
