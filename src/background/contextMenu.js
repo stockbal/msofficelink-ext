@@ -1,5 +1,5 @@
-import { OfficeFileEnding } from '../util';
 import { ContextId } from '../util/enums';
+import { OfficeFileEnding } from '../util/OfficeFileEnding';
 
 const i18n = chrome.i18n.getMessage;
 

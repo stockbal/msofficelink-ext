@@ -28,8 +28,8 @@ exports.cssLoaders = (options = {}) => {
   for (let key in prePprocessors) {
     let loader = [
       {
-        loader: 'css-loader',
-        options: { minimize: process.env.NODE_ENV === 'production' }
+        loader: 'css-loader'
+        // options: { minimize: process.env.NODE_ENV === 'production' }
       }
     ];
     if (prePprocessors[key].loader) {

@@ -60,8 +60,8 @@
 
 <script>
 import LinkActions from './LinkActions';
-import { LinkHandler } from '../../util/index';
-import { ExtStorage } from '../../ext/storage';
+import { ExtStorage } from '../../ext/ExtStorage';
+import { LinkHandler } from '../../util/LinkHandler';
 
 export default {
   name: 'DocumentLink',

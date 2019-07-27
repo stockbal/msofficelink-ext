@@ -1,7 +1,7 @@
 export class ExtStorage {
   /**
    * Returns the current extension settings
-   * @returns {Promise<any>}
+   * @returns {Promise<Object>}
    */
   static getSettings() {
     return new Promise((resolve, reject) => {
@@ -14,11 +14,17 @@ export class ExtStorage {
             linkDefaultAction: 'original',
             openInNewTab: false,
             copyLinkMode: 'original',
-            popupDefaultTab: 'options'
+            popupDefaultTab: 'options',
+            filterListType: 'black',
+            urlFilterList: ''
           };
         } else {
           if (!settings.copyLinkMode) {
             settings.copyLinkMode = 'original';
+          }
+          if (!settings.filterListType) {
+            settings.filterListType = 'black';
+            settings.urlFilterList = '';
           }
         }
 

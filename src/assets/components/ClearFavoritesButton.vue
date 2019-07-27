@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { ExtStorage } from '../../ext/storage';
+import { ExtStorage } from '../../ext/ExtStorage';
 
 export default {
   name: 'ClearFavoritesButton',
@@ -34,4 +34,4 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style></style>

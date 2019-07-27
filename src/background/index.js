@@ -1,6 +1,7 @@
-import { LinkHandler, openUrlInTab } from '../util';
+import { openUrlInTab } from '../util';
 import { installContextMenu } from './contextMenu';
 import { ActionId, ContextId } from '../util/enums';
+import { LinkHandler } from '../util/LinkHandler';
 
 // register command listener to open history/favorites page
 chrome.commands.onCommand.addListener(command => {

@@ -1,37 +1,37 @@
 <template>
   <div class="link-actions" :class="appClass">
-    <div class="link-actions__action" @click="onAction('read');">
+    <div class="link-actions__action" @click="onAction('read')">
       <font-awesome-icon icon="glasses" fixed-width></font-awesome-icon>
       {{ $i18n('LinkOption_openProtected') }}
     </div>
-    <div class="link-actions__action" @click="onAction('edit');">
+    <div class="link-actions__action" @click="onAction('edit')">
       <font-awesome-icon icon="edit" fixed-width></font-awesome-icon>
       {{ $i18n('LinkOption_openEdit') }}
     </div>
-    <div class="link-actions__action" @click="onAction('online');">
+    <div class="link-actions__action" @click="onAction('online')">
       <font-awesome-icon icon="globe" fixed-width></font-awesome-icon>
       {{ $i18n('LinkOption_openOnline') }}
     </div>
     <div class="link-actions__separator"></div>
-    <div class="link-actions__action" @click="onAction('copylink');">
+    <div class="link-actions__action" @click="onAction('copylink')">
       <font-awesome-icon icon="copy" fixed-width></font-awesome-icon>
       {{ $i18n('LinkOption_copyDocLink') }}
     </div>
     <div class="link-actions__separator"></div>
-    <div class="link-actions__action" @click="onAction('download');">
+    <div class="link-actions__action" @click="onAction('download')">
       <font-awesome-icon icon="download" fixed-width></font-awesome-icon>
       {{ $i18n('LinkOption_download') }}
     </div>
-    <div v-if="onPage" class="link-actions__action" @click="onAction('markasfav');">
+    <div v-if="onPage" class="link-actions__action" @click="onAction('markasfav')">
       <font-awesome-icon icon="star" fixed-width></font-awesome-icon>
       {{ $i18n('LinkOption_addToFavs') }}
     </div>
     <div class="link-actions__separator"></div>
-    <div class="link-actions__action" @click="onAction('parent');">
+    <div class="link-actions__action" @click="onAction('parent')">
       <font-awesome-icon icon="folder-open" fixed-width></font-awesome-icon>
       {{ $i18n('LinkOption_openParent') }}
     </div>
-    <div v-if="!onPage" class="link-actions__action" @click="onAction('owner');">
+    <div v-if="!onPage" class="link-actions__action" @click="onAction('owner')">
       <font-awesome-icon icon="file-alt" fixed-width></font-awesome-icon>
       {{ $i18n('LinkOption_openOwnerPage') }}
     </div>

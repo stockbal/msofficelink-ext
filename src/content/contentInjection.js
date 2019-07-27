@@ -4,11 +4,12 @@ import ElementUI from 'element-ui';
 import Vue from 'vue';
 import localeEN from 'element-ui/lib/locale/lang/en';
 import localeDE from 'element-ui/lib/locale/lang/de';
-import { LinkHandler, LinkUtil } from '../util';
-import { ExtStorage } from '../ext/storage';
-import '../util/initAwesomeIconsForHistory';
+import { ExtStorage } from '../ext/ExtStorage';
+import '../util/initIconLibrary';
 import Popper from 'popper.js';
 import { LinkObserver } from './linkObserver';
+import { LinkUtil } from '../util/LinkUtil';
+import { LinkHandler } from '../util/LinkHandler';
 
 const LINK_HANDLED = 'msofficelink-link-handled';
 

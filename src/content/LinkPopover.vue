@@ -8,8 +8,10 @@
 </template>
 
 <script>
-import { LinkHandler, on, off, LinkUtil } from '../util';
+import { on, off } from '../util';
 import LinkActions from '../assets/components/LinkActions';
+import { LinkUtil } from '../util/LinkUtil';
+import { LinkHandler } from '../util/LinkHandler';
 
 export default {
   name: 'LinkPopover',

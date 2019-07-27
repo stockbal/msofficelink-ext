@@ -1,5 +1,5 @@
 # msofficelink-ext
-###### _Version 1.2.1_
+###### _Version 1.3.0_
 
 > Chrome Extension to handle MS Office Document links
 
@@ -13,17 +13,21 @@
   - the original link (WOPI-Frame is removed)
   - open Excel in Read-Only/Edit mode
   - open Online
+- Whitelist/Blacklist feature to activate/deactivate MS Doc Link on certain pages  
+  **Note**: This concerns only the following features
+  - concrete MS Office Link action (apart from Original)
+  - creating a history entry upon clicking on an MS Office Document Link
 
 ## Build Setup
 
 ``` bash
 # install dependencies
-yarn install
+npm install
 
-# serve with hot reload at localhost:8080
-yarn dev
+# serve the chrome extension with automatic page reload upon detecting changes
+npm run dev
 
 # build for production with minification
-yarn build
+npm run build
 
 ```

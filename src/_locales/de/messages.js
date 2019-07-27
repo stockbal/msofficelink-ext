@@ -44,7 +44,7 @@ module.exports = {
   // All kinds of messages
   MSG_urlFilterListInfo: {
     message:
-      '$type$-Regeln schreiben vor, auf welchen Webseiten MS Doc Link$not$ aktiv sein soll (Betrifft Verlaufsfunktion und Optionsmenü). Ein Eintrag pro Zeile. Ungültige Regeln werden stillschweigend ignoriert',
+      '$type$-Regeln schreiben vor, auf welchen Webseiten MS Doc Link$not$ aktiv sein soll (Kontextmenü ist immer aktiv). Ein Eintrag pro Zeile. Ungültige Regeln werden stillschweigend ignoriert',
     placeholders: {
       type: {
         content: '$1'

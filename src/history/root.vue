@@ -51,8 +51,8 @@
           :link="link"
           checkable
           mode="fav"
-          v-on:update:checked="onCheck('fav', link);"
-          @favChanged="onFavChanged(link);"
+          v-on:update:checked="onCheck('fav', link)"
+          @favChanged="onFavChanged(link)"
         ></document-link>
       </section>
       <section v-else class="flex links__empty" v-loading="loading">
@@ -61,7 +61,7 @@
       <section v-if="history.length && !loading" class="links__entries--history">
         <h2 v-if="!search" class="section--header flex flex--row">
           <span>{{ $i18n('OptionTab_history') }}</span>
-          <clear-history-button @cleared="history = [];" type="text"></clear-history-button>
+          <clear-history-button @cleared="history = []" type="text"></clear-history-button>
         </h2>
         <h2 v-else class="section--header flex flex--row">{{ historySearchResultText }}</h2>
         <document-link
@@ -71,9 +71,9 @@
           :link="link"
           checkable
           mode="history-page"
-          @favChanged="onFavChanged(link);"
+          @favChanged="onFavChanged(link)"
           :show-opened-on="true"
-          v-on:update:checked="onCheck('hist', link);"
+          v-on:update:checked="onCheck('hist', link)"
         ></document-link>
       </section>
       <section v-else class="flex links__empty" v-loading="loading">
@@ -83,7 +83,7 @@
   </div>
 </template>
 <script>
-import { ExtStorage } from '../ext/storage';
+import { ExtStorage } from '../ext/ExtStorage';
 import { off, on } from '../util';
 import DocumentLink from '../assets/components/DocumentLink';
 import ClearFavoritesButton from '../assets/components/ClearFavoritesButton';

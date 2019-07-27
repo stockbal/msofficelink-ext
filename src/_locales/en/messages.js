@@ -44,7 +44,7 @@ module.exports = {
   // All kinds of messages
   MSG_urlFilterListInfo: {
     message:
-      '$type$ Rules control, on which Web Pages MS Doc Link should$not$ be active (concerns History Function and Option Popover). One Entry per Line. Invalid Rules are ignored silently',
+      '$type$ Rules control, on which Web Pages MS Doc Link should$not$ be active (Context Menu will always be active). One Entry per Line. Invalid Rules are ignored silently',
     placeholders: {
       type: {
         content: '$1'

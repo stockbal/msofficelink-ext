@@ -17,7 +17,7 @@
             :key="idx"
             :link="linkData"
             mode="fav"
-            @favChanged="onIsFavChanged(linkData, idx);"
+            @favChanged="onIsFavChanged(linkData, idx)"
           ></document-link>
         </div>
         <div v-else class="favorites--empty flex flex--column flex--align-center">
@@ -30,7 +30,7 @@
           <clear-favorites-button
             class="show-history-btn"
             size="medium"
-            @cleared="favorites = [];"
+            @cleared="favorites = []"
           ></clear-favorites-button>
         </div>
       </el-tab-pane>
@@ -49,7 +49,7 @@
             v-for="(linkData, idx) in history"
             :key="idx"
             :link="linkData"
-            @favChanged="onIsFavInHistoryChanged(linkData);"
+            @favChanged="onIsFavInHistoryChanged(linkData)"
           ></document-link>
         </div>
         <div v-else class="history--empty flex flex--column flex--align-center">
@@ -61,7 +61,7 @@
           }}</el-button>
           <clear-history-button
             class="show-history-btn"
-            @cleared="history = [];"
+            @cleared="history = []"
             size="medium"
           ></clear-history-button>
         </div>
@@ -149,6 +149,7 @@
           <el-form-item>
             <el-input
               type="textarea"
+              class="popup-filterlist__input"
               spellcheck="false"
               :autosize="{ minRows: 10, maxRows: 10 }"
               v-model="settings.urlFilterList"
@@ -162,7 +163,7 @@
 </template>
 
 <script>
-import { ExtStorage } from '../ext/storage';
+import { ExtStorage } from '../ext/ExtStorage';
 import LinkActions from '../assets/components/LinkActions';
 import DocumentLink from '../assets/components/DocumentLink';
 import ClearFavoritesButton from '../assets/components/ClearFavoritesButton';
@@ -403,5 +404,9 @@ hr {
 
 .popup-whitelist-info {
   color: $--color-primary !important;
+}
+
+.popup-filterlist__input textarea {
+  white-space: nowrap;
 }
 </style>
