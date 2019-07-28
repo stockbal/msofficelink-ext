@@ -78,7 +78,16 @@
             <el-radio label="black">{{ $i18n('MSG_blackList') }}</el-radio>
             <el-radio label="white">{{ $i18n('MSG_whiteList') }}</el-radio>
           </el-radio-group>
-          <div class="tip options__whitelist-form-el" v-html="whiteListInformation"></div>
+          <el-collapse value="1" accordion class="options__whitelist-form-el">
+            <el-collapse-item
+              :title="$i18n('MSG_filterListInfoHeader') + ' ' + typeText + '?'"
+              name="1"
+            >
+              <div class="tip" v-html="whiteListInformation"></div>
+            </el-collapse-item>
+            <el-collapse-item :title="$i18n('MSG_filterPatternHelpHeader')" name="2">
+            </el-collapse-item>
+          </el-collapse>
           <el-input
             type="textarea"
             class="popup-filterlist__input options__whitelist-form-el"

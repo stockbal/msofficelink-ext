@@ -59,6 +59,8 @@ module.exports = {
   MSG_blackList: { message: 'Blacklist' },
   MSG_not: { message: 'not' },
   MSG_filterListTypeLabel: { message: 'Type' },
+  MSG_filterListInfoHeader: { message: 'What is a' },
+  MSG_filterPatternHelpHeader: { message: 'Manual for filter rules' },
   MSG_noHistory: { message: 'No History entries yet' },
   MSG_noFavorites: { message: 'No Favorites yet' },
   MSG_favsWereDeleted: { message: 'Favorites have been deleted' },
