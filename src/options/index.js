@@ -10,7 +10,7 @@ Vue.config.productionTip = false;
 Vue.prototype.$i18n = chrome.i18n.getMessage;
 
 document.title =
-  chrome.i18n.getMessage('extName') + ' | ' + chrome.i18n.getMessage('History_pageTitle');
+  chrome.i18n.getMessage('extName') + ' | ' + chrome.i18n.getMessage('OptionTab_options');
 
 const currentLocale = chrome.i18n.getUILanguage();
 const locale = currentLocale === 'de' ? localeDE : localeEN;

@@ -156,7 +156,6 @@ export class LinkHandler {
    */
   async copyLinkAddress(copyToClipboardAction = null) {
     // read settings to determine the correct link copy action
-    debugger;
     if (copyToClipboardAction) {
       switch (copyToClipboardAction) {
         case ContextId.ORIGINAL_TO_CLIPBOARD:

@@ -23,8 +23,8 @@ module.exports = {
   LinkOption_copyDocLink: { message: 'Adresse des Dokuments kopieren' },
   // messages for Extension settings
   Setting_newTab: { message: 'In neuem Tab öffnen' },
-  Setting_popupDefaultTab: { message: 'Standard Menu' },
-  Setting_defaultMenuLinkAction: { message: 'Link Aktion in Erweiterung' },
+  Setting_popupDefaultTab: { message: 'Standard Tab in Popup' },
+  Setting_defaultMenuLinkAction: { message: 'Link Aktion in Popup' },
   Setting_defaultLinkAction: { message: 'Link Aktion' },
   Setting_activateHistory: { message: 'Verlauf aktivieren' },
   Setting_maxHistoryCount: { message: 'Maximale Anzahl Links in Historie' },
@@ -44,7 +44,8 @@ module.exports = {
   // All kinds of messages
   MSG_urlFilterListInfo: {
     message:
-      '$type$-Regeln schreiben vor, auf welchen Webseiten MS Doc Link$not$ aktiv sein soll (Kontextmenü ist immer aktiv). Ein Eintrag pro Zeile. Ungültige Regeln werden stillschweigend ignoriert',
+      '$type$-Regeln schreiben vor, auf welchen Webseiten MS Doc Link$not$ aktiv sein soll (Kontextmenü ist immer aktiv).' +
+      '<ul class="list"><li>Ein Eintrag pro Zeile</li><li>Ungültige Regeln werden stillschweigend ignoriert</li></ul>',
     placeholders: {
       type: {
         content: '$1'

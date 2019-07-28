@@ -23,8 +23,8 @@ module.exports = {
   LinkOption_copyDocLink: { message: 'Copy address of the document' },
   // messages for Extension settings
   Setting_newTab: { message: 'Open in new Tab' },
-  Setting_popupDefaultTab: { message: 'Default Visible Menu' },
-  Setting_defaultMenuLinkAction: { message: 'Link Action in Extension' },
+  Setting_popupDefaultTab: { message: 'Default Tab in Popup' },
+  Setting_defaultMenuLinkAction: { message: 'Link Action in Popup' },
   Setting_defaultLinkAction: { message: 'Link Action' },
   Setting_activateHistory: { message: 'Activate Link History' },
   Setting_maxHistoryCount: { message: 'Maximum Link History' },
@@ -44,7 +44,8 @@ module.exports = {
   // All kinds of messages
   MSG_urlFilterListInfo: {
     message:
-      '$type$ Rules control, on which Web Pages MS Doc Link should$not$ be active (Context Menu will always be active). One Entry per Line. Invalid Rules are ignored silently',
+      '$type$ Rules control on which Web Pages MS Doc Link should$not$ be active (Context Menu will always be active).' +
+      '<ul class="list"><li>One Entry per Line</li><li>Invalid Rules are ignored silently</li></ul>',
     placeholders: {
       type: {
         content: '$1'

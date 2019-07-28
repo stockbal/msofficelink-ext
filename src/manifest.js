@@ -32,6 +32,7 @@ module.exports = {
     persistent: false,
     page: 'pages/background.html'
   },
+  options_page: 'pages/options.html',
   commands: {
     openLinkHistory: {
       suggested_key: {

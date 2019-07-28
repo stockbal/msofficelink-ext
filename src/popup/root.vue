@@ -4,6 +4,11 @@
       <img class="popup-icon" src="../../static/icons/icon.svg" alt="image" />
       <h2>{{ $i18n('extName') }}</h2>
     </div>
+    <div class="popup-settings-link">
+      <el-link @click="openSettings"
+        ><font-awesome-icon icon="cog" /> {{ $i18n('OptionTab_options') }}</el-link
+      >
+    </div>
     <el-tabs class="popup-tabs" :value="currentTab">
       <!-- Favorite document links -->
       <el-tab-pane name="favs">
@@ -66,98 +71,6 @@
           ></clear-history-button>
         </div>
       </el-tab-pane>
-      <!-- Extension options -->
-      <el-tab-pane name="options">
-        <span slot="label"
-          ><font-awesome-icon icon="cog"></font-awesome-icon> {{ $i18n('OptionTab_options') }}</span
-        >
-        <el-form
-          ref="settings"
-          :model="settings"
-          label-width="240px"
-          size="medium"
-          class="popup-tabs__options"
-        >
-          <el-form-item :label="$i18n('Setting_popupDefaultTab')">
-            <el-select v-model="settings.popupDefaultTab" @change="onSubmit">
-              <el-option :label="$i18n('OptionTab_favs')" value="favs"></el-option>
-              <el-option :label="$i18n('OptionTab_history')" value="history"></el-option>
-              <el-option :label="$i18n('OptionTab_options')" value="options"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item :label="$i18n('Setting_defaultMenuLinkAction')">
-            <el-select v-model="settings.menuLinkDefaultAction" @change="onDefaultActionChange">
-              <el-option :label="$i18n('LinkOption_openEdit')" value="edit"></el-option>
-              <el-option :label="$i18n('LinkOption_openProtected')" value="read"></el-option>
-              <el-option :label="$i18n('LinkOption_openOnline')" value="online"></el-option>
-              <el-option :label="$i18n('LinkOption_download')" value="download"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item :label="$i18n('Setting_defaultLinkAction')">
-            <el-select v-model="settings.linkDefaultAction" @change="onDefaultActionChange">
-              <el-option :label="$i18n('LinkOption_original')" value="original"></el-option>
-              <el-option :label="$i18n('LinkOption_popover')" value="dialog"></el-option>
-              <el-option :label="$i18n('LinkOption_openEdit')" value="edit"></el-option>
-              <el-option :label="$i18n('LinkOption_openProtected')" value="read"></el-option>
-              <el-option :label="$i18n('LinkOption_openOnline')" value="online"></el-option>
-              <el-option :label="$i18n('LinkOption_download')" value="download"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item :label="$i18n('Setting_copyLinkMode')">
-            <el-select v-model="settings.copyLinkMode" @change="onSubmit">
-              <el-option :label="$i18n('LinkOption_original')" value="original"></el-option>
-              <el-option :label="$i18n('LinkOption_openEdit')" value="edit"></el-option>
-              <el-option :label="$i18n('LinkOption_openProtected')" value="read"></el-option>
-              <el-option :label="$i18n('LinkOption_openOnline')" value="online"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item :label="$i18n('Setting_newTab')">
-            <el-switch v-model="settings.openInNewTab" @change="onSubmit"></el-switch>
-          </el-form-item>
-          <el-form-item :label="$i18n('Setting_activateHistory')">
-            <el-switch v-model="settings.linkHistoryActive" @change="onHistoryActivate"></el-switch>
-          </el-form-item>
-        </el-form>
-      </el-tab-pane>
-      <!-- Blacklist/Whitelist options for extension -->
-      <el-tab-pane>
-        <span slot="label"
-          ><font-awesome-icon icon="clipboard-check"></font-awesome-icon>
-          {{ $i18n('OptionTab_whiteBlackList') }}</span
-        >
-        <el-alert
-          :title="whiteListInformation"
-          type="info"
-          show-icon
-          :closable="false"
-          class="popup-whitelist-info"
-        >
-        </el-alert>
-        <el-form
-          ref="settings"
-          :model="settings"
-          label-position="left"
-          size="medium"
-          class="popup-tabs__options"
-        >
-          <el-form-item :label="$i18n('MSG_filterListTypeLabel')">
-            <el-radio-group v-model="settings.filterListType" @change="onSubmit">
-              <el-radio label="black">{{ $i18n('MSG_blackList') }}</el-radio>
-              <el-radio label="white">{{ $i18n('MSG_whiteList') }}</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item>
-            <el-input
-              type="textarea"
-              class="popup-filterlist__input"
-              spellcheck="false"
-              :autosize="{ minRows: 10, maxRows: 10 }"
-              v-model="settings.urlFilterList"
-              @change="onSubmit"
-            ></el-input>
-          </el-form-item>
-        </el-form>
-      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -177,33 +90,11 @@ export default {
     LinkActions
   },
   data: () => ({
-    currentTab: 'options',
-    settings: {
-      linkHistoryActive: false,
-      menuLinkDefaultAction: 'online',
-      linkDefaultAction: 'original',
-      popupDefaultTab: 'options',
-      copyLinkMode: 'original',
-      openInNewTab: false,
-      filterListType: 'black',
-      urlFilterList: ''
-    },
+    currentTab: 'favs',
+    settings: {},
     history: [],
     favorites: []
   }),
-  computed: {
-    whiteListInformation() {
-      let notActiveText = '';
-      let typeText = '';
-      if (this.settings.filterListType === 'white') {
-        typeText = this.$i18n('MSG_whiteList');
-      } else {
-        typeText = this.$i18n('MSG_blackList');
-        notActiveText = ` ${this.$i18n('MSG_not')}`;
-      }
-      return this.$i18n('MSG_urlFilterListInfo', [typeText, notActiveText]);
-    }
-  },
   async created() {
     const settings = await ExtStorage.getSettings();
     Object.assign(this.settings, settings);
@@ -241,45 +132,8 @@ export default {
     openFavAndHistory() {
       chrome.tabs.create({ url: 'pages/history.html' });
     },
-    async onHistoryActivate(newValue) {
-      if (!newValue) {
-        try {
-          await this.$confirm(this.$i18n('MSG_deactivateHistoryWarning'), this.$i18n('Warning'), {
-            confirmButtonText: this.$i18n('Yes'),
-            cancelButtonText: this.$i18n('No'),
-            type: 'warning'
-          });
-          this.onSubmit();
-          // delete the history
-          ExtStorage.clearLinkHistory();
-        } catch (e) {
-          this.settings.linkHistoryActive = true;
-        }
-      } else {
-        this.onSubmit();
-      }
-    },
-    onDefaultActionChange(newValue) {
-      if (newValue === 'original') {
-        // page refresh may be needed
-        this.$message({
-          message: this.$i18n('MSG_linkOptionSwitchedToOriginal'),
-          type: 'warning'
-        });
-      }
-      this.onSubmit(() => {
-        chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-          chrome.tabs.sendMessage(tabs[0].id, { action: 'updateLinks' });
-        });
-      });
-    },
-    onSubmit(afterSetFunction = () => {}) {
-      if (afterSetFunction !== undefined && !afterSetFunction.isPrototypeOf(Function)) {
-        afterSetFunction = () => {};
-      }
-      chrome.storage.sync.set({ settings: this.settings }, () => {
-        afterSetFunction();
-      });
+    openSettings() {
+      chrome.runtime.openOptionsPage();
     }
   }
 };
@@ -394,19 +248,22 @@ hr {
   font-size: 15px;
 }
 
-.label {
-  font-size: 14px;
-  color: #606266;
-  line-height: 40px;
-  padding: 0 12px 0 0;
-  box-sizing: border-box;
-}
-
-.popup-whitelist-info {
-  color: $--color-primary !important;
-}
-
 .popup-filterlist__input textarea {
   white-space: nowrap;
+}
+
+.popup-settings-link {
+  position: fixed;
+  top: 25px;
+  right: 20px;
+  padding: 5px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  .el-link {
+    color: white !important;
+  }
+  &:hover {
+    border-color: #ffffff61;
+  }
 }
 </style>

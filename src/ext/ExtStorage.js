@@ -14,11 +14,14 @@ export class ExtStorage {
             linkDefaultAction: 'original',
             openInNewTab: false,
             copyLinkMode: 'original',
-            popupDefaultTab: 'options',
+            popupDefaultTab: 'favs',
             filterListType: 'black',
             urlFilterList: ''
           };
         } else {
+          if (settings.popupDefaultTab === 'options') {
+            settings.popupDefaultTab = 'favs';
+          }
           if (!settings.copyLinkMode) {
             settings.copyLinkMode = 'original';
           }

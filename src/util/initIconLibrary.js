@@ -18,7 +18,8 @@ import {
   faFilePowerpoint,
   faLink,
   faCopy,
-  faClipboardCheck
+  faClipboardCheck,
+  faBan
 } from '@fortawesome/free-solid-svg-icons';
 import { faStar, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import {
@@ -47,7 +48,8 @@ library.add(
   faFilePowerpoint,
   faLink,
   faCopy,
-  faClipboardCheck
+  faClipboardCheck,
+  faBan
 );
 
 Vue.component(FontAwesomeIcon.name, FontAwesomeIcon);

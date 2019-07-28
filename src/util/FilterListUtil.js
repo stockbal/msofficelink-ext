@@ -89,6 +89,9 @@ export class FilterListUtil {
     let filterList = [];
     temp.forEach(filter => {
       filter = filter.trim().toLowerCase();
+      if (filter === '') {
+        return;
+      }
       if (filter.startsWith('#')) {
         return;
       }

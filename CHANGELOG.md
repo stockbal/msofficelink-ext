@@ -1,3 +1,15 @@
+### v1.3.0
+
+#### Features
+
+- Move options from popup into separate options page which is accessible via extension context menu or from the popup
+- Add blacklist/whitelist
+
+#### Fixes 
+
+- fix page freezing error
+  - link elements are only updated one time if a structural change in the page was detected 
+ 
 ### v1.2.1
 
 #### Fixes

@@ -15,7 +15,8 @@ module.exports = {
     popup: resolve('./popup'),
     content: resolve('./content'),
     history: resolve('./history'),
-    background: resolve('./background')
+    background: resolve('./background'),
+    options: resolve('./options')
   },
   output: {
     path: path.join(rootDir, 'dist'),
@@ -99,6 +100,7 @@ module.exports = {
     htmlPage('popup', 'popup', ['manifest', 'vendor', 'popup']),
     htmlPage('Favorites & History', 'history', ['manifest', 'vendor', 'history']),
     htmlPage('background', 'background', ['manifest', 'vendor', 'background']),
+    htmlPage('options', 'options', ['manifest', 'vendor', 'options']),
     // End customize
     new CopyWebpackPlugin([{ from: path.join(rootDir, 'static') }]),
     new GenerateLocaleJsonPlugin({
