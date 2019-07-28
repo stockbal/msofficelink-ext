@@ -20,6 +20,7 @@ module.exports = {
     '*://*/*',
     'contextMenus',
     'activeTab',
+    'tabs',
     'background',
     'unlimitedStorage',
     'storage'
