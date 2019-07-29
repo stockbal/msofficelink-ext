@@ -13,6 +13,24 @@ import { LinkHandler } from '../util/LinkHandler';
 
 const LINK_HANDLED = 'msofficelink-link-handled';
 
+let popover = null;
+/**
+ * Creates the popover element on the page
+ */
+const createPopover = () => {
+  if (popover) {
+    return;
+  }
+  const popoverEl = document.createElement('div');
+  document.body.appendChild(popoverEl);
+
+  /* eslint-disable no-new */
+  popover = new Vue({
+    el: popoverEl,
+    render: h => h(LinkPopover)
+  });
+};
+
 export const injectIntoPage = () => {
   Vue.config.productionTip = false;
   Vue.prototype.$i18n = chrome.i18n.getMessage;
@@ -21,16 +39,6 @@ export const injectIntoPage = () => {
   const locale = currentLocale === 'de' ? localeDE : localeEN;
 
   Vue.use(ElementUI, { locale });
-
-  const popoverEl = document.createElement('div');
-  document.body.appendChild(popoverEl);
-
-  /* eslint-disable no-new */
-  const popover = new Vue({
-    el: popoverEl,
-    render: h => h(LinkPopover)
-  });
-
   let observer = null;
 
   const updateOfficeLinks = async () => {
@@ -84,6 +92,7 @@ export const injectIntoPage = () => {
                 evt.stopPropagation();
 
                 if (defaultAction === 'dialog') {
+                  createPopover();
                   popover.$emit('showPopper', newLink, origin, href);
                   if (!window.msofficeLinkPopper) {
                     window.msofficeLinkPopper = new Popper(newLink, popover.$el, {
