@@ -8,6 +8,7 @@ module.exports = {
   extDescription: {
     message: 'Handle MS Office Document links in a better way'
   },
+  extOptions: { message: 'Options' },
   // messages for context menus
   CTX_copyLinkAddressAs: { message: 'Copy address of the document as...' },
   // messages for link open options

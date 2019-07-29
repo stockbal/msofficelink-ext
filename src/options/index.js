@@ -9,8 +9,7 @@ import '../util/initIconLibrary';
 Vue.config.productionTip = false;
 Vue.prototype.$i18n = chrome.i18n.getMessage;
 
-document.title =
-  chrome.i18n.getMessage('extName') + ' | ' + chrome.i18n.getMessage('OptionTab_options');
+document.title = chrome.i18n.getMessage('extName') + ' | ' + chrome.i18n.getMessage('extOptions');
 
 const currentLocale = chrome.i18n.getUILanguage();
 const locale = currentLocale === 'de' ? localeDE : localeEN;

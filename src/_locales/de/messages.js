@@ -8,6 +8,7 @@ module.exports = {
   extDescription: {
     message: 'Öffnet / Verwaltet Hyperlinks auf MS Office Dokumente'
   },
+  extOptions: { message: 'Optionen' },
   // messages for context menus
   CTX_copyLinkAddressAs: { message: 'Adresse des Dokuments kopieren als...' },
   // messages for link open options

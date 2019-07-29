@@ -6,7 +6,7 @@
     </div>
     <div class="popup-settings-link">
       <el-link @click="openSettings"
-        ><font-awesome-icon icon="cog" /> {{ $i18n('OptionTab_options') }}</el-link
+        ><font-awesome-icon icon="cog" /> {{ $i18n('extOptions') }}</el-link
       >
     </div>
     <el-tabs class="popup-tabs" :value="currentTab">
