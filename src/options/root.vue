@@ -6,7 +6,7 @@
         <h1 class="title">{{ $i18n('extName') }}</h1>
       </div>
     </header>
-    <main>
+    <main class="options__content">
       <section>
         <h2 class="section--header">
           <font-awesome-icon icon="cog"></font-awesome-icon> {{ $i18n('OptionTab_options') }}
@@ -69,16 +69,24 @@
           <font-awesome-icon :icon="filterListIcon"></font-awesome-icon>
           {{ typeText }}
         </h2>
-        <div class="section--content options__whitelist-form">
+        <div class="section--content options__filterlist-form">
           <el-radio-group
-            class="options__whitelist-form-el"
+            class="options__filterlist-form-el"
             v-model="settings.filterListType"
             @change="updateFilterListType"
           >
             <el-radio label="black">{{ $i18n('MSG_blackList') }}</el-radio>
             <el-radio label="white">{{ $i18n('MSG_whiteList') }}</el-radio>
           </el-radio-group>
-          <el-collapse value="1" accordion class="options__whitelist-form-el">
+          <el-input
+            type="textarea"
+            class="popup-filterlist__input options__filterlist-form-el"
+            spellcheck="false"
+            :autosize="{ minRows: 10 }"
+            v-model="settings.urlFilterList"
+            @input="onSubmit"
+          ></el-input>
+          <el-collapse value="1" accordion class="options__filterlist-form-el">
             <el-collapse-item
               :title="$i18n('MSG_filterListInfoHeader') + ' ' + typeText + '?'"
               name="1"
@@ -86,19 +94,47 @@
               <div class="tip" v-html="whiteListInformation"></div>
             </el-collapse-item>
             <el-collapse-item :title="$i18n('MSG_filterPatternHelpHeader')" name="2">
+              <div>
+                <span v-html="$i18n('MSG_filterListManualIntro')"></span>:<br />
+                <div class="tip m-t-10">
+                  <span v-html="$i18n('MSG_domainFilterDescription')"></span><br />
+                  {{ $i18n('Examples') }}:
+                  <ul class="list">
+                    <li>org.example.com</li>
+                    <li>amazon.com</li>
+                  </ul>
+                </div>
+                <div class="tip m-t-10">
+                  <span v-html="$i18n('MSG_singlePageFilterDescription')"></span><br />
+                  {{ $i18n('Examples') }}:
+                  <ul class="list">
+                    <li>https://www.amazon.com</li>
+                    <li>https://en.wikipedia.org/wiki/Microsoft</li>
+                  </ul>
+                </div>
+                <div class="tip m-t-10">
+                  <span v-html="$i18n('MSG_simplePatternFilterDescription')"></span> <br />
+                  {{ $i18n('Examples') }}:
+                  <ul class="list">
+                    <li>*reddit.com/r/privacy/*</li>
+                    <li>https://github.com/stockbal/msofficelink-ext*</li>
+                  </ul>
+                </div>
+                <div class="tip m-t-10">
+                  <span v-html="$i18n('MSG_complexRegExFilterDescription')"></span><br />
+                  {{ $i18n('Examples') }}:
+                  <ul class="list">
+                    <li><strong>/</strong>^https?://192\.168\.0\.\d+<strong>/</strong></li>
+                    <li><strong>/</strong>https?://(read|lesen)\.amazon.*$<strong>/</strong></li>
+                  </ul>
+                </div>
+              </div>
             </el-collapse-item>
           </el-collapse>
-          <el-input
-            type="textarea"
-            class="popup-filterlist__input options__whitelist-form-el"
-            spellcheck="false"
-            :autosize="{ minRows: 10 }"
-            v-model="settings.urlFilterList"
-            @input="onSubmit"
-          ></el-input>
         </div>
       </section>
     </main>
+    <el-backtop target=".options__content"></el-backtop>
   </div>
 </template>
 
@@ -287,14 +323,17 @@ section {
     margin: 10px 10px 20px;
   }
 }
-
-.options__whitelist-form {
-  .options__whitelist-form-el:first-child {
-    margin-top: 5px;
+.options__filterlist-form-el {
+  margin-bottom: 10px;
+  &,
+  span {
+    font-size: $--default-font-size;
   }
 }
 
-.options__whitelist-form-el {
-  margin-bottom: 10px;
+.options__filterlist-form {
+  .options__filterlist-form-el:first-child {
+    margin-top: 5px;
+  }
 }
 </style>

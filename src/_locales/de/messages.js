@@ -55,12 +55,35 @@ module.exports = {
       }
     }
   },
+  MSG_filterListManualIntro: { message: 'Es gibt die folgenden Arten von Filter-Regeln' },
+  MSG_domainFilterDescription: {
+    message:
+      '<strong>Domain Filter</strong>-Regeln sind einfache Filter die nur auf den ' +
+      'Domänen-Teil einer URL angewendet werden. Sie dürfen keinerlei <code>*</code>-' +
+      ' oder <code>/</code>-Zeichen enthalten'
+  },
+  MSG_singlePageFilterDescription: {
+    message:
+      'Wenn <strong>bestimmte Seiten</strong> gefiltert werden sollen, wird die gesamte ' +
+      'URL mit dem Filter verglichen'
+  },
+  MSG_simplePatternFilterDescription: {
+    message:
+      'Wenn nur bestimmte Teile einer Webseite gefiltert werden sollen können auch ' +
+      '<strong>einfache Muster</strong> verwendet werden'
+  },
+  MSG_complexRegExFilterDescription: {
+    message:
+      'Wenn keine der vorigen Filter-Methoden ausreicht, kann man mit ' +
+      '<strong>regulären Ausdrücken</strong> komplexe Regeln erstellen. Damit sie als ' +
+      'solche erkannt werden müssen diese Regeln mit <code>/</code> starten und enden.'
+  },
   MSG_whiteList: { message: 'Whitelist' },
   MSG_blackList: { message: 'Blacklist' },
   MSG_not: { message: 'nicht' },
   MSG_filterListTypeLabel: { message: 'Typ' },
   MSG_filterListInfoHeader: { message: 'Was ist eine' },
-  MSG_filterPatternHelpHeader: { message: 'Anleitung für Filterregeln' },
+  MSG_filterPatternHelpHeader: { message: 'Wie schreibe ich eine Filterregel?' },
   MSG_noHistory: { message: 'Kein Verlauf vorhanden' },
   MSG_noFavorites: { message: 'Keine Favoriten vorhanden' },
   MSG_favsWereDeleted: { message: 'Favoriten wurden gelöscht' },
@@ -121,6 +144,7 @@ module.exports = {
   No: { message: 'Nein' },
   Warning: { message: 'Warnung' },
   ResultPluralSuffix: { message: 'se' },
+  Examples: { message: 'Beispiele' },
 
   // Texts for single document link
   Link_addFavorite: { message: 'Zu Favoriten hinzufügen' },

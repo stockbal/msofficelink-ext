@@ -55,12 +55,35 @@ module.exports = {
       }
     }
   },
+  MSG_filterListManualIntro: { message: 'The following filter rules exist' },
+  MSG_domainFilterDescription: {
+    message:
+      '<strong>Domain Filter</strong> Rules are simple Filters that only work on the ' +
+      'Domain Part of a URL. The must not contain any <code>*</code>' +
+      ' or <code>/</code> Characters'
+  },
+  MSG_singlePageFilterDescription: {
+    message:
+      'If <strong>specific Pages</strong> should be filtered, the whole ' +
+      'URL will be compared with the Filter'
+  },
+  MSG_simplePatternFilterDescription: {
+    message:
+      'If only specific Parts of a Web Page should be filtered, you can use ' +
+      '<strong>simple Patterns</strong>'
+  },
+  MSG_complexRegExFilterDescription: {
+    message:
+      'If none of the previously described Filter Methods work, you can create complex ' +
+      'Rules by using <strong>regular Expressions</strong>. To be recognized as such they ' +
+      'have to start and end with <code>/</code>.'
+  },
   MSG_whiteList: { message: 'Whitelist' },
   MSG_blackList: { message: 'Blacklist' },
   MSG_not: { message: 'not' },
   MSG_filterListTypeLabel: { message: 'Type' },
   MSG_filterListInfoHeader: { message: 'What is a' },
-  MSG_filterPatternHelpHeader: { message: 'Manual for filter rules' },
+  MSG_filterPatternHelpHeader: { message: 'How do I write a Filter Rule?' },
   MSG_noHistory: { message: 'No History entries yet' },
   MSG_noFavorites: { message: 'No Favorites yet' },
   MSG_favsWereDeleted: { message: 'Favorites have been deleted' },
@@ -120,6 +143,7 @@ module.exports = {
   No: { message: 'No' },
   Warning: { message: 'Warning' },
   ResultPluralSuffix: { message: 's' },
+  Examples: { message: 'Examples' },
 
   // Texts for single document link
   Link_addFavorite: { message: 'Mark as favorite' },
