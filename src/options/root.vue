@@ -336,4 +336,10 @@ section {
     margin-top: 5px;
   }
 }
+
+code {
+  background: #e2e2e2;
+  border-radius: 4px;
+  padding: 1px 5px;
+}
 </style>
