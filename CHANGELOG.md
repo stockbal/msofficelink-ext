@@ -1,3 +1,9 @@
+### v1.3.1
+
+#### Fixes
+
+- Remove css selectors from global namespace to prevent styling issues on some pages
+
 ### v1.3.0
 
 #### Features

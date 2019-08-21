@@ -4,7 +4,7 @@
 module.exports = {
   name: '__MSG_extName__',
   description: '__MSG_extDescription__',
-  version: '1.3.0',
+  version: '1.3.1',
   icons: {
     '16': 'icons/Icon16.png',
     '32': 'icons/Icon32.png',
